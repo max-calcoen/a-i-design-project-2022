@@ -4,7 +4,7 @@ import express from "express"
 import { join } from "path"
 
 // Tunables for server setup
-const SERVER_PORT = 3000
+const SERVER_PORT = 8080
 const PUBLIC_FILES_DIR = 'public'
 
 const app = express()
