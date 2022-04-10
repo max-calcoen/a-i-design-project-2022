@@ -18,6 +18,18 @@ app.set('view engine', 'pug')
 
 let users = []
 
+app.get("/battle", (req, res) => {
+    res.render("battle-interface", {
+        enemypokemon: {
+            name: "Raichu"
+        },
+        userpokemon: {
+            name: "Turtwig",
+            nick: "Turt"
+        }
+    })
+})
+
 app.get("/", (req, res) => {
     res.sendFile(join(__dirname, "index.html"))
 })

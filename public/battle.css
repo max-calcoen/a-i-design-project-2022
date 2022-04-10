@@ -1,0 +1,72 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0px;
+}
+
+#content {
+    display: grid;
+    grid-template-areas:
+        'battlearea'
+        'battleoptions'
+    ;
+    grid-template-rows: 2fr 1fr;
+    height: 100vh;
+}
+
+#battlearea {
+    grid-area: battlearea;
+    border-bottom: 2px solid black;
+}
+
+#battleoptions {
+    grid-area: battleoptions;
+    display: grid;
+    grid-template-areas:
+        'p battleoptionsgrid'
+    ;
+    grid-template-columns: 3fr 2fr;
+}
+
+#battleoptions>p {
+    grid-area: p;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    margin: 0px;
+}
+
+#battleoptionsgrid {
+    display: grid;
+    grid-template-areas:
+        'fight bag'
+        'pokemon run'
+    ;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+#battleoptionsgrid>div>button {
+    width: 100%;
+    height: 100%;
+    font-size: 25px;
+}
+
+.healthbarcontainer {
+    box-sizing: content-box;
+    margin: 0px;
+    border: 2px solid black;
+    border-radius: 1px;
+    width: 200px;
+    height: 20px;
+}
+
+.healthbar {
+    background-color: gray;
+    margin: 0px;
+    width: 100px;
+    height: 20px;
+}
