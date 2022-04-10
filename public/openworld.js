@@ -1,3 +1,5 @@
+// import * as PIXI from 'pixi.js'
+
 const renderer = PIXI.autoDetectRenderer({
     antialias: true,
     autoDensity: true,
@@ -14,8 +16,7 @@ document.body.appendChild(renderer.view);
 
 const loader = new PIXI.Loader();
 
-loader.add('atlas', 'examples/assets/tilemaps/atlas.json');
-loader.add('button', 'examples/assets/tilemaps/button.png');
+loader.add('grass', 'assets/grass.jpeg');
 loader.load((_, resources) => {
     // Setup tilemap scene
     stage = new PIXI.Container();
@@ -56,7 +57,7 @@ function makeTilemap() {
             tilemap.tile(
                 (j < tileH / 2) && (i % 2 === 1) && (j % 2 === 1)
                     ? 'tough.png'
-                    : 'grass.png',
+                    : 'grass.jpg',
                 i * size,
                 j * size,
             );
@@ -66,13 +67,6 @@ function makeTilemap() {
             } else if (j > wallBoundary + 1 && j < tileH - 1) {
                 if (Math.random() > 0.8) {
                     tilemap.tile('chest.png', i * size, j * size);
-
-                    if (Math.random() > 0.8) {
-                        // Animate between 2 tile textures. The x-offset
-                        // between them in the base-texture is 34px, i.e.
-                        // "red_chest" is exactly 34 pixels right in the atlas.
-                        tilemap.tileAnimX(34, 2);
-                    }
                 }
             }
         }

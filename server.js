@@ -30,9 +30,9 @@ app.get("/battle", (req, res) => {
     })
 })
 
-app.get("/", (req, res) => {
-    res.sendFile(join(__dirname, "index.html"))
-})
+// app.get("/", (req, res) => {
+//     res.sendFile(join(__dirname, "index.html"))
+// })
 
 app.get("/hello", (req, res) => {
     let name = req.query.name
@@ -51,11 +51,9 @@ app.get("/hello", (req, res) => {
 })
 
 
-app.get("/openworld", (req, res) => {
-    res.render("open-interface", {
-        
-    })
-})
+// app.get("/openworld", (req, res) => {
+//      res.sendFile(join(__dirname, "public", "openworld.html"))
+// })
 
 io.on("connection", (socket) => {
     socket.on("connect", (arg) => {
