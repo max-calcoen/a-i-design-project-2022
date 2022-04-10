@@ -50,6 +50,13 @@ app.get("/hello", (req, res) => {
     }
 })
 
+
+app.get("/openworld", (req, res) => {
+    res.render("open-interface", {
+        
+    })
+})
+
 io.on("connection", (socket) => {
     socket.on("connect", (arg) => {
         console.log("user connected :)")
