@@ -4,7 +4,7 @@ export class Pokemon {
     #basestats
     #maxstats
     #stats
-    constructor(name, element, moves, frontImg, backImg, baseStats, maxStats) {
+    constructor(name, element, moves, frontImg, backImg, baseStats, maxStats, nick = "") {
         this.name = name
         defaultElements = ["Water", "Fire", "Poison", "Grass", "Bug", "Fairy", "Dragon", "Normal", "Ghost", "Physic", "Lightning", "Flying", "Ground", "Rock", "Dark", "Steel", "Ice", "Fighting"]
         if (defaultElements.includes(element)) this.element = element
@@ -13,9 +13,12 @@ export class Pokemon {
         this.#backImg = backImg
         this.#baseStats = baseStats
         this.#maxStats = maxStats
+        this.stats = baseStats
         this.totalExp = 0
-        this.nick = ""
+        this.nick = nick
         this.level = 0
+        this.currentHp = this.#basestats.maxHp
+        this.statusEffects = []
     }
 
     /**
@@ -38,8 +41,28 @@ export class Pokemon {
 
     }
 
-    levelUp(toLevel = this.level + 1) {
+    /**
+     * 
+     * @param {int} amt amount of damage to take
+     * @returns true on faint, false otherwise
+     */
+    takeDamage(amt) {
+        this.#stats.currentHp -= amt
+        return this.fainted
+    }
+    /**
+     * @returns true on faint, false otherwise
+     */
+    get fainted() {
+        if (this.#stats.currentHp <= 0) {
+            return true
+        } else {
+            return false
+        }
+    }
 
+    levelUp(toLevel = this.level + 1) {
+        // if the total exp is less than normal, boost there
     }
     /**
      * @param {int} level level to plug into experience requirement calculation

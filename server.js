@@ -1,6 +1,7 @@
 // Import neccesary modules
 import { createServer, Server } from "http"
 import express from "express"
+import BattleLogic from "./models/battlelogic.js"
 import { join } from "path"
 
 // Tunables for server setup
@@ -30,10 +31,6 @@ app.get("/battle", (req, res) => {
     })
 })
 
-// app.get("/", (req, res) => {
-//     res.sendFile(join(__dirname, "index.html"))
-// })
-
 app.get("/hello", (req, res) => {
     let name = req.query.name
     if (!users.includes(name)) {
@@ -49,11 +46,6 @@ app.get("/hello", (req, res) => {
         })
     }
 })
-
-
-// app.get("/openworld", (req, res) => {
-//      res.sendFile(join(__dirname, "public", "openworld.html"))
-// })
 
 io.on("connection", (socket) => {
     socket.on("connect", (arg) => {
