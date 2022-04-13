@@ -9,7 +9,7 @@ let stage=  PIXI.Container;
 let tilemap = CompositeTilemap();
 
 document.body.appendChild(renderer.view);
-//Defines loader
+//Defines loaders
 const loader = new PIXI.Loader();
 
 /**
