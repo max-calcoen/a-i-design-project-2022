@@ -4,6 +4,7 @@
 
 body {
     margin: 0px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #content {
@@ -69,4 +70,32 @@ body {
     margin: 0px;
     width: 100px;
     height: 20px;
+}
+
+#playerhealth {
+    position: absolute;
+    bottom: calc(100vh / 3 + 15px);
+    left: 10px;
+}
+
+#enemyhealth {
+    position: absolute;
+    top: 15px;
+    right: 10px;
+}
+
+img#p1 {
+    position: absolute;
+    height: 500px;
+    width: 500px;
+    top: 100px;
+    left: 150px;
+}
+
+img#p2 {
+    position: absolute;
+    height: 500px;
+    width: 500px;
+    top: 0px;
+    right: 200px;
 }

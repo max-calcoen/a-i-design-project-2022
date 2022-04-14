@@ -1,36 +1,33 @@
-import * as PIXI from "pixi.js";
-import { CompositeTilemap } from "@pixi/tilemap";
+import * as PIXI from 'pixi.js'
 
-const renderer = PIXI.autoDetectRenderer({
-    width: 800,
-    height: 600
-});
-let stage=  PIXI.Container;
-let tilemap = CompositeTilemap();
+// The application will create a renderer using WebGL, if possible,
+// with a fallback to a canvas render. It will also setup the ticker
+// and the root stage PIXI.Container
+const app = new PIXI.Application()
 
-document.body.appendChild(renderer.view);
-//Defines loaders
-const loader = new PIXI.Loader();
+// The application will create a canvas element for you that you
+// can then insert into the DOM
+document.body.appendChild(app.view)
 
-/**
- * Builds tilemap
- * -- Adds grass/tough texture on each 32px by 32px square
- */
-function buildTilemap() {
-    // Clear everything, like a PIXI.Graphics
-    tilemap.clear();
+// load the texture we need
+app.loader.add('bunny', 'bunny.png').load((loader, resources) => {
+    // This creates a texture from a 'bunny.png' image
+    const bunny = new PIXI.Sprite(resources.bunny.texture)
 
-    const resources = loader.resources;
-    const size = 32;
+    // Setup the position of the bunny
+    bunny.x = app.renderer.width / 2
+    bunny.y = app.renderer.height / 2
 
-    for (let i = 0; i < 7; i++) {
-        for (let j = 0; j < 5; j++) {
-            tilemap.tile("grass.png", i * size, j * size);
+    // Rotate around the center
+    bunny.anchor.x = 0.5
+    bunny.anchor.y = 0.5
 
-            if (i % 2 === 1 && j % 2 === 1) {
-                tilemap.tile("tough.png", i * size, j * size);
-            }
-        }
-    }
+    // Add the bunny to the scene we are building
+    app.stage.addChild(bunny)
 
-}
+    // Listen for frame updates
+    app.ticker.add(() => {
+        // each frame we spin the bunny around a bit
+        bunny.rotation += 0.01
+    })
+})
