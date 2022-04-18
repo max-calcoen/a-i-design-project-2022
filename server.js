@@ -26,7 +26,7 @@ app.get("/battle", (req, res) => {
         },
         userpokemon: {
             name: "Turtwig",
-            nick: "Turt"
+            nick: "Turtwig"
         }
     })
 })
