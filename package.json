@@ -1,7 +1,6 @@
 {
   "name": "design-project",
   "version": "1.0.0",
-  "description": "",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -17,5 +16,14 @@
     "pixi.js": "^6.3.0",
     "pug": "^3.0.2",
     "socket.io": "^4.4.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/max-calcoen/a-i-design-project-2022.git"
+  },
+  "bugs": {
+    "url": "https://github.com/max-calcoen/a-i-design-project-2022/issues"
+  },
+  "homepage": "https://github.com/max-calcoen/a-i-design-project-2022#readme",
+  "description": ""
 }
