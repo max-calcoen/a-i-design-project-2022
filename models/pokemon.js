@@ -4,16 +4,14 @@ export class Pokemon {
     #basestats
     #maxstats
     #stats
-
     /**
-     * 
-     * @param {string} name name of pokemon (Charmander)
-     * @param {string} element elemental type of pokemon (fire)
-     * @param {Array} moves array of moves ([moves.get("flamethrower"), moves.get("scratch"), moves.get("growl"))])
-     * @param {string} frontImg image url of front of pokemon
-     * @param {string} backImg image url of back of pokemon
-     * @param {Stats} baseStats Base stats of the pokemon -- Object
-     * @param {Stats} maxStats Max stats of the pokemon -- Object
+     * @param {string} name name of pokemon ("Charmander")
+     * @param {string} element elemental type of pokemon ("fire")
+     * @param {array} moves array of moves ([moves.get("flamethrower"), moves.get("scratch"), moves.get("growl"))])
+     * @param {string} frontImg image url of front of pokemon ("charmanderfront.png")
+     * @param {string} backImg image url of back of pokemon ("charmandeback.png")
+     * @param {Stat} baseStats starting / level 1 stats of the pokemon (new Stat(15, 20, 100))
+     * @param {Stat} maxStats maximum possible / level 100 stats of the pokemon (new Stat(200, 250, 250))
      */
     constructor(name, element, moves, frontImg, backImg, baseStats, maxStats) {
         this.name = name
@@ -33,7 +31,7 @@ export class Pokemon {
     }
 
     /**
-     * Replaces a pokemon's move with another
+     * Replace a pokemon's move with another
      * @param {Move} newMove move to learn
      * @param {Move} moveToReplace move to unlearn
      * @returns true on success, false on failure
@@ -54,13 +52,20 @@ export class Pokemon {
     }
 
     /**
-     * 
      * @param {int} amt amount of damage to take
      * @returns true on faint, false otherwise
      */
     takeDamage(amt) {
         this.#stats.currentHp -= amt
         return this.fainted
+    }
+
+    /**
+     * @param {int} amt amount of health points to heal / add to current hp
+     */
+    heal(amt) {
+        this.#stats.currentHp += amt
+        if (this.#stats.currentHp > this.#stats.maxHp) this.#stats.currentHp = this.#stats.maxHp
     }
 
     /**
