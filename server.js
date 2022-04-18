@@ -1,10 +1,9 @@
-// Import neccesary modules
+// import neccesary modules
 import { createServer, Server } from "http"
 import express from "express"
-import BattleLogic from "./models/battlelogic.js"
 import { join } from "path"
 
-// Tunables for server setup
+// tunables for server setup
 const SERVER_PORT = 8080
 const PUBLIC_FILES_DIR = 'public'
 
@@ -13,7 +12,7 @@ const server = createServer(app)
 const io = new Server(server)
 app.use(express.static(PUBLIC_FILES_DIR))
 
-// Setup Pug rendering engine
+// set up pug rendering engine
 app.set('views', 'views')
 app.set('view engine', 'pug')
 

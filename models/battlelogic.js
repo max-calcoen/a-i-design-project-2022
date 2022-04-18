@@ -1,23 +1,23 @@
 export default class BattleLogic {
     constructor(pokemon1, pokemon2) {
-        // this.pokemon1 = pokemon1
-        // this.pokemon2 = pokemon2
+        this.pokemon1 = pokemon1
+        this.pokemon2 = pokemon2
     }
     turn(pokemon1move, pokemon2move) {
-
-        // p1 goes first
         let p1level = pokemon1.level
         let p1power = pokemon1move.power
         let p1atk = pokemon1.stats.atk
         let p1def = pokemon1.stats.def
         let p1crit = 1
-        if (Math.floor(Math.random() * 16) == 15) p1crit = 1.75 // 1/16 chance to deal 1.75x damage on crit
+        if (Math.floor(Math.random() * 16) == 15) p1crit = 1.75 // 1/16 chance to deal 1.75x damage on critical attack
         let p1rand = (Math.floor(Math.random() * 15) + 85) / 100
         let p1stab = 1
         if (this.pokemon1.type == pokemon1move.type) p1stab = 1.5
         let p1type = this.getEffectiveness(pokemon1move.type, pokemon2.type)
 
         let p1damage = ((((2 * p1level / 5) + 2) * p1power * p1atk / p1def) / 50 + 2) * p1crit * p1rand * p1stab * p1type
+
+
 
         let p2level = pokemon2.level
         let p2power = pokemon2move.power
@@ -34,24 +34,40 @@ export default class BattleLogic {
 
         if (pokemon1.stats.speed > pokemon2.stats.speed) {
             if (pokemon2.takeDamage(p1damage)) {
-                return [pokemon1, pokemon2, 1]
+                return {
+                    pokemon1: this.pokemon1,
+                    pokemon2: this.pokemon2,
+                    winner: 1
+                }
             } else if (pokemon1.takeDamage(p2damage)) {
-                return [pokemon1, pokemon2, 2]
+                return {
+                    pokemon1: this.pokemon1,
+                    pokemon2: this.pokemon2,
+                    winner: 2
+                }
             }
         } else {
             if (pokemon1.takeDamage(p2damage)) {
-                return [pokemon1, pokemon2, 2]
+                return {
+                    pokemon1: this.pokemon1,
+                    pokemon2: this.pokemon2,
+                    winner: 2
+                }
             } else if (pokemon2.takeDamage(p1damage)) {
-                return [pokemon1, pokemon2, 1]
+                return {
+                    pokemon1: this.pokemon1,
+                    pokemon2: this.pokemon2,
+                    winner: 1
+                }
             }
         }
-
+        return false
         // calculate damage ((((2 * level / 5) + 2) * power * atk / def) / 50 + 2) * crit * rand * stab * type
         // trigger status effects
     }
     /**
-     * @param {String} atk type of attacking pokemon
-     * @param {String} def type of defending pokemon
+     * @param {string} atk type of attacking pokemon
+     * @param {string} def type of defending pokemon
      * @returns damage modifier
      */
     getEffectiveness(atk, def) {

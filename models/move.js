@@ -2,8 +2,8 @@ export class Move {
     #inflict
     /**
      * Contructs Move object
-     * @param {String} name name of move (Flamethrower)
-     * @param {String} type type of move (Fire)
+     * @param {string} name name of move (Flamethrower)
+     * @param {string} type type of move (Fire)
      * @param {boolean} isSpecial special attack not regular attack
      * @param {int} power power of move
      * @param {int} pp power points- number of times a pokemon can use an attack
@@ -20,7 +20,8 @@ export class Move {
         this.#inflict = inflict
     }
     /**
-     * @return {String, boolean} returns the inflict type if success, returns false otherwise
+     * @return {string} returns the inflict type
+     * @return {boolean} returns false if no infliction
      */
     get inflict() {
         if (this.#inflict.length <= 1) return false

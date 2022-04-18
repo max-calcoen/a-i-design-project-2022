@@ -4,7 +4,18 @@ export class Pokemon {
     #basestats
     #maxstats
     #stats
-    constructor(name, element, moves, frontImg, backImg, baseStats, maxStats, nick = "") {
+
+    /**
+     * 
+     * @param {string} name name of pokemon (Charmander)
+     * @param {string} element elemental type of pokemon (fire)
+     * @param {Array} moves array of moves ([moves.get("flamethrower"), moves.get("scratch"), moves.get("growl"))])
+     * @param {string} frontImg image url of front of pokemon
+     * @param {string} backImg image url of back of pokemon
+     * @param {Stats} baseStats Base stats of the pokemon -- Object
+     * @param {Stats} maxStats Max stats of the pokemon -- Object
+     */
+    constructor(name, element, moves, frontImg, backImg, baseStats, maxStats) {
         this.name = name
         defaultElements = ["Water", "Fire", "Poison", "Grass", "Bug", "Fairy", "Dragon", "Normal", "Ghost", "Physic", "Lightning", "Flying", "Ground", "Rock", "Dark", "Steel", "Ice", "Fighting"]
         if (defaultElements.includes(element)) this.element = element
@@ -15,7 +26,7 @@ export class Pokemon {
         this.#maxStats = maxStats
         this.stats = baseStats
         this.totalExp = 0
-        this.nick = nick
+        this.nick = ""
         this.level = 0
         this.currentHp = this.#basestats.maxHp
         this.statusEffects = []
@@ -37,6 +48,7 @@ export class Pokemon {
         return false
     }
 
+    // TODO
     addExp(amt) {
 
     }
@@ -50,6 +62,7 @@ export class Pokemon {
         this.#stats.currentHp -= amt
         return this.fainted
     }
+
     /**
      * @returns true on faint, false otherwise
      */
@@ -61,9 +74,11 @@ export class Pokemon {
         }
     }
 
+    // TODO
     levelUp(toLevel = this.level + 1) {
         // if the total exp is less than normal, boost there
     }
+
     /**
      * @param {int} level level to plug into experience requirement calculation
      * @returns amount of total experience required to level up from level 0 to that level
