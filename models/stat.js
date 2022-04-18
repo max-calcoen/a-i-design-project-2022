@@ -1,7 +1,7 @@
 class Stat {
-    basestats
-    maxstats
-    constructor(Pokemon) {
-
+    constructor(health, attack, spd) {
+        this.health = health
+        this.attack = attack;
+        this.speed = speed
     }
 }
