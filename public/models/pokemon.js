@@ -3,8 +3,6 @@ export class Pokemon {
     #backImg
     #baseStats
     #maxStats
-    #stats
-    #moves
     /**
      * @param {string} name name of pokemon ("Charmander")
      * @param {string} element elemental type of pokemon ("fire")
@@ -23,7 +21,8 @@ export class Pokemon {
         this.#backImg = backImg
         this.#baseStats = baseStats
         this.#maxStats = maxStats
-        this.stats = baseStats
+        this.currentStats = baseStats
+        this.currentHp = 100
         this.totalExp = 0
         this.nick = ""
         this.level = 0
@@ -38,7 +37,7 @@ export class Pokemon {
      * @returns true on success, false on failure
      */
     learnMove(newMove, moveToReplace) {
-        for (let i = 0; i < this.#moves.length; i++) {
+        for (let i = 0; i < this.moves.length; i++) {
             if (this.moves[i].equals(moveToReplace)) {
                 this.moves[i] = newMove
                 return true
@@ -57,7 +56,7 @@ export class Pokemon {
      * @returns true on faint, false otherwise
      */
     takeDamage(amt) {
-        this.#stats.currentHp -= amt
+        this.currentStats.currentHp -= amt
         return this.fainted
     }
 
@@ -65,15 +64,15 @@ export class Pokemon {
      * @param {int} amt amount of health points to heal / add to current hp
      */
     heal(amt) {
-        this.#stats.currentHp += amt
-        if (this.#stats.currentHp > this.#stats.maxHp) this.#stats.currentHp = this.#stats.maxHp
+        this.currentStats.currentHp += amt
+        if (this.currentStats.currentHp > this.currentStats.maxHp) this.currentStats.currentHp = this.currentStats.maxHp
     }
 
     /**
      * @returns true on faint, false otherwise
      */
     get fainted() {
-        if (this.#stats.currentHp <= 0) {
+        if (this.currentStats.currentHp <= 0) {
             return true
         } else {
             return false

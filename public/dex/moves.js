@@ -11,4 +11,8 @@ import { Move } from "../models/move.js"
      * @param {Array} inflict array constituting of inflict type, chance to hit
      */
 export let moves = new Map()
-moves.set("Scratch", new Move("Scratch", "normal", ""))
+moves.set("Scratch", new Move("Scratch", "normal", false, 30, 40, 100, []))
+moves.set("Thunderbot", new Move("Thunderbolt", "thunder", true, 70, 10, 100, []))
+moves.set("Vine Whip", new Move("Vine Whip", "grass", true, 40, 30, 100, []))
+moves.set("Razor Leaf", new Move("Razor Leaf", "grass", true, 50, 20, 100, []))
+moves.set("Leech Seed", new Move("Leech Seed", "grass", true, 60, 15, 100, []))

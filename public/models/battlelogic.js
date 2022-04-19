@@ -3,43 +3,43 @@ export class BattleLogic {
         this.pokemon1 = pokemon1
         this.pokemon2 = pokemon2
     }
-    turn(pokemon1move, pokemon2move) {
-        let p1level = pokemon1.level
+    turn(pokemon1move, pokemon2move = this.pokemon2.moves[Math.floor(Math.random() * 4)]) {
+        let p1level = this.pokemon1.level
         let p1power = pokemon1move.power
-        let p1atk = pokemon1.stats.atk
-        let p1def = pokemon1.stats.def
+        let p1attack = this.pokemon1.currentStats.attack
+        let p1def = this.pokemon1.currentStats.def
         let p1crit = 1
         if (Math.floor(Math.random() * 16) == 15) p1crit = 1.75 // 1/16 chance to deal 1.75x damage on critical attack
         let p1rand = (Math.floor(Math.random() * 15) + 85) / 100
         let p1stab = 1
         if (this.pokemon1.type == pokemon1move.type) p1stab = 1.5
-        let p1type = this.getEffectiveness(pokemon1move.type, pokemon2.type)
+        let p1type = this.getEffectiveness(pokemon1move.type, this.pokemon2.type)
 
-        let p1damage = ((((2 * p1level / 5) + 2) * p1power * p1atk / p1def) / 50 + 2) * p1crit * p1rand * p1stab * p1type
+        let p1damage = ((((2 * p1level / 5) + 2) * p1power * p1attack / p1def) / 50 + 2) * p1crit * p1rand * p1stab * p1type
 
 
 
-        let p2level = pokemon2.level
+        let p2level = this.pokemon2.level
         let p2power = pokemon2move.power
-        let p2atk = pokemon2.stats.atk
-        let p2def = pokemon2.stats.def
+        let p2attack = this.pokemon2.currentStats.attack
+        let p2def = this.pokemon2.currentStats.def
         let p2crit = 1
         if (Math.floor(Math.random() * 16) == 15) p2crit = 1.75 // 1/16 chance to deal 1.75x damage on crit
         let p2rand = (Math.floor(Math.random() * 15) + 85) / 100
         let p2stab = 1
-        if (this.pokemon1.type == pokemon1move.type) p2stab = 1.5
-        let p2type = this.getEffectiveness(pokemon1move.type, pokemon2.type)
+        if (this.pokemon2.type == pokemon1move.type) p2stab = 1.5
+        let p2type = this.getEffectiveness(pokemon2move.type, this.pokemon1.type)
 
-        let p2damage = ((((2 * p2level / 5) + 2) * p2power * p2atk / p2def) / 50 + 2) * p2crit * p2rand * p2stab * p2type
+        let p2damage = ((((2 * p2level / 5) + 2) * p2power * p2attack / p2def) / 50 + 2) * p2crit * p2rand * p2stab * p2type
 
-        if (pokemon1.stats.speed > pokemon2.stats.speed) {
-            if (pokemon2.takeDamage(p1damage)) {
+        if (this.pokemon1.currentStats.speed > this.pokemon2.currentStats.speed) {
+            if (this.pokemon2.takeDamage(p1damage)) {
                 return {
                     pokemon1: this.pokemon1,
                     pokemon2: this.pokemon2,
                     winner: 1
                 }
-            } else if (pokemon1.takeDamage(p2damage)) {
+            } else if (this.pokemon1.takeDamage(p2damage)) {
                 return {
                     pokemon1: this.pokemon1,
                     pokemon2: this.pokemon2,
@@ -47,13 +47,13 @@ export class BattleLogic {
                 }
             }
         } else {
-            if (pokemon1.takeDamage(p2damage)) {
+            if (this.pokemon1.takeDamage(p2damage)) {
                 return {
                     pokemon1: this.pokemon1,
                     pokemon2: this.pokemon2,
                     winner: 2
                 }
-            } else if (pokemon2.takeDamage(p1damage)) {
+            } else if (this.pokemon2.takeDamage(p1damage)) {
                 return {
                     pokemon1: this.pokemon1,
                     pokemon2: this.pokemon2,
@@ -62,15 +62,15 @@ export class BattleLogic {
             }
         }
         return false
-        // calculate damage ((((2 * level / 5) + 2) * power * atk / def) / 50 + 2) * crit * rand * stab * type
+        // calculate damage ((((2 * level / 5) + 2) * power * attack / def) / 50 + 2) * crit * rand * stab * type
         // trigger status effects
     }
     /**
-     * @param {string} atk type of attacking pokemon
+     * @param {string} attack type of attacking pokemon
      * @param {string} def type of defending pokemon
      * @returns damage modifier
      */
-    getEffectiveness(atk, def) {
+    getEffectiveness(attack, def) {
         let types = new Map()
 
         types.set("normal", new Map())
@@ -413,6 +413,10 @@ export class BattleLogic {
         types.get("fairy").set("dark", 0.5)
         types.get("fairy").set("fairy", 1)
 
-        return types.get(atk).get(def)
+        console.log(types)
+        console.log(attack)
+        console.log(def)
+        console.log(types.get(attack).get(def))
+        return types.get(attack).get(def)
     }
 }

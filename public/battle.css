@@ -7,7 +7,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-#content {
+div#content {
     display: grid;
     grid-template-areas:
         'battlearea'
@@ -17,12 +17,12 @@ body {
     height: 100vh;
 }
 
-#battlearea {
+div#battlearea {
     grid-area: battlearea;
     border-bottom: 2px solid black;
 }
 
-#battleoptions {
+div#battleoptions {
     grid-area: battleoptions;
     display: grid;
     grid-template-areas:
@@ -31,7 +31,7 @@ body {
     grid-template-columns: 3fr 2fr;
 }
 
-#battleoptions>p {
+div#battleoptions>p {
     grid-area: p;
     display: flex;
     justify-content: center;
@@ -40,7 +40,7 @@ body {
     margin: 0px;
 }
 
-#battleoptionsgrid {
+div#battleoptionsgrid {
     display: grid;
     grid-template-areas:
         'fight bag'
@@ -50,13 +50,13 @@ body {
     grid-template-rows: 1fr 1fr;
 }
 
-#battleoptionsgrid>div>button {
+div#battleoptionsgrid>div>button {
     width: 100%;
     height: 100%;
     font-size: 25px;
 }
 
-.healthbarcontainer {
+div.healthbarcontainer {
     box-sizing: content-box;
     margin: 0px;
     border: 2px solid black;
@@ -65,20 +65,20 @@ body {
     height: 20px;
 }
 
-.healthbar {
+div.healthbar {
     background-color: gray;
     margin: 0px;
     width: 100px;
     height: 20px;
 }
 
-#playerhealth {
+div#playerhealth {
     position: absolute;
     bottom: calc(100vh / 3 + 15px);
     left: 10px;
 }
 
-#enemyhealth {
+div#enemyhealth {
     position: absolute;
     top: 15px;
     right: 10px;
@@ -86,16 +86,18 @@ body {
 
 img#p1 {
     position: absolute;
-    height: 500px;
-    width: 500px;
-    top: 100px;
-    left: 150px;
+    height: 100px;
+    width: 100px;
+    top: 335px;
+    left: 200px;
+    z-index: -1;
 }
 
 img#p2 {
     position: absolute;
-    height: 500px;
-    width: 500px;
+    height: 100px;
+    width: 100px;
     top: 0px;
-    right: 200px;
+    right: 220px;
+    z-index: -1;
 }
