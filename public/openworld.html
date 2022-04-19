@@ -15,7 +15,7 @@
         width: 1425,
         height: 690,
         });
-
+        window.addEventListener('keydown', handleKeyPress)
         let stage;
         let tilemap;
         let frame = 0;
@@ -71,7 +71,7 @@
                 }
             }
 
-            tilemap.tile(
+            let sprite = tilemap.tile(
                 'brick_wall.png',
                 tileW/2*size,
                 tileH/2*size,
@@ -80,14 +80,19 @@
             // - it will create second layer for special for buttons and they will
             // appear above all the other tiles.
         }
+        window.addEventListener('keydown', handleKeyPress)
         function handleKeyPress(evt){
             if (evt.which === 68) {
-                player1.velX = 8
-                player1.movementright = true
+                sprite.x += 8
             }
             if (evt.which === 65) {
-                player1.velX = -8
-                player1.movementleft = true
+                sprite.x += -8
+            }
+            if (evt.which === 87) {
+                sprite.y += 8
+            }
+            if (evt.which === 83) {
+                sprite.y -= 8
             }
         }
     </script>
