@@ -1,9 +1,10 @@
 export class Pokemon {
-    #frontimg
-    #backimg
-    #basestats
-    #maxstats
+    #frontImg
+    #backImg
+    #baseStats
+    #maxStats
     #stats
+    #moves
     /**
      * @param {string} name name of pokemon ("Charmander")
      * @param {string} element elemental type of pokemon ("fire")
@@ -15,7 +16,7 @@ export class Pokemon {
      */
     constructor(name, element, moves, frontImg, backImg, baseStats, maxStats) {
         this.name = name
-        defaultElements = ["Water", "Fire", "Poison", "Grass", "Bug", "Fairy", "Dragon", "Normal", "Ghost", "Physic", "Lightning", "Flying", "Ground", "Rock", "Dark", "Steel", "Ice", "Fighting"]
+        let defaultElements = ["Water", "Fire", "Poison", "Grass", "Bug", "Fairy", "Dragon", "Normal", "Ghost", "Physic", "Lightning", "Flying", "Ground", "Rock", "Dark", "Steel", "Ice", "Fighting"]
         if (defaultElements.includes(element)) this.element = element
         this.moves = moves
         this.#frontImg = frontImg
@@ -26,7 +27,7 @@ export class Pokemon {
         this.totalExp = 0
         this.nick = ""
         this.level = 0
-        this.currentHp = this.#basestats.maxHp
+        this.currentHp = this.#baseStats.maxHp
         this.statusEffects = []
     }
 

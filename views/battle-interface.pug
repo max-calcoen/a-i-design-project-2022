@@ -6,10 +6,6 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         link(rel="stylesheet", href="/battle.css")
         title Battle
-        script(type="text/javascript").
-            console.log("test")
-            import { Pokemon } from "./models/pokemon.js"
-            
     body
         #content
             #battlearea
@@ -27,10 +23,31 @@ html(lang="en")
                 p What will #{userpokemon.nick} do?
                 #battleoptionsgrid
                     #fight
-                        button Fight
+                        button(onclick="handleFight()") Fight
                     #bag
-                        button Bag
+                        button(onclick="handleBag()") Bag
                     #pokemon
-                        button Pokemon
+                        button(onclick="handlePokemon()") Pokemon
                     #run
                         button Run
+        script(type="module").
+            import { pokedex } from "./dex/pokedex.js"
+            import { BattleLogic } from "./models/battlelogic.js"
+            let turtwig = pokedex.get("Turtwig")
+            let raichu = pokedex.get("Raichu")
+            let battle
+
+            function init() {
+                let battle = new BattleLogic(turtwig, raichu)
+            }
+
+            function handleFight() {
+                let fightElement = document.getElementById("fight")
+                fightElement.removeChild(document.getElementById("fight").children[0])
+                for (let i = 0; i < turtwig.moves.length; i++) {
+                    fightElement.appendChild(document.createElement("div"))
+                    fightElement.children[i].id = "fight" + i
+                    fightElement.children[i].innerText = turtwig.moves[i].name
+                }
+            }
+            window.onload = init

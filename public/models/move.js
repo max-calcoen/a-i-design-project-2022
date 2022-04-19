@@ -2,13 +2,13 @@ export class Move {
     #inflict
     /**
      * Contructs Move object
-     * @param {string} name name of move (Flamethrower)
-     * @param {string} type type of move (Fire)
-     * @param {boolean} isSpecial special attack not regular attack
-     * @param {int} power power of move
-     * @param {int} pp power points- number of times a pokemon can use an attack
-     * @param {int} accuracy chance out of 100 to hit target
-     * @param {Array} inflict array constituting of inflict type, chance to hit
+     * @param {string} name name of move ("Flamethrower")
+     * @param {string} type type of move ("fire")
+     * @param {boolean} isSpecial true if special attack, false if regular attack (true)
+     * @param {int} power power of move (70)
+     * @param {int} pp power points- number of times a pokemon can use an attack (10)
+     * @param {int} accuracy chance out of 100 to hit target (90)
+     * @param {map} inflict array constituting of inflict type, chance to hit (new Map([["burning", 10]]))
      */
     constructor(name, type, isSpecial, power, pp, accuracy, inflict) {
         this.name = name
