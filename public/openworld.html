@@ -8,6 +8,7 @@
 
 <body>
     <script>
+        let sprite;
         const renderer = PIXI.autoDetectRenderer({
         antialias: true,
         autoDensity: true,
@@ -71,7 +72,7 @@
                 }
             }
 
-            let sprite = tilemap.tile(
+            sprite = tilemap.tile(
                 'brick_wall.png',
                 tileW/2*size,
                 tileH/2*size,
@@ -89,10 +90,10 @@
                 sprite.x += -8
             }
             if (evt.which === 87) {
-                sprite.y += 8
+                sprite.y -= 8
             }
             if (evt.which === 83) {
-                sprite.y -= 8
+                sprite.y += 8
             }
         }
     </script>
