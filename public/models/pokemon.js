@@ -31,6 +31,7 @@ export class Pokemon {
         this.level = 0
         this.currentHp = this.#baseStats.maxHp
         this.statusEffects = []
+        this.canMove = true
     }
 
     /**
@@ -48,39 +49,35 @@ export class Pokemon {
         }
         return false
     }
-    //adds an array containing the id of the status_effect along with its effect values to the pokemon statuseffects array
-    addstatuseffect(status_effect) {
-        let alleffects = [
-            ['Frozen', Frozen = {
-                duration: 2,
-                damage: 0,
-                immobility: true
-            }],
-            ['Burned', Burned = {
-                duration: 2,
-                damage: this.#baseStats.maxHp * 0.1,
-                immobility: false
-            }],
-            ['Paralyzed', Paralyzed = {
-                duration: 2,
-                damage: 0,
-                immobility: true
-            }],
-            ['Poisoned', Poisoned = {
-                duration: 2,
-                damage: this.#baseStats.maxHp * 0.05,
-                immobility: false
-            }],
-            ['Sleeping', Sleeping = {
-                duration: 2,
-                damage: 0,
-                immobility: true
-            }]
-        ]
-        for (let i = 0; i < alleffects.length; i++) {
-            if (status_effect == alleffects[i][0]) {
-                this.statusEffects.push(alleffects[i])
-            }
+    
+    /**
+     * adds an array containing the id of the status_effect along with its effect values to the pokemon statuseffects array
+     * @param {string} statusEffect the status effect given to the pokemon
+     */
+    addStatusEffect(statusEffect) {
+        let allEffects = new Map()
+        allEffects.set('Frozen', {
+            duration: 1,
+            damage: 0,
+            immobility: true,
+        })
+        allEffects.set('Burned', {
+            duration: 2,
+            damage: this.#baseStats.maxHp * 0.1,
+            immobility: false,
+        })
+        allEffects.set('Paralyzed', {
+            duration: 2,
+            damage: 0,
+            immobility: true,
+        })
+        allEffects.set('Poisoned', {
+            duration: 2,
+            damage: this.#baseStats.maxHp * 0.05,
+            immobility: false,
+        })
+        if(allEffects.has(statusEffect)){
+            this.statusEffects.push(allEffects.get(statusEffect))
         }
     }
 
@@ -88,17 +85,12 @@ export class Pokemon {
     addExp(amt) {
         this.totalExp += amt
         this.tempexp += amt
-        if (getExpRequirement(this.level + 1) <= this.tempexp) {
+        if (this.#getExpRequirement(this.level + 1) <= this.tempexp) {
             this.levelUp()
             this.tempexp = 0
         }
     }
-    changenick(newnick) {
-        if (typeof (newnick) == "string") {
-            this.nick = newnick
-        }
-        else return false
-    }
+
     /**
      * @param {int} amt amount of damage to take
      * @returns true on faint, false otherwise

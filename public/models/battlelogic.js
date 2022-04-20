@@ -1,9 +1,11 @@
 export class BattleLogic {
+    turnnumber = 0
     constructor(pokemon1, pokemon2) {
         this.pokemon1 = pokemon1
         this.pokemon2 = pokemon2
     }
     turn(pokemon1move, pokemon2move = this.pokemon2.moves[Math.floor(Math.random() * 4)]) {
+        
         let p1level = this.pokemon1.level
         let p1power = pokemon1move.power
         let p1attack = this.pokemon1.currentStats.attack
@@ -31,15 +33,44 @@ export class BattleLogic {
         let p2type = this.getEffectiveness(pokemon2move.type, this.pokemon1.type)
 
         let p2damage = ((((2 * p2level / 5) + 2) * p2power * p2attack / p2def) / 50 + 2) * p2crit * p2rand * p2stab * p2type
+        
+        //--------------------------takes care of effects prior to fight-----------------------------
+        let pokemon1effects = this.pokemon1.statusEffects
+        for(let i =0; i < pokemon1effects.length; i++){
+            pokemon1.takeDamage(pokemon1effects[i].damage)
+            if(pokemon1ffects[i].immobility){
+                this.pokemon1.canMove = false
+            }
+            pokemon1ffects[i].duration -= 1
+            if( pokemon1ffects[i].duration == 0){
+                this.pokemon1.statusEffects.splice(i, 1)
+            }
+        }
+       
+        let pokemon2effects = this.pokemon2.statusEffects
+        for(let i =0; i < pokemon2effects.length; i++){
+            pokemon2.takeDamage(pokemone2ffects[i].damage) 
+            if(pokemon2ffects[i].immobility){
+                this.pokemon2.canMove = false
+            }
+            pokemon2ffects[i].duration -= 1
+            if( pokemon2ffects[i].duration == 0){
+                this.pokemon2.statusEffects.splice(i, 1)
+            }
+        }
+        
 
-        if (this.pokemon1.currentStats.speed > this.pokemon2.currentStats.speed) {
+         //---------------------------->takes care of effects prior to fight<-----------------------------\\
+        if (this.pokemon1.currentStats.speed > this.pokemon2.currentStats.speed && this.pokemon1.canMove == true) {
             if (this.pokemon2.takeDamage(p1damage)) {
+                this.turnnumber += 1
                 return {
                     pokemon1: this.pokemon1,
                     pokemon2: this.pokemon2,
                     winner: 1
                 }
             } else if (this.pokemon1.takeDamage(p2damage)) {
+                this.turnnumber += 1
                 return {
                     pokemon1: this.pokemon1,
                     pokemon2: this.pokemon2,
@@ -48,12 +79,15 @@ export class BattleLogic {
             }
         } else {
             if (this.pokemon1.takeDamage(p2damage)) {
+                this.turnnumber += 1
                 return {
                     pokemon1: this.pokemon1,
                     pokemon2: this.pokemon2,
                     winner: 2
+                   
                 }
             } else if (this.pokemon2.takeDamage(p1damage)) {
+                this.turnnumber += 1
                 return {
                     pokemon1: this.pokemon1,
                     pokemon2: this.pokemon2,
@@ -61,6 +95,7 @@ export class BattleLogic {
                 }
             }
         }
+        this.turnnumber += 1
         return false
         // calculate damage ((((2 * level / 5) + 2) * power * attack / def) / 50 + 2) * crit * rand * stab * type
         // trigger status effects

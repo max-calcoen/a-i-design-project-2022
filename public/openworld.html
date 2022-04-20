@@ -26,6 +26,19 @@
         const loader = new PIXI.Loader();
 
         loader.add('atlas', '/assets/tilemap/atlas.json');
+        
+        
+        //Variable for 
+        const resources = loader.resources;
+        const size = 32;
+
+        // Calculate the dimensions of the tilemap to build
+        const pxW = renderer.screen.width;
+        const pxH = renderer.screen.height;
+        const tileW = pxW / size;
+        const tileH = pxH / size;
+
+
         loader.load((_, resources) => {
             // Setup tilemap scene
             stage = new PIXI.Container();
@@ -42,14 +55,7 @@
             // Clear the tilemap, in case it is being reused.
             tilemap.clear();
 
-            const resources = loader.resources;
-            const size = 32;
-
-            // Calculate the dimensions of the tilemap to build
-            const pxW = renderer.screen.width;
-            const pxH = renderer.screen.height;
-            const tileW = pxW / size;
-            const tileH = pxH / size;
+           
             // Fill the scene with grass and sparse rocks 
             for (let i = 0; i < tileW; i++) {
                 for (let j = 0; j < tileH; j++) {
@@ -69,17 +75,19 @@
                     
                 }
             }
-
+            // Make Sprite Tile
             sprite = tilemap.tile(
-                'brick_wall.png',
+                'chest.png',
                 tileW/2*size,
                 tileH/2*size,
             );
-            // Button does not appear in the atlas, but @pixi/tilemap won't surrender
-            // - it will create second layer for special for buttons and they will
-            // appear above all the other tiles.
+            
         }
+
+
+        //Add event listener to keydown
         window.addEventListener('keydown', handleKeyPress)
+        // Takes an event and moves the canvas if it the key is one of the following: WASD
         function handleKeyPress(evt){
             if (evt.which === 68) {
                 sprite.x += 8
