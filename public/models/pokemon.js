@@ -52,29 +52,29 @@ export class Pokemon {
     addstatuseffect(status_effect) {
         let alleffects = [
             ['Frozen', Frozen = {
-                duration = 2,
-                damage = 0,
-                immobility = true
+                duration: 2,
+                damage: 0,
+                immobility: true
             }],
             ['Burned', Burned = {
-                duration = 2,
-                damage = this.#baseStats.maxHp * 0.1,
-                immobility = false
+                duration: 2,
+                damage: this.#baseStats.maxHp * 0.1,
+                immobility: false
             }],
             ['Paralyzed', Paralyzed = {
-                duration = 2,
-                damage = 0,
-                immobility = true
+                duration: 2,
+                damage: 0,
+                immobility: true
             }],
             ['Poisoned', Poisoned = {
-                duration = 2,
-                damage = this.#baseStats.maxHp * 0.05,
-                immobility = false
+                duration: 2,
+                damage: this.#baseStats.maxHp * 0.05,
+                immobility: false
             }],
             ['Sleeping', Sleeping = {
-                duration = 2,
-                damage = 0,
-                immobility = true
+                duration: 2,
+                damage: 0,
+                immobility: true
             }]
         ]
         for (let i = 0; i < alleffects.length; i++) {

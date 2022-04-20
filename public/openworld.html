@@ -50,9 +50,7 @@
             const pxH = renderer.screen.height;
             const tileW = pxW / size;
             const tileH = pxH / size;
-            // Fill the scene with grass and sparse rocks on top and chests on
-            // the bottom. Some chests are animated between two tile textures
-            // (so they flash red).
+            // Fill the scene with grass and sparse rocks 
             for (let i = 0; i < tileW; i++) {
                 for (let j = 0; j < tileH; j++) {
                     if(i%2 == 0 && j % 2 == 0){
