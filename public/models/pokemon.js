@@ -15,7 +15,9 @@ export class Pokemon {
     constructor(name, element, moves, frontImg, backImg, baseStats, maxStats) {
         this.name = name
         let defaultElements = ["Water", "Fire", "Poison", "Grass", "Bug", "Fairy", "Dragon", "Normal", "Ghost", "Physic", "Lightning", "Flying", "Ground", "Rock", "Dark", "Steel", "Ice", "Fighting"]
-        if (defaultElements.includes(element)) this.element = element
+        if (defaultElements.includes(element)) {
+            this.element = element
+        }
         this.moves = moves
         this.#frontImg = frontImg
         this.#backImg = backImg
@@ -24,6 +26,7 @@ export class Pokemon {
         this.currentStats = baseStats
         this.currentHp = 100
         this.totalExp = 0
+        this.tempexp = 0
         this.nick = ""
         this.level = 0
         this.currentHp = this.#baseStats.maxHp
@@ -45,12 +48,57 @@ export class Pokemon {
         }
         return false
     }
+    //adds an array containing the id of the status_effect along with its effect values to the pokemon statuseffects array
+    addstatuseffect(status_effect) {
+        let alleffects = [
+            ['Frozen', Frozen = {
+                duration = 2,
+                damage = 0,
+                immobility = true
+            }],
+            ['Burned', Burned = {
+                duration = 2,
+                damage = this.#baseStats.maxHp * 0.1,
+                immobility = false
+            }],
+            ['Paralyzed', Paralyzed = {
+                duration = 2,
+                damage = 0,
+                immobility = true
+            }],
+            ['Poisoned', Poisoned = {
+                duration = 2,
+                damage = this.#baseStats.maxHp * 0.05,
+                immobility = false
+            }],
+            ['Sleeping', Sleeping = {
+                duration = 2,
+                damage = 0,
+                immobility = true
+            }]
+        ]
+        for (let i = 0; i < alleffects.length; i++) {
+            if (status_effect == alleffects[i][0]) {
+                this.statusEffects.push(alleffects[i])
+            }
+        }
+    }
 
     // TODO
     addExp(amt) {
-
+        this.totalExp += amt
+        this.tempexp += amt
+        if (getExpRequirement(this.level + 1) <= this.tempexp) {
+            this.levelUp()
+            this.tempexp = 0
+        }
     }
-
+    changenick(newnick) {
+        if (typeof (newnick) == "string") {
+            this.nick = newnick
+        }
+        else return false
+    }
     /**
      * @param {int} amt amount of damage to take
      * @returns true on faint, false otherwise
@@ -73,6 +121,7 @@ export class Pokemon {
      */
     get fainted() {
         if (this.currentStats.currentHp <= 0) {
+            this.currentStats.currentHp = 0
             return true
         } else {
             return false
