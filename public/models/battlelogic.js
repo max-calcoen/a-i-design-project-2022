@@ -4,7 +4,9 @@ export class BattleLogic {
         this.pokemon2 = pokemon2
         this.turnnumber = 0
     }
+    // TODO: make it possible to use potions
     turn(pokemon1move, pokemon2move = this.pokemon2.moves[Math.floor(Math.random() * 4)]) {
+
         let p1level = this.pokemon1.level
         let p1power = pokemon1move.power
         let p1attack = this.pokemon1.currentStats.attack
@@ -16,7 +18,7 @@ export class BattleLogic {
         if (this.pokemon1.types[0] == pokemon1move.type) p1stab = 1.5
         let p1type = this.getEffectiveness(pokemon1move.type, this.pokemon2.types)
         let p1damage = Math.floor(((((2 * p1level / 5) + 2) * p1power * p1attack / p2def) / 50 + 2) * p1crit * p1rand * p1stab * p1type)
-        
+
         let p2level = this.pokemon2.level
         let p2power = pokemon2move.power
         let p1def = this.pokemon1.currentStats.defense
@@ -56,36 +58,39 @@ export class BattleLogic {
                 this.pokemon2.canMove = true
             }
         }
-
-
         //-------------------------------fight---------------------------------
-        if (this.pokemon1.currentStats.speed > this.pokemon2.currentStats.speed && this.pokemon1.canMove == true) {
-            if (this.pokemon2.takeDamage(p1damage) && this.pokemon1.canMove == true) {
-                this.turnnumber += 1
+        if (This.pokemon1.canMove && pokemon1.currentStats.speed > this.pokemon2.currentStats.speed) {
+            let damageResult = this.pokemon2.takeDamage(p1damage)
+            let inflicteffect = pokemon1move.inflict()
+            if (inflicteffect != false) {
+                this.pokemon1.statusEffects.addStatusEffect(inflicteffect)
+            }
+            if (this.pokemon1.canMove && damageResult) {
                 return {
                     pokemon1: this.pokemon1,
                     pokemon2: this.pokemon2,
                     winner: 1
                 }
-            } else if (this.pokemon1.takeDamage(p2damage) && this.pokemon2.canMove == true) {
-                this.turnnumber += 1
+            } else if (this.pokemon2.canMove && damageResult) {
                 return {
                     pokemon1: this.pokemon1,
                     pokemon2: this.pokemon2,
                     winner: 2
                 }
             }
-        } else {
-            if (this.pokemon1.takeDamage(p2damage) && this.pokemon2.canMove == true) {
-                this.turnnumber += 1
+        } else if (this.pokemon2.canMove) {
+            let damageResult = this.pokemon1.takeDamage(p1damage)
+            let inflicteffect = pokemon2move.inflict()
+            if (inflicteffect != false) {
+                this.pokemon2.statusEffects.addStatusEffect(inflicteffect)
+            }
+            if (this.pokemon1.canMove && damageResult) {
                 return {
                     pokemon1: this.pokemon1,
                     pokemon2: this.pokemon2,
                     winner: 2
-
                 }
-            } else if (this.pokemon2.takeDamage(p1damage) && this.pokemon1.canMove == true) {
-                this.turnnumber += 1
+            } else if (this.pokemon1.canMove && damageResult) {
                 return {
                     pokemon1: this.pokemon1,
                     pokemon2: this.pokemon2,
@@ -98,6 +103,11 @@ export class BattleLogic {
         // calculate damage ((((2 * level / 5) + 2) * power * attack / def) / 50 + 2) * crit * rand * stab * type
         // trigger status effects
     }
+
+    // TODO: make it possible to throw pokeballs (calls turn())
+
+
+
     /**
      * @param {string} attack type of attacking pokemon
      * @param {string} def type of defending pokemon

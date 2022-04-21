@@ -79,12 +79,12 @@ export class Pokemon {
     }
 
     /**
+
      * @param {int} amt amount of damage to take
      * @returns true on faint, false otherwise
      */
     takeDamage(amt) {
         this.currentStats.health -= amt
-        this.move
         return this.fainted
     }
 

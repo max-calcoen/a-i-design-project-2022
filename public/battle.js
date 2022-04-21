@@ -4,12 +4,7 @@ let turtwig = pokedex.get("Turtwig")
 let raichu = pokedex.get("Raichu")
 let battle = new BattleLogic(turtwig, raichu)
 
-window.onload = init
-
-function init() {
-    showOptions()
-}
-
+window.onload = showOptions
 
 /**
  * Removes event listeners on all buttons
@@ -52,13 +47,13 @@ function handleFightButtonClick() {
                 console.log("winner: " + battleResult.winner)
                 turtwig = battleResult.pokemon1
                 raichu = battleResult.pokemon2
+                // clear screen
             } else {
                 resetButtonListeners()
                 showOptions()
-                console.log("UPDATED STATS:")
-                console.log(battle.pokemon1.currentStats)
-                console.log(battle.pokemon2.currentStats)
+
             }
+
         }
     }
     showBackButton()

@@ -8,9 +8,8 @@ export class Move {
      * @param {int} power power of move (70)
      * @param {int} pp power points- number of times a pokemon can use an attack (10)
      * @param {int} accuracy chance out of 100 to hit target (90)
-     * @param {map} inflict array constituting of inflict type, chance to hit (new Map([["burning", 10]]))
      */
-    constructor(name, type, isSpecial, power, pp, accuracy, inflict = []) {
+    constructor(name, type, isSpecial, power, pp, accuracy) {
         this.name = name
         this.type = type
         this.isSpecial = isSpecial
