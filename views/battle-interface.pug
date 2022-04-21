@@ -15,11 +15,15 @@ html(lang="en")
                         div.healthbar
                     p #{enemypokemon.name}
                 div#playerhealth
-                    p #{userpokemon.name}
+                    p 
+                        | #{userpokemon.name} 
+                        span#currentNumPlayerHealth 25
+                        | /
+                        span#maxNumPlayerHealth 25
                     .healthbarcontainer
                         .healthbar
-                img#p1(src="assets/sprites/turtwig.png")
-                img#p2(src="assets/sprites/raichu.png")
+                img#p1(src="assets/sprites/turtwigback.png")
+                img#p2(src="assets/sprites/raichufront.png")
             div#battleoptions
                 p What will #{userpokemon.nick} do?
                 div#battleoptionsgrid

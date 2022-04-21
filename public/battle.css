@@ -1,3 +1,8 @@
+:root {
+    --player-health: 100%;
+    --enemy-health: 100%;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -66,10 +71,16 @@ div.healthbarcontainer {
 }
 
 div.healthbar {
-    background-color: gray;
-    margin: 0px;
-    width: 100px;
     height: 20px;
+    background-color: gray;
+}
+
+div#playerhealth>div.healthbarcontainer>div.healthbar {
+    width: var(--player-health);
+}
+
+div#enemyhealth>div.healthbarcontainer>div.healthbar {
+    width: var(--enemy-health);
 }
 
 div#playerhealth {

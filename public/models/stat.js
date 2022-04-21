@@ -11,6 +11,6 @@ export class Stat {
         this.attack = attack
         this.speed = speed
         this.defense = defense
-        this.maxhealth = health
+        this.maxHealth = health
     }
 }

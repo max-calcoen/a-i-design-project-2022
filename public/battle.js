@@ -4,7 +4,12 @@ let turtwig = pokedex.get("Turtwig")
 let raichu = pokedex.get("Raichu")
 let battle = new BattleLogic(turtwig, raichu)
 
-window.onload = showOptions
+window.onload = init
+
+function init() {
+    showOptions()
+}
+
 
 /**
  * Removes event listeners on all buttons
@@ -21,8 +26,6 @@ function resetButtonListeners() {
  * Shows game options (Fight, Bag, Pokemon, Run)
  */
 function showOptions() {
-    console.log(battle.pokemon1.currentStats)
-    console.log(battle.pokemon2.currentStats)
     let buttons = document.getElementsByTagName("button")
     buttons[0].innerText = "Fight"
     document.getElementById("box1").children[0].addEventListener("click", handleFightButtonClick)
@@ -46,30 +49,40 @@ function handleFightButtonClick() {
         document.getElementById("box" + (i + 1)).children[0].onclick = () => {
             let battleResult = battle.turn(turtwig.moves[i], raichu.moves[Math.floor(Math.random() * 4)])
             if (battleResult) {
-                console.log("winner: %s" % battleResult.winner)
+                console.log("winner: " + battleResult.winner)
                 turtwig = battleResult.pokemon1
                 raichu = battleResult.pokemon2
+            } else {
+                resetButtonListeners()
+                showOptions()
+                console.log("UPDATED STATS:")
+                console.log(battle.pokemon1.currentStats)
+                console.log(battle.pokemon2.currentStats)
             }
-            resetButtonListeners()
-            showOptions()
-            console.log("UPDATED STATS:")
-            console.log(battle.pokemon1.currentStats)
-            console.log(battle.pokemon2.currentStats)
         }
     }
+    showBackButton()
 }
 
 // TODO
 function handleBagButtonClick() {
     console.log("bag button clicked")
+    showBackButton()
 }
 
 // TODO
 function handlePokemonButtonClick() {
     console.log("pokemon button clicked")
+    showBackButton()
 }
 
 // TODO
 function handleRunButtonClick() {
     console.log("run button clicked")
+    showBackButton()
+}
+
+// TODO
+function showBackButton() {
+
 }

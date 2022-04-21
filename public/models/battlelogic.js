@@ -15,7 +15,7 @@ export class BattleLogic {
         let p1stab = 1
         if (this.pokemon1.types[0] == pokemon1move.type) p1stab = 1.5
         let p1type = this.getEffectiveness(pokemon1move.type, this.pokemon2.types)
-        let p1damage = ((((2 * p1level / 5) + 2) * p1power * p1attack / p2def) / 50 + 2) * p1crit * p1rand * p1stab * p1type
+        let p1damage = Math.floor(((((2 * p1level / 5) + 2) * p1power * p1attack / p2def) / 50 + 2) * p1crit * p1rand * p1stab * p1type)
         
         let p2level = this.pokemon2.level
         let p2power = pokemon2move.power
@@ -28,7 +28,7 @@ export class BattleLogic {
         if (this.pokemon2.types[0] == pokemon1move.type) p2stab = 1.5
         let p2type = this.getEffectiveness(pokemon2move.type, this.pokemon1.types)
 
-        let p2damage = ((((2 * p2level / 5) + 2) * p2power * p2attack / p1def) / 50 + 2) * p2crit * p2rand * p2stab * p2type
+        let p2damage = Math.floor(((((2 * p2level / 5) + 2) * p2power * p2attack / p1def) / 50 + 2) * p2crit * p2rand * p2stab * p2type)
 
 //--------------------------takes care of effects prior to fight-----------------------------
 // TODO: broken, needs fixing
