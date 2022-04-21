@@ -15,25 +15,23 @@ export class Heal extends Item {
         this.#subtype = subtype
     }
     use(type, pokemon) {
-        let MAXHP = pokemon.baseStats.health
-        let currentHP = pokemon.currentStats.health
+        let MAXHP = pokemon.currentStats.maxHealth
         if (type == 'potion') {
-            if (currentHP == 0) {
+            if (pokemon.currentStats.health == 0) {
                 return 'cannot use a potion on a fainted pokemon bozo...'
             }
-            if (currentHP == pokemon.baseStats.health) {
+            if (pokemon.currentStats.health == pokemon.baseStats.health) {
                 return 'it would be a shame to waste such valuable resources...'
             }
             else {
-                if (subtype == '')
-                    currentHP += healamt
-                if (currentHP > BaseHP) {
-                    currentHP = BaseHP
-                }
+                if (subtype == 'regular')
+                    pokemon.heal(40)
+                if (subtype == 'super')
+                    pokemon.heal(100)
             }
         }
         if (type == 'Revive') {
-            if (currentHP == pokemon.baseStats.health) {
+            if (pokemon.currentStats.health == pokemon.baseStats.health) {
                 return 'it would be a shame to waste such valuable resources...'
             }
             if (subtype == 'regular') {
