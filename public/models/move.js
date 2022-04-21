@@ -10,7 +10,7 @@ export class Move {
      * @param {int} accuracy chance out of 100 to hit target (90)
      * @param {map} inflict array constituting of inflict type, chance to hit (new Map([["burning", 10]]))
      */
-    constructor(name, type, isSpecial, power, pp, accuracy, inflict) {
+    constructor(name, type, isSpecial, power, pp, accuracy, inflict = []) {
         this.name = name
         this.type = type
         this.isSpecial = isSpecial
@@ -19,6 +19,7 @@ export class Move {
         this.accuracy = accuracy
         this.#inflict = inflict
     }
+
     /**
      * @return {string} returns the inflict type
      * @return {boolean} returns false if no infliction

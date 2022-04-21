@@ -5,31 +5,26 @@ export class Pokemon {
     #maxStats
     /**
      * @param {string} name name of pokemon ("Charmander")
-     * @param {string} element elemental type of pokemon ("fire")
+     * @param {string} types elemental type of pokemon ("fire")
      * @param {array} moves array of moves ([moves.get("flamethrower"), moves.get("scratch"), moves.get("growl"))])
      * @param {string} frontImg image url of front of pokemon ("charmanderfront.png")
      * @param {string} backImg image url of back of pokemon ("charmandeback.png")
      * @param {Stat} baseStats starting / level 1 stats of the pokemon (new Stat(15, 20, 100))
      * @param {Stat} maxStats maximum possible / level 100 stats of the pokemon (new Stat(200, 250, 250))
      */
-    constructor(name, element, moves, frontImg, backImg, baseStats, maxStats) {
+    constructor(name, types, moves, frontImg, backImg, baseStats, maxStats) {
         this.name = name
-        let defaultElements = ["Water", "Fire", "Poison", "Grass", "Bug", "Fairy", "Dragon", "Normal", "Ghost", "Physic", "Lightning", "Flying", "Ground", "Rock", "Dark", "Steel", "Ice", "Fighting"]
-        if (defaultElements.includes(element)) {
-            this.element = element
-        }
+        this.types = types
         this.moves = moves
         this.#frontImg = frontImg
         this.#backImg = backImg
         this.#baseStats = baseStats
         this.#maxStats = maxStats
         this.currentStats = baseStats
-        this.currentHp = 100
         this.totalExp = 0
         this.tempexp = 0
         this.nick = ""
         this.level = 0
-        this.currentHp = this.#baseStats.maxHp
         this.statusEffects = []
         this.canMove = true
     }
@@ -40,6 +35,7 @@ export class Pokemon {
      * @param {Move} moveToReplace move to unlearn
      * @returns true on success, false on failure
      */
+    // TODO- make better (using different array methods)
     learnMove(newMove, moveToReplace) {
         for (let i = 0; i < this.moves.length; i++) {
             if (this.moves[i].equals(moveToReplace)) {
@@ -54,6 +50,7 @@ export class Pokemon {
      * adds an array containing the id of the status_effect along with its effect values to the pokemon statuseffects array
      * @param {string} statusEffect the status effect given to the pokemon
      */
+    // TODO- check if working
     addStatusEffect(statusEffect) {
         let allEffects = new Map()
         allEffects.set('Frozen', {
@@ -81,7 +78,7 @@ export class Pokemon {
         }
     }
 
-    // TODO
+    // TODO- check if working
     addExp(amt) {
         this.totalExp += amt
         this.tempexp += amt
@@ -96,7 +93,7 @@ export class Pokemon {
      * @returns true on faint, false otherwise
      */
     takeDamage(amt) {
-        this.currentStats.currentHp -= amt
+        this.currentStats.health -= amt
         return this.fainted
     }
 
@@ -104,16 +101,16 @@ export class Pokemon {
      * @param {int} amt amount of health points to heal / add to current hp
      */
     heal(amt) {
-        this.currentStats.currentHp += amt
-        if (this.currentStats.currentHp > this.currentStats.maxHp) this.currentStats.currentHp = this.currentStats.maxHp
+        this.currentStats.health += amt
+        if (this.currentStats.health > this.#maxStats.health) this.currentStats.health = this.currentStats.maxHealth
     }
 
     /**
      * @returns true on faint, false otherwise
      */
     get fainted() {
-        if (this.currentStats.currentHp <= 0) {
-            this.currentStats.currentHp = 0
+        if (this.currentStats.health <= 0) {
+            this.currentStats.health = 0
             return true
         } else {
             return false
@@ -131,5 +128,11 @@ export class Pokemon {
      */
     #getExpRequirement(level) {
         return 0.4 * Math.pow(level, 3)
+    }
+    get basics() {
+        return `name: ${this.name}
+stats:
+-> current health: ${this.currentStats.health}
+-> fainted: ${this.fainted}`
     }
 }

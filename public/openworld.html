@@ -2,19 +2,19 @@
 <html>
 
 <head>
-  <script src="https://pixijs.download/release/pixi.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@pixi/tilemap@latest/dist/pixi-tilemap.umd.js"></script>
+    <script src="https://pixijs.download/release/pixi.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@pixi/tilemap@latest/dist/pixi-tilemap.umd.js"></script>
 </head>
 
 <body>
     <script>
         let sprite;
         const renderer = PIXI.autoDetectRenderer({
-        antialias: true,
-        autoDensity: true,
-        resolution: window.devicePixelRatio || 1,
-        width: 1425,
-        height: 690,
+            antialias: true,
+            autoDensity: true,
+            resolution: window.devicePixelRatio || 1,
+            width: 1425,
+            height: 690,
         });
         window.addEventListener('keydown', handleKeyPress)
         let stage;
@@ -26,8 +26,8 @@
         const loader = new PIXI.Loader();
 
         loader.add('atlas', '/assets/tilemap/atlas.json');
-        
-        
+
+
         //Variable for 
         const resources = loader.resources;
         const size = 32;
@@ -55,40 +55,40 @@
             // Clear the tilemap, in case it is being reused.
             tilemap.clear();
 
-           
+
             // Fill the scene with grass and sparse rocks 
             for (let i = 0; i < tileW; i++) {
                 for (let j = 0; j < tileH; j++) {
-                    if(i%2 == 0 && j % 2 == 0){
+                    if (i % 2 == 0 && j % 2 == 0) {
                         tilemap.tile(
-                        'grass.png',
-                        i * size,
-                        j * size,
-                    );
+                            'grass.png',
+                            i * size,
+                            j * size,
+                        );
                     } else {
                         tilemap.tile(
-                        'tough.png',
-                        i * size,
-                        j * size,
-                    );
+                            'tough.png',
+                            i * size,
+                            j * size,
+                        );
                     }
-                    
+
                 }
             }
             // Make Sprite Tile
             sprite = tilemap.tile(
                 'chest.png',
-                tileW/2*size,
-                tileH/2*size,
+                tileW / 2 * size,
+                tileH / 2 * size,
             );
-            
+
         }
 
 
         //Add event listener to keydown
         window.addEventListener('keydown', handleKeyPress)
         // Takes an event and moves the canvas if it the key is one of the following: WASD
-        function handleKeyPress(evt){
+        function handleKeyPress(evt) {
             if (evt.which === 68) {
                 sprite.x += 8
             }

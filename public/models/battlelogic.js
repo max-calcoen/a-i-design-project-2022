@@ -1,66 +1,62 @@
 export class BattleLogic {
-    turnnumber = 0
     constructor(pokemon1, pokemon2) {
         this.pokemon1 = pokemon1
         this.pokemon2 = pokemon2
+        this.turnnumber = 0
     }
     turn(pokemon1move, pokemon2move = this.pokemon2.moves[Math.floor(Math.random() * 4)]) {
-        
         let p1level = this.pokemon1.level
         let p1power = pokemon1move.power
         let p1attack = this.pokemon1.currentStats.attack
-        let p1def = this.pokemon1.currentStats.def
+        let p2def = this.pokemon2.currentStats.defense
         let p1crit = 1
         if (Math.floor(Math.random() * 16) == 15) p1crit = 1.75 // 1/16 chance to deal 1.75x damage on critical attack
         let p1rand = (Math.floor(Math.random() * 15) + 85) / 100
         let p1stab = 1
-        if (this.pokemon1.type == pokemon1move.type) p1stab = 1.5
-        let p1type = this.getEffectiveness(pokemon1move.type, this.pokemon2.type)
-
-        let p1damage = ((((2 * p1level / 5) + 2) * p1power * p1attack / p1def) / 50 + 2) * p1crit * p1rand * p1stab * p1type
-
-
-
+        if (this.pokemon1.types[0] == pokemon1move.type) p1stab = 1.5
+        let p1type = this.getEffectiveness(pokemon1move.type, this.pokemon2.types)
+        let p1damage = ((((2 * p1level / 5) + 2) * p1power * p1attack / p2def) / 50 + 2) * p1crit * p1rand * p1stab * p1type
+        
         let p2level = this.pokemon2.level
         let p2power = pokemon2move.power
+        let p1def = this.pokemon1.currentStats.defense
         let p2attack = this.pokemon2.currentStats.attack
-        let p2def = this.pokemon2.currentStats.def
         let p2crit = 1
         if (Math.floor(Math.random() * 16) == 15) p2crit = 1.75 // 1/16 chance to deal 1.75x damage on crit
         let p2rand = (Math.floor(Math.random() * 15) + 85) / 100
         let p2stab = 1
-        if (this.pokemon2.type == pokemon1move.type) p2stab = 1.5
-        let p2type = this.getEffectiveness(pokemon2move.type, this.pokemon1.type)
+        if (this.pokemon2.types[0] == pokemon1move.type) p2stab = 1.5
+        let p2type = this.getEffectiveness(pokemon2move.type, this.pokemon1.types)
 
-        let p2damage = ((((2 * p2level / 5) + 2) * p2power * p2attack / p2def) / 50 + 2) * p2crit * p2rand * p2stab * p2type
-        
-        //--------------------------takes care of effects prior to fight-----------------------------
+        let p2damage = ((((2 * p2level / 5) + 2) * p2power * p2attack / p1def) / 50 + 2) * p2crit * p2rand * p2stab * p2type
+
+//--------------------------takes care of effects prior to fight-----------------------------
+// TODO: broken, needs fixing
         let pokemon1effects = this.pokemon1.statusEffects
-        for(let i =0; i < pokemon1effects.length; i++){
+        for(let i = 0; i < pokemon1effects.length; i++){
             pokemon1.takeDamage(pokemon1effects[i].damage)
-            if(pokemon1ffects[i].immobility){
+            if (pokemon1effects[i].immobility){
                 this.pokemon1.canMove = false
             }
-            pokemon1ffects[i].duration -= 1
-            if( pokemon1ffects[i].duration == 0){
+            pokemon1effects[i].duration -= 1
+            if (pokemon1effects[i].duration == 0){
                 this.pokemon1.statusEffects.splice(i, 1)
             }
         }
-       
         let pokemon2effects = this.pokemon2.statusEffects
         for(let i =0; i < pokemon2effects.length; i++){
             pokemon2.takeDamage(pokemone2ffects[i].damage) 
-            if(pokemon2ffects[i].immobility){
+            if(pokemon2effects[i].immobility){
                 this.pokemon2.canMove = false
             }
-            pokemon2ffects[i].duration -= 1
-            if( pokemon2ffects[i].duration == 0){
+            pokemon2effects[i].duration -= 1
+            if( pokemon2effects[i].duration == 0){
                 this.pokemon2.statusEffects.splice(i, 1)
             }
         }
         
 
-         //---------------------------->takes care of effects prior to fight<-----------------------------\\
+//-------------------------------fight---------------------------------
         if (this.pokemon1.currentStats.speed > this.pokemon2.currentStats.speed && this.pokemon1.canMove == true) {
             if (this.pokemon2.takeDamage(p1damage)) {
                 this.turnnumber += 1
@@ -327,6 +323,26 @@ export class BattleLogic {
         types.get("water").set("dragon", 0.5)
         types.get("water").set("dark", 1)
         types.get("water").set("fairy", 1)
+        
+        types.set("grass", new Map())
+        types.get("grass").set("normal", 1)
+        types.get("grass").set("fighting", 1)
+        types.get("grass").set("flying", 0.5)
+        types.get("grass").set("poison", 0.5)
+        types.get("grass").set("ground", 2)
+        types.get("grass").set("rock", 2)
+        types.get("grass").set("bug", 0.5)
+        types.get("grass").set("ghost", 1)
+        types.get("grass").set("steel", 0.5)
+        types.get("grass").set("fire", 0.5)
+        types.get("grass").set("water", 2)
+        types.get("grass").set("grass", 0.5)
+        types.get("grass").set("electric", 1)
+        types.get("grass").set("physic", 1)
+        types.get("grass").set("ice", 1)
+        types.get("grass").set("dragon", 0.5)
+        types.get("grass").set("dark", 1)
+        types.get("grass").set("fairy", 1)
 
         types.set("electric", new Map())
         types.get("electric").set("normal", 1)
@@ -447,11 +463,7 @@ export class BattleLogic {
         types.get("fairy").set("dragon", 0.5)
         types.get("fairy").set("dark", 0.5)
         types.get("fairy").set("fairy", 1)
-
-        console.log(types)
-        console.log(attack)
-        console.log(def)
-        console.log(types.get(attack).get(def))
-        return types.get(attack).get(def)
+        if (def.length == 1) return types.get(attack).get(def[0])
+        return types.get(attack).get(def[0]) * types.get(attack).get(def[1])
     }
 }
