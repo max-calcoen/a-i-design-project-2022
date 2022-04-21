@@ -8,4 +8,5 @@ export class Item {
         this.name = name
         this.description = description
     }
+
 }

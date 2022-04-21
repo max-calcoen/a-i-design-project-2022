@@ -94,6 +94,7 @@ export class Pokemon {
     heal(amt) {
         this.currentStats.health += amt
         if (this.currentStats.health > this.#maxStats.health) this.currentStats.health = this.currentStats.maxHealth
+        return true
     }
 
     /**
