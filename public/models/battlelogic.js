@@ -6,6 +6,8 @@ export class BattleLogic {
     }
     // TODO: make it possible to use potions
     turn(pokemon1move, pokemon2move = this.pokemon2.moves[Math.floor(Math.random() * 4)]) {
+        console.log("pokemon 2 used: ")
+        console.log(pokemon2move)
 
         let p1level = this.pokemon1.level
         let p1power = pokemon1move.power
@@ -32,40 +34,12 @@ export class BattleLogic {
 
         let p2damage = Math.floor(((((2 * p2level / 5) + 2) * p2power * p2attack / p1def) / 50 + 2) * p2crit * p2rand * p2stab * p2type)
 
-        //--------------------------takes care of effects prior to fight-----------------------------
-        // TODO: broken, needs fixing
-        let pokemon1effects = this.pokemon1.statusEffects
-        for (let i = 0; i < pokemon1effects.length; i++) {
-            pokemon1.takeDamage(pokemon1effects[i].damage)
-            if (pokemon1effects[i].immobility) {
-                this.pokemon1.canMove = false
-            }
-            pokemon1effects[i].duration--
-            if (pokemon1effects[i].duration == 0) {
-                this.pokemon1.statusEffects.splice(i, 1)
-                this.pokemon1.canMove = true
-            }
-        }
-        let pokemon2effects = this.pokemon2.statusEffects
-        for (let i = 0; i < pokemon2effects.length; i++) {
-            pokemon2.takeDamage(pokemon2effects[i].damage)
-            if (pokemon2effects[i].immobility) {
-                this.pokemon2.canMove = false
-            }
-            pokemon2effects[i].duration--
-            if (pokemon2effects[i].duration == 0) {
-                this.pokemon2.statusEffects.splice(i, 1)
-                this.pokemon2.canMove = true
-            }
-        }
         //-------------------------------fight---------------------------------
-        if (This.pokemon1.canMove && pokemon1.currentStats.speed > this.pokemon2.currentStats.speed) {
-            let damageResult = this.pokemon2.takeDamage(p1damage)
-            let inflicteffect = pokemon1move.inflict()
-            if (inflicteffect != false) {
-                this.pokemon1.statusEffects.addStatusEffect(inflicteffect)
+        if (this.pokemon1.currentStats.speed > this.pokemon2.currentStats.speed) {
+            if (this.pokemon1.canMove) {
+                damageResult = this.pokemon2.takeDamage(p1damage)
             }
-            if (this.pokemon1.canMove && damageResult) {
+            if (damageResult) {
                 return {
                     pokemon1: this.pokemon1,
                     pokemon2: this.pokemon2,
@@ -80,10 +54,6 @@ export class BattleLogic {
             }
         } else if (this.pokemon2.canMove) {
             let damageResult = this.pokemon1.takeDamage(p1damage)
-            let inflicteffect = pokemon2move.inflict()
-            if (inflicteffect != false) {
-                this.pokemon2.statusEffects.addStatusEffect(inflicteffect)
-            }
             if (this.pokemon1.canMove && damageResult) {
                 return {
                     pokemon1: this.pokemon1,

@@ -16,21 +16,5 @@ export class Move {
         this.power = power
         this.pp = pp
         this.accuracy = accuracy
-        this.#inflict = inflict
     }
-
-    /**
-     * @return {string} returns the inflict type
-     * @return {boolean} returns false if no infliction
-     */
-    get inflict() {
-        if (this.#inflict.length <= 1) return false
-        let random = Math.round(Math.random() * 100 + 1)
-        if (this.#inflict[1] >= random) {
-            return this.#inflict[0]
-        }
-        return false
-    }
-
-
 }
