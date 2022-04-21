@@ -16,7 +16,7 @@ export class BattleLogic {
         if (this.pokemon1.types[0] == pokemon1move.type) p1stab = 1.5
         let p1type = this.getEffectiveness(pokemon1move.type, this.pokemon2.types)
         let p1damage = ((((2 * p1level / 5) + 2) * p1power * p1attack / p2def) / 50 + 2) * p1crit * p1rand * p1stab * p1type
-        
+
         let p2level = this.pokemon2.level
         let p2power = pokemon2move.power
         let p1def = this.pokemon1.currentStats.defense
@@ -30,42 +30,44 @@ export class BattleLogic {
 
         let p2damage = ((((2 * p2level / 5) + 2) * p2power * p2attack / p1def) / 50 + 2) * p2crit * p2rand * p2stab * p2type
 
-//--------------------------takes care of effects prior to fight-----------------------------
-// TODO: broken, needs fixing
+        //--------------------------takes care of effects prior to fight-----------------------------
+        // TODO: broken, needs fixing
         let pokemon1effects = this.pokemon1.statusEffects
-        for(let i = 0; i < pokemon1effects.length; i++){
+        for (let i = 0; i < pokemon1effects.length; i++) {
             pokemon1.takeDamage(pokemon1effects[i].damage)
-            if (pokemon1effects[i].immobility){
+            if (pokemon1effects[i].immobility) {
                 this.pokemon1.canMove = false
             }
-            pokemon1effects[i].duration -= 1
-            if (pokemon1effects[i].duration == 0){
+            pokemon1effects[i].duration--
+            if (pokemon1effects[i].duration == 0) {
                 this.pokemon1.statusEffects.splice(i, 1)
+                this.pokemon1.canMove = true
             }
         }
         let pokemon2effects = this.pokemon2.statusEffects
-        for(let i =0; i < pokemon2effects.length; i++){
-            pokemon2.takeDamage(pokemone2ffects[i].damage) 
-            if(pokemon2effects[i].immobility){
+        for (let i = 0; i < pokemon2effects.length; i++) {
+            pokemon2.takeDamage(pokemon2effects[i].damage)
+            if (pokemon2effects[i].immobility) {
                 this.pokemon2.canMove = false
             }
-            pokemon2effects[i].duration -= 1
-            if( pokemon2effects[i].duration == 0){
+            pokemon2effects[i].duration--
+            if (pokemon2effects[i].duration == 0) {
                 this.pokemon2.statusEffects.splice(i, 1)
+                this.pokemon2.canMove = true
             }
         }
-        
 
-//-------------------------------fight---------------------------------
+
+        //-------------------------------fight---------------------------------
         if (this.pokemon1.currentStats.speed > this.pokemon2.currentStats.speed && this.pokemon1.canMove == true) {
-            if (this.pokemon2.takeDamage(p1damage)) {
+            if (this.pokemon2.takeDamage(p1damage) && this.pokemon1.canMove == true) {
                 this.turnnumber += 1
                 return {
                     pokemon1: this.pokemon1,
                     pokemon2: this.pokemon2,
                     winner: 1
                 }
-            } else if (this.pokemon1.takeDamage(p2damage)) {
+            } else if (this.pokemon1.takeDamage(p2damage) && this.pokemon2.canMove == true) {
                 this.turnnumber += 1
                 return {
                     pokemon1: this.pokemon1,
@@ -74,15 +76,15 @@ export class BattleLogic {
                 }
             }
         } else {
-            if (this.pokemon1.takeDamage(p2damage)) {
+            if (this.pokemon1.takeDamage(p2damage) && this.pokemon2.canMove == true) {
                 this.turnnumber += 1
                 return {
                     pokemon1: this.pokemon1,
                     pokemon2: this.pokemon2,
                     winner: 2
-                   
+
                 }
-            } else if (this.pokemon2.takeDamage(p1damage)) {
+            } else if (this.pokemon2.takeDamage(p1damage) && this.pokemon1.canMove == true) {
                 this.turnnumber += 1
                 return {
                     pokemon1: this.pokemon1,
@@ -323,7 +325,7 @@ export class BattleLogic {
         types.get("water").set("dragon", 0.5)
         types.get("water").set("dark", 1)
         types.get("water").set("fairy", 1)
-        
+
         types.set("grass", new Map())
         types.get("grass").set("normal", 1)
         types.get("grass").set("fighting", 1)
