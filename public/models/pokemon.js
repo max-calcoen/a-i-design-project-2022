@@ -45,7 +45,7 @@ export class Pokemon {
         }
         return false
     }
-    
+
     /**
      * adds an array containing the id of the status_effect along with its effect values to the pokemon statuseffects array
      * @param {string} statusEffect the status effect given to the pokemon
@@ -53,11 +53,6 @@ export class Pokemon {
     // TODO- check if working
     addStatusEffect(statusEffect) {
         let allEffects = new Map()
-        allEffects.set('Frozen', {
-            duration: 1,
-            damage: 0,
-            immobility: true,
-        })
         allEffects.set('Burned', {
             duration: 2,
             damage: this.#baseStats.maxHp * 0.1,
@@ -68,12 +63,7 @@ export class Pokemon {
             damage: 0,
             immobility: true,
         })
-        allEffects.set('Poisoned', {
-            duration: 2,
-            damage: this.#baseStats.maxHp * 0.05,
-            immobility: false,
-        })
-        if(allEffects.has(statusEffect)){
+        if (allEffects.has(statusEffect)) {
             this.statusEffects.push(allEffects.get(statusEffect))
         }
     }
@@ -94,6 +84,7 @@ export class Pokemon {
      */
     takeDamage(amt) {
         this.currentStats.health -= amt
+        this.move
         return this.fainted
     }
 
