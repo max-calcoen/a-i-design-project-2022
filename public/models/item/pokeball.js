@@ -9,12 +9,13 @@ export class Pokeball extends Item {
     constructor(type, probability) {
         this.type = type;
         this.probability = probability
+
     }
     /**
      * @param {Pokemon} pokemon pokemon trying to catch
      * @return true on catch, false otherwise
      */
     catch(pokemon) {
-        let catchRate = (pokemon.currentStats.maxHealth * (255) * 4) / (pokemon.currentStats.health * this.probability)
+
     }
 }

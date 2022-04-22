@@ -11,8 +11,9 @@ export class Pokemon {
      * @param {string} backImg image url of back of pokemon ("charmandeback.png")
      * @param {Stat} baseStats starting / level 1 stats of the pokemon (new Stat(15, 20, 100))
      * @param {Stat} maxStats maximum possible / level 100 stats of the pokemon (new Stat(200, 250, 250))
+     * @param {int} catchRate catch rate modifier
      */
-    constructor(name, types, moves, frontImg, backImg, baseStats, maxStats) {
+    constructor(name, types, moves, frontImg, backImg, baseStats, maxStats, catchRate = 30) {
         this.name = name
         this.types = types
         this.moves = moves
@@ -97,6 +98,19 @@ export class Pokemon {
         return true
     }
 
+    /**
+     * @param {int} prob probability of getting caught
+     */
+    catch(prob) {
+        prob = (prob * this.catchRate) / 30
+
+        let math = Math.random() * 100;
+        if (math < prob) {
+            // TODO: implement "caught" (add to User PC)
+            return true;
+        }
+        return false
+    }
     /**
      * @returns true on faint, false otherwise
      */
