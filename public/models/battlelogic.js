@@ -4,7 +4,12 @@ export class BattleLogic {
         this.pokemon2 = pokemon2
         this.turnnumber = 0
     }
-    // TODO: make it possible to use potions
+    // MAX: TODO: make it possible to use potions
+    // TODO: poggers
+    // FIX: the following comments are false!
+    // EVERETT: is cool
+    // BEN: is smart
+
     turn(pokemon1move, pokemon2move = this.pokemon2.moves[Math.floor(Math.random() * 4)]) {
         console.log("pokemon 2 used: ")
         console.log(pokemon2move)
