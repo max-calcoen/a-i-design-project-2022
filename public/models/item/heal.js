@@ -4,7 +4,6 @@ export class Potion extends Item {
     // Potion, super poton, max potion, revive, max revive
     #type
     #amt
-    #subtype
     /**
      * Contructs Move object
      * @param {string} type potion or revive?
@@ -32,6 +31,37 @@ export class Potion extends Item {
         return {
             success: pokemon.heal(this.amount),
             message: 'successfully used the ' + this.name + ' potion'
+        }
+    }
+}
+export class Revive extends Item {
+    // Potion, super poton, max potion, revive, max revive
+    percentheal
+
+    /**
+     * Contructs Move object
+     * @param {string} type potion or revive?
+     * @param {string} subtype what kind of potion or revive?
+     * @param {int} healamt how much item heals by
+     */
+    constructor(name, percentheal) {
+        this.name = name
+        this.percentheal = percentheal
+    }
+
+    use(pokemon) {
+        if (pokemon.currentStats.health > 0) {
+            return {
+                success: false,
+                message: 'cannot use a revive on a living pokemon bozo...'
+            }
+        }
+
+        else {
+            return {
+                success: pokemon.heal(pokemon.currenStats.maxHealth * this.percentheal),
+                message: 'successfully used the ' + this.name + ' revive'
+            }
         }
     }
 }
