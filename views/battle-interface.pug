@@ -9,24 +9,24 @@ html(lang="en")
         script(type="module" src="../battle.js")
     body
         div#content
-            div#battlearea
-                div#enemyhealth
-                    div.healthbarcontainer
-                        div.healthbar
-                    p #{enemypokemon.name}
-                div#playerhealth
+            div#battleArea
+                div#enemyHealth
+                    div.healthBarContainer
+                        div.healthBar
+                    p #{enemyPokemon.name}
+                div#playerHealth
                     p 
-                        | #{userpokemon.name} 
+                        | #{userPokemon.name} 
                         span#currentNumPlayerHealth 25
-                        | /
+                        | 
                         span#maxNumPlayerHealth 25
-                    .healthbarcontainer
-                        .healthbar
+                    .healthBarContainer
+                        .healthBar
                 img#p1(src="assets/sprites/turtwigback.png")
                 img#p2(src="assets/sprites/raichufront.png")
-            div#battleoptions
-                p What will #{userpokemon.nick} do?
-                div#battleoptionsgrid
+            div#battleOptions
+                p What will #{userPokemon.nick} do?
+                div#battleOptionsGrid
                     div#box1
                         button Fight
                     div#box2
@@ -35,3 +35,5 @@ html(lang="en")
                         button Pokemon
                     div#box4
                         button Run
+                div#backButtonContainer
+                    button#back.hidden Back

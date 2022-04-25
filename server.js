@@ -20,10 +20,10 @@ let users = []
 
 app.get("/battle", (req, res) => {
     res.render("battle-interface", {
-        enemypokemon: {
+        enemyPokemon: {
             name: "Raichu"
         },
-        userpokemon: {
+        userPokemon: {
             name: "Turtwig",
             nick: "Turtwig"
         }

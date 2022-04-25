@@ -77,7 +77,11 @@ function handleRunButtonClick() {
     showBackButton()
 }
 
-// TODO
+// MAX TODO
 function showBackButton() {
+    document.getElementById("back").classList.remove("hidden")
+}
 
+function hideBackButton() {
+    document.getElementById("back").classList.add("hidden")
 }

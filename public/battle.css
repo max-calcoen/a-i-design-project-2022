@@ -15,28 +15,29 @@ body {
 div#content {
     display: grid;
     grid-template-areas:
-        'battlearea'
-        'battleoptions'
+        'battleArea'
+        'battleOptions'
     ;
     grid-template-rows: 2fr 1fr;
     height: 100vh;
 }
 
-div#battlearea {
-    grid-area: battlearea;
+div#battleArea {
+    grid-area: battleArea;
     border-bottom: 2px solid black;
 }
 
-div#battleoptions {
-    grid-area: battleoptions;
+div#battleOptions {
+    grid-area: battleOptions;
     display: grid;
     grid-template-areas:
-        'p battleoptionsgrid'
+        'p battleOptionsGrid'
     ;
     grid-template-columns: 3fr 2fr;
+    grid-template-rows: 1fr;
 }
 
-div#battleoptions>p {
+div#battleOptions>p {
     grid-area: p;
     display: flex;
     justify-content: center;
@@ -45,7 +46,7 @@ div#battleoptions>p {
     margin: 0px;
 }
 
-div#battleoptionsgrid {
+div#battleOptionsGrid {
     display: grid;
     grid-template-areas:
         'fight bag'
@@ -55,13 +56,13 @@ div#battleoptionsgrid {
     grid-template-rows: 1fr 1fr;
 }
 
-div#battleoptionsgrid>div>button {
+div#battleOptionsGrid>div>button {
     width: 100%;
     height: 100%;
     font-size: 25px;
 }
 
-div.healthbarcontainer {
+div.healthBarContainer {
     box-sizing: content-box;
     margin: 0px;
     border: 2px solid black;
@@ -70,26 +71,26 @@ div.healthbarcontainer {
     height: 20px;
 }
 
-div.healthbar {
+div.healthBar {
     height: 20px;
     background-color: gray;
 }
 
-div#playerhealth>div.healthbarcontainer>div.healthbar {
+div#playerHealth>div.healthBarContainer>div.healthBar {
     width: var(--player-health);
 }
 
-div#enemyhealth>div.healthbarcontainer>div.healthbar {
+div#enemyHealth>div.healthBarContainer>div.healthBar {
     width: var(--enemy-health);
 }
 
-div#playerhealth {
+div#playerHealth {
     position: absolute;
     bottom: calc(100vh / 3 + 15px);
     left: 10px;
 }
 
-div#enemyhealth {
+div#enemyHealth {
     position: absolute;
     top: 15px;
     right: 10px;
@@ -111,4 +112,15 @@ img#p2 {
     top: 0px;
     right: 220px;
     z-index: -1;
+}
+
+.hidden {
+    display: none;
+}
+
+button#back {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    font-size: 20px;
 }
