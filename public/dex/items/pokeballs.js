@@ -1,4 +1,9 @@
 import { Pokeball } from "./item/pokeball.js"
+/**
+ * @param {string} type type of ball being used
+ * @param {int} probabilityModifier probability modifier of catch
+ */
+
 export let pokeballs = new Map()
 pokeballs.set("Pokeball", new Pokeball("Pokeball", 30))
 pokeballs.set("Great Ball", new Pokeball("Great Ball", 50))

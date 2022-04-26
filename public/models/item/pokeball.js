@@ -1,22 +1,12 @@
-export class Pokeball extends Item {
-    chance = 0;
+import { Item } from "./item.js"
 
-    // pokeball, great ball, ultra ball, master ball
+export class Pokeball extends Item {
     /**
      * @param {string} type type of ball being used
-     * @param {int} probability probability modifier of catch
+     * @param {int} probabilityModifier probability modifier of catch
      */
-    constructor(type, probability) {
+    constructor(type, probabilityModifier) {
         this.type = type;
-        this.probability = probability
-
+        this.probabilityModifier = probabilityModifier
     }
-    /**
-     * @param {Pokemon} pokemon pokemon trying to catch
-     * @return true on catch, false otherwise
-     */
-    catch(pokemon) {
-        return pokemon.catch(this.probability)
-    }
-
 }

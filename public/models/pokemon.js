@@ -1,6 +1,6 @@
 export class Pokemon {
-    #frontImg
-    #backImg
+    frontImg
+    backImg
     #baseStats
     #maxStats
     #baseCatchRate
@@ -18,8 +18,8 @@ export class Pokemon {
         this.name = name
         this.types = types
         this.moves = moves
-        this.#frontImg = frontImg
-        this.#backImg = backImg
+        this.frontImg = frontImg
+        this.backImg = backImg
         this.#baseStats = baseStats
         this.#maxStats = maxStats
         this.currentStats = baseStats
