@@ -101,16 +101,16 @@ export class Pokemon {
     }
 
     /**
-     * @param {int} prob type of ball catch, poke = 30, great = 50, ultra = 70, master = insta
+     * @param {int} pokeball pokeball object
      * @returns true if the pokemon has been caught, false if the pokemon escaped
      */
-    catch(prob) {
-        if (prob == 100) {
+    catch(pokeball) {
+        if (pokeball.probabilityModifier == 100) {
             return true;
         }
-        prob = (prob * this.#baseCatchRate) / 30
+        pokeball.probabilityModifier = (pokeball.probabilityModifier * this.#baseCatchRate) / 30
         let math = Math.random() * 100;
-        if (math < prob) {
+        if (math < pokeball.probabilityModifier) {
             return true;
         }
         return false
