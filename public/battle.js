@@ -50,7 +50,7 @@ function handleFightButtonClick() {
             updateHealth()
             turtwig = turnResult.pokemon1
             raichu = turnResult.pokemon2
-
+            console.log(turnResult)
             if (turnResult.winner != 0) {
                 gameOver(turnResult.winner == 1 ? turtwig.name : raichu.name)
             } else {

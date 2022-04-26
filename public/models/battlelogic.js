@@ -12,8 +12,6 @@ export class BattleLogic {
      * @returns {Object} object in form pokemon1: pokemon1, pokemon2: pokemon2, winner: 1 if p1 knocks out p2, 2 if p2 knocks out p1, false if neither
      */
     turn(pokemon1move, pokemon2move = this.pokemon2.moves[Math.floor(Math.random() * 4)]) {
-        console.log(this.pokemon2)
-        console.log(pokemon2move)
         let p1level = this.pokemon1.level
         let p1power = pokemon1move.power
         let p1attack = this.pokemon1.currentStats.attack
@@ -67,7 +65,7 @@ export class BattleLogic {
                     return {
                         pokemon1: this.pokemon1,
                         pokemon2: this.pokemon2,
-                        winner: 0
+                        winner: 2
                     }
                 }
             }
@@ -94,11 +92,10 @@ export class BattleLogic {
     /**
      * @param {string} attack type of attacking pokemon
      * @param {string} def type of defending pokemon
-     * @returns damage modifier
+     * @returns type effectiveness damage modifier
      */
     getEffectiveness(attack, def) {
         let types = new Map()
-
         types.set("normal", new Map())
         types.get("normal").set("normal", 1)
         types.get("normal").set("fighting", 1)
