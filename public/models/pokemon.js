@@ -3,6 +3,7 @@ export class Pokemon {
     #backImg
     #baseStats
     #maxStats
+    #baseCatchRate
     /**
      * @param {string} name name of pokemon ("Charmander")
      * @param {string} types elemental type of pokemon ("fire")
@@ -28,6 +29,7 @@ export class Pokemon {
         this.level = 0
         this.statusEffects = []
         this.canMove = true
+        this.#baseCatchRate = catchRate
     }
 
     /**
@@ -99,18 +101,22 @@ export class Pokemon {
     }
 
     /**
-     * @param {int} prob probability of getting caught
+     * @param {int} prob type of ball catch, poke = 30, great = 50, ultra = 70, master = insta
+     * @returns true if the pokemon has been caught, false if the pokemon escaped
      */
     catch(prob) {
-        prob = (prob * this.catchRate) / 30
-
+        if (prob == 100) {
+            return true;
+        }
+        prob = (prob * this.#baseCatchRate) / 30
         let math = Math.random() * 100;
         if (math < prob) {
-            // TODO: implement "caught" (add to User PC)
             return true;
         }
         return false
     }
+
+
     /**
      * @returns true on faint, false otherwise
      */
@@ -134,11 +140,5 @@ export class Pokemon {
      */
     #getExpRequirement(level) {
         return 0.4 * Math.pow(level, 3)
-    }
-    get basics() {
-        return `name: ${this.name}
-stats:
--> current health: ${this.currentStats.health}
--> fainted: ${this.fainted}`
     }
 }

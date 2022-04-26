@@ -4,7 +4,11 @@ let turtwig = pokedex.get("Turtwig")
 let raichu = pokedex.get("Raichu")
 let battle = new BattleLogic(turtwig, raichu)
 
-window.onload = showOptions
+window.onload = function () {
+    showOptions()
+    updateHealth()
+}
+
 
 /**
  * Removes event listeners on all buttons
@@ -12,8 +16,8 @@ window.onload = showOptions
 function resetButtonListeners() {
     let buttons = document.getElementsByTagName("button")
     for (let button of buttons) {
-        let newbutton = button.cloneNode(true)
-        button.parentNode.replaceChild(newbutton, button)
+        let newButton = button.cloneNode(true)
+        button.parentNode.replaceChild(newButton, button)
     }
 }
 
@@ -26,7 +30,7 @@ function showOptions() {
     document.getElementById("box1").children[0].addEventListener("click", handleFightButtonClick)
     buttons[1].innerText = "Bag"
     document.getElementById("box2").children[0].addEventListener("click", handleBagButtonClick)
-    buttons[2].innerText = "Pokemon"
+    buttons[2].innerText = "Pokémon"
     document.getElementById("box3").children[0].addEventListener("click", handlePokemonButtonClick)
     buttons[3].innerText = "Run"
     document.getElementById("box4").children[0].addEventListener("click", handleRunButtonClick)
@@ -34,24 +38,24 @@ function showOptions() {
 
 function handleFightButtonClick() {
     resetButtonListeners()
-    let battleoptionsgrid = document.getElementById("battleoptionsgrid")
+    let BattleOptionsGrid = document.getElementById("battleOptionsGrid")
     for (let i = 0; i < turtwig.moves.length; i++) {
-        battleoptionsgrid.children[i].children[0].innerHTML = turtwig.moves[i].name
+        BattleOptionsGrid.children[i].children[0].innerHTML = turtwig.moves[i].name
     }
 
-    let battleOptionsDivs = document.getElementById("battleoptionsgrid").children
+    let battleOptionsDivs = document.getElementById("battleOptionsGrid").children
     for (let i = 0; i < battleOptionsDivs.length; i++) {
         document.getElementById("box" + (i + 1)).children[0].onclick = () => {
-            let battleResult = battle.turn(turtwig.moves[i], raichu.moves[Math.floor(Math.random() * 4)])
-            if (battleResult) {
-                console.log("winner: " + battleResult.winner)
-                turtwig = battleResult.pokemon1
-                raichu = battleResult.pokemon2
-                // clear screen
+            let turnResult = battle.turn(turtwig.moves[i], raichu.moves[Math.floor(Math.random() * 4)])
+            updateHealth()
+            turtwig = turnResult.pokemon1
+            raichu = turnResult.pokemon2
+
+            if (turnResult.winner != 0) {
+                gameOver(turnResult.winner == 1 ? turtwig.name : raichu.name)
             } else {
                 resetButtonListeners()
                 showOptions()
-
             }
 
         }
@@ -67,21 +71,36 @@ function handleBagButtonClick() {
 
 // TODO
 function handlePokemonButtonClick() {
-    console.log("pokemon button clicked")
     showBackButton()
 }
 
 // TODO
 function handleRunButtonClick() {
-    console.log("run button clicked")
     showBackButton()
 }
 
-// MAX TODO
 function showBackButton() {
     document.getElementById("back").classList.remove("hidden")
 }
 
 function hideBackButton() {
     document.getElementById("back").classList.add("hidden")
+}
+
+document.getElementById("back").addEventListener("click", function () {
+    resetButtonListeners()
+    showOptions()
+})
+
+function gameOver(winner, text = winner + " Won!") {
+    showOptions()
+    resetButtonListeners()
+    document.getElementById("storyText").innerText = text
+}
+
+function updateHealth() {
+    document.getElementById("maxNumPlayerHealth").innerText = turtwig.currentStats.maxHealth
+    document.getElementById("currentNumPlayerHealth").innerText = turtwig.currentStats.health
+    document.documentElement.style.setProperty("--player-health", (100 * turtwig.currentStats.health / turtwig.currentStats.maxHealth) + "%")
+    document.documentElement.style.setProperty("--enemy-health", (100 * raichu.currentStats.health / raichu.currentStats.maxHealth) + "%")
 }

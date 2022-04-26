@@ -1,7 +1,6 @@
 // import neccesary modules
 import { createServer, Server } from "http"
 import express from "express"
-import { join } from "path"
 
 // tunables for server setup
 const SERVER_PORT = 8080
@@ -26,6 +25,23 @@ app.get("/battle", (req, res) => {
         userPokemon: {
             name: "Turtwig",
             nick: "Turtwig"
+        }
+    })
+})
+
+app.get("/bag", (req, res) => {
+    res.render("bag-GUI", {
+        bagAlert: {
+            pokeballs: 0,
+            greatballs: 0,
+            ultraballs: 0,
+            masterballs: 0,
+            regRevive: 0,
+            maxRevive: 0,
+            potion: 0,
+            superPotion: 0,
+            hyperPotion: 0,
+            maxPotion: 0
         }
     })
 })

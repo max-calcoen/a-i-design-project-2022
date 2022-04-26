@@ -4,8 +4,16 @@ export class BattleLogic {
         this.pokemon2 = pokemon2
     }
 
-    // MAX: TODO: implement bag, pokemon, run, and status effects (including turn)
+    // TODO: implement bag, pokemon, run, and status effects (including turn)
+    /**
+     * (TODO comment)
+     * @param {Move} pokemon1move move pokemon 1 makes
+     * @param {Move} pokemon2move move pokemon 2 makes
+     * @returns {Object} object in form pokemon1: pokemon1, pokemon2: pokemon2, winner: 1 if p1 knocks out p2, 2 if p2 knocks out p1, false if neither
+     */
     turn(pokemon1move, pokemon2move = this.pokemon2.moves[Math.floor(Math.random() * 4)]) {
+        console.log(this.pokemon2)
+        console.log(pokemon2move)
         let p1level = this.pokemon1.level
         let p1power = pokemon1move.power
         let p1attack = this.pokemon1.currentStats.attack
@@ -16,7 +24,7 @@ export class BattleLogic {
         let p1stab = 1
         if (this.pokemon1.types[0] == pokemon1move.type) p1stab = 1.5
         let p1type = this.getEffectiveness(pokemon1move.type, this.pokemon2.types)
-        let p1Damage = Math.floor(((((2 * p1level / 5) + 2) * p1power * p1attack / p2def) / 50 + 2) * p1crit * p1rand * p1stab * p1type)
+        let p1damage = Math.floor(((((2 * p1level / 5) + 2) * p1power * p1attack / p2def) / 50 + 2) * p1crit * p1rand * p1stab * p1type)
 
         let p2level = this.pokemon2.level
         let p2power = pokemon2move.power
@@ -28,13 +36,13 @@ export class BattleLogic {
         let p2stab = 1
         if (this.pokemon2.types[0] == pokemon1move.type) p2stab = 1.5
         let p2type = this.getEffectiveness(pokemon2move.type, this.pokemon1.types)
-        let p2Damage = Math.floor(((((2 * p2level / 5) + 2) * p2power * p2attack / p1def) / 50 + 2) * p2crit * p2rand * p2stab * p2type)
+        let p2damage = Math.floor(((((2 * p2level / 5) + 2) * p2power * p2attack / p1def) / 50 + 2) * p2crit * p2rand * p2stab * p2type)
 
-
+        let damageResult
         if (this.pokemon1.currentStats.speed > this.pokemon2.currentStats.speed) {
             if (this.pokemon1.canMove) {
-                turnResult = this.pokemon2.takeDamage(p1Damage)
-                if (turnResult) {
+                damageResult = this.pokemon2.takeDamage(p1damage)
+                if (damageResult) {
                     return {
                         pokemon1: this.pokemon1,
                         pokemon2: this.pokemon2,
@@ -43,8 +51,8 @@ export class BattleLogic {
                 }
             }
             if (this.pokemon2.canMove) {
-                turnResult = this.pokemon1.takeDamage(p2Damage)
-                if (turnResult) {
+                damageResult = this.pokemon1.takeDamage(p2damage)
+                if (damageResult) {
                     return {
                         pokemon1: this.pokemon1,
                         pokemon2: this.pokemon2,
@@ -54,18 +62,18 @@ export class BattleLogic {
             }
         } else {
             if (this.pokemon2.canMove) {
-                turnResult = this.pokemon1.takeDamage
-                if (turnResult) {
+                damageResult = this.pokemon1.takeDamage(p1damage)
+                if (damageResult) {
                     return {
                         pokemon1: this.pokemon1,
-                        pokemon2: this, pokemon2,
-                        winner: 2
+                        pokemon2: this.pokemon2,
+                        winner: 0
                     }
                 }
             }
             if (this.pokemon1.canMove) {
-                turnResult = this.pokemon2.takeDamage(p1Damage)
-                if (turnResult) {
+                damageResult = this.pokemon2.takeDamage(p1damage)
+                if (damageResult) {
                     return {
                         pokemon1: this.pokemon1,
                         pokemon2: this.pokemon2,
@@ -74,7 +82,11 @@ export class BattleLogic {
                 }
             }
         }
-        return false
+        return {
+            pokemon1: this.pokemon1,
+            pokemon2: this.pokemon2,
+            winner: 0
+        }
     }
 
 

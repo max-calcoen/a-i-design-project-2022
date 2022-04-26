@@ -1,11 +1,20 @@
-doctype html
-html(lang="en")
-    head
-        meta(charset="UTF-8")
-        meta(http-equiv="X-UA-Compatible", content="IE=edge")
-        meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        link(rel="stylesheet", href="/battle.css")
-        title Bag
-        script(type="module" src="../battle.js")
-    body
-        div#content
+div
+    button#pokeball.button(onclick="") Pokeball (#{bagAlert.pokeballs})
+div
+    button#greatball.button(onclick="") Greatball (#{bagAlert.greatballs})
+div
+    button#ultraball.button(onclick="") Ultraball (#{bagAlert.ultraballs})
+div 
+    button#masterball.button(onclick="") Masterball (#{bagAlert.masterballs})
+div 
+    button#regRevive.button(onclick="") Revive (#{bagAlert.regRevive})
+div 
+    button#maxRevive.button(onclick="") Max Revive (#{bagAlert.maxRevive})
+div 
+    button#potion.button(onclick="") Potion (#{bagAlert.potion}) 
+div
+    button#superPotion.button(onclick="") Super Potion (#{bagAlert.superPotion})
+div
+    button#hyperPotion.button(onclick="") Hyper Potion (#{bagAlert.hyperPotion})
+div
+    button#maxPotion.button(onclick="") Max Potion (#{bagAlert.maxPotion}) 

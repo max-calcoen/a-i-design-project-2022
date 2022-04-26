@@ -11,28 +11,28 @@ html(lang="en")
         div#content
             div#battleArea
                 div#enemyHealth
-                    div.healthBarContainer
-                        div.healthBar
+                    div#enemyHealthBarContainer.healthBarContainer
+                        div#enemyHealthBar.healthBar
                     p #{enemyPokemon.name}
                 div#playerHealth
                     p 
                         | #{userPokemon.name} 
-                        span#currentNumPlayerHealth 25
-                        | 
-                        span#maxNumPlayerHealth 25
-                    .healthBarContainer
-                        .healthBar
+                        span#currentNumPlayerHealth 20
+                        | /
+                        span#maxNumPlayerHealth 20
+                    div#playerHealthBarContainer.healthBarContainer
+                        div#playerHealthBar.healthBar
                 img#p1(src="assets/sprites/turtwigback.png")
                 img#p2(src="assets/sprites/raichufront.png")
             div#battleOptions
-                p What will #{userPokemon.nick} do?
+                p#storyText What will #{userPokemon.nick} do?
                 div#battleOptionsGrid
                     div#box1
                         button Fight
                     div#box2
                         button Bag
                     div#box3
-                        button Pokemon
+                        button Pokémon
                     div#box4
                         button Run
                 div#backButtonContainer

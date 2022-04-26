@@ -16,6 +16,7 @@ export class Pokeball extends Item {
      * @return true on catch, false otherwise
      */
     catch(pokemon) {
-
+        return pokemon.catch(this.probability)
     }
+
 }

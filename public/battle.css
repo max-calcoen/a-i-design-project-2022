@@ -1,4 +1,6 @@
 :root {
+    --old-player-health: 100%;
+    --old-enemy-health: 100%;
     --player-health: 100%;
     --enemy-health: 100%;
 }
@@ -76,12 +78,16 @@ div.healthBar {
     background-color: gray;
 }
 
-div#playerHealth>div.healthBarContainer>div.healthBar {
+div#playerHealthBar {
     width: var(--player-health);
+    animation-name: slidePlayerHealth;
+    animation-duration: 1s;
 }
 
-div#enemyHealth>div.healthBarContainer>div.healthBar {
+div#enemyHealthBar {
     width: var(--enemy-health);
+    animation-name: slideEnemyHealth;
+    animation-duration: 1s;
 }
 
 div#playerHealth {
@@ -123,4 +129,25 @@ button#back {
     bottom: 0px;
     right: 0px;
     font-size: 20px;
+}
+
+
+@keyframes slidePlayerHealth {
+    from {
+        width: var(--old-player-health);
+    }
+
+    to {
+        width: var(--player-health);
+    }
+}
+
+@keyframes slideEnemyHealth {
+    from {
+        width: var(--old-player-health);
+    }
+
+    to {
+        width: var(--player-health);
+    }
 }
