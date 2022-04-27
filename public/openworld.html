@@ -56,8 +56,8 @@
             tilemap.clear();
 
             // Fill the scene with grass and sparse rocks 
-            for (let i = 0; i < tileW * 10; i++) {
-                for (let j = 0; j < tileH * 10; j++) {
+            for (let i = 0; i < tileW * 4; i++) {
+                for (let j = 0; j < tileH * 4; j++) {
                     let math = Math.random() * 100;
                     if (math < 90) {
                         tilemap.tile(
@@ -75,6 +75,8 @@
 
                 }
             }
+            console.log(tileW*10 + "w")
+            console.log(tileH*10 + "h")
             // Make Sprite Tile
             sprite = PIXI.Sprite.from('chest.png');
             stage.addChild(sprite);
