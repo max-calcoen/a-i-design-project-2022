@@ -17,17 +17,22 @@ export class Pokeball extends Item {
     catch(ballType){ //Need to check if we have pokeballs before the function is called.
         if(ballType == "pokeball"){
             this.probabilityModifier = 30;
+            return 30;
         }
         if(ballType == "greatball"){
             this.probabilityModifier = 50;
+            return 50;
         }
         if(ballType == "ultraball"){
             this.probabilityModifier = 70;
+            return 70;
         }
         if(ballType == "masterball"){
             this.probabilityModifier = 100;
+            return 100;
         } else { //defaults to pokeball if none
             this.probabilityModifier = 30;
+            return 30;
         }
     }
 

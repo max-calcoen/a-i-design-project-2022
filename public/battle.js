@@ -28,6 +28,7 @@ function showOptions() {
     let buttons = document.getElementsByTagName("button")
     buttons[0].innerText = "Fight"
     document.getElementById("box1").children[0].addEventListener("click", handleFightButtonClick)
+    document.getElementById("box1").children[0].addEventListener("click", handleFightButtonClick)
     buttons[1].innerText = "Bag"
     document.getElementById("box2").children[0].addEventListener("click", handleBagButtonClick)
     buttons[2].innerText = "Pokémon"
@@ -65,8 +66,12 @@ function handleFightButtonClick() {
 
 // TODO
 function handleBagButtonClick() {
-    console.log("bag button clicked")
+    let buttons = document.getElementsByTagName("button")
+    for(let i = 0; i < buttons.length; i++){
+        buttons[i].classList.add("hidden")
+    }
     showBackButton()
+    
 }
 
 // TODO
@@ -87,10 +92,19 @@ function hideBackButton() {
     document.getElementById("back").classList.add("hidden")
 }
 
-document.getElementById("back").addEventListener("click", function () {
+ document.getElementById("back").addEventListener("click", function () {
+    handleBackButtonClick()
+})
+
+function handleBackButtonClick() {
+    let buttons = document.getElementsByTagName("button")
+    for (let button of buttons) {
+        button.classList.remove("hidden")
+    }
     resetButtonListeners()
     showOptions()
-})
+    hideBackButton()
+}
 
 function gameOver(winner, text = winner + " Won!") {
     showOptions()

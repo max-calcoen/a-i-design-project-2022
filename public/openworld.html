@@ -55,11 +55,11 @@
             // Clear the tilemap, in case it is being reused.
             tilemap.clear();
 
-
             // Fill the scene with grass and sparse rocks 
-            for (let i = 0; i < tileW; i++) {
-                for (let j = 0; j < tileH; j++) {
-                    if (i % 2 == 0 && j % 2 == 0) {
+            for (let i = 0; i < tileW * 10; i++) {
+                for (let j = 0; j < tileH * 10; j++) {
+                    let math = Math.random() * 100;
+                    if (math < 90) {
                         tilemap.tile(
                             'grass.png',
                             i * size,
@@ -76,12 +76,15 @@
                 }
             }
             // Make Sprite Tile
-            sprite = tilemap.tile(
-                'chest.png',
-                tileW / 2 * size,
-                tileH / 2 * size,
-            );
+            sprite = PIXI.Sprite.from('chest.png');
+            stage.addChild(sprite);
+            sprite.x = tileW / 2 * size;
+            sprite.y = tileH / 2 *size;
 
+        }
+
+        function rightTilemap(){
+            
         }
 
 
@@ -90,16 +93,16 @@
         // Takes an event and moves the canvas if it the key is one of the following: WASD
         function handleKeyPress(evt) {
             if (evt.which === 68) {
-                sprite.x += 8
+                tilemap.x -= 16
             }
             if (evt.which === 65) {
-                sprite.x += -8
+                tilemap.x += 16
             }
             if (evt.which === 87) {
-                sprite.y -= 8
+                tilemap.y += 16
             }
             if (evt.which === 83) {
-                sprite.y += 8
+                tilemap.y -= 16
             }
         }
     </script>

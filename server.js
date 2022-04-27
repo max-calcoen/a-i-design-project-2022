@@ -1,6 +1,7 @@
 // import neccesary modules
 import { createServer, Server } from "http"
 import express from "express"
+import { pokedex } from "./public/dex/pokedex.js"
 
 // tunables for server setup
 const SERVER_PORT = 8080
@@ -19,13 +20,8 @@ let users = []
 
 app.get("/battle", (req, res) => {
     res.render("battle-interface", {
-        enemyPokemon: {
-            name: "Raichu"
-        },
-        userPokemon: {
-            name: "Turtwig",
-            nick: "Turtwig"
-        }
+        enemyPokemon: pokedex.get("Raichu"),
+        userPokemon: podedex.get("Turtwig")
     })
 })
 

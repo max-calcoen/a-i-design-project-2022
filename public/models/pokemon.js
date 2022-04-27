@@ -6,7 +6,7 @@ export class Pokemon {
     #baseCatchRate
     /**
      * @param {string} name name of pokemon ("Charmander")
-     * @param {string} types elemental type of pokemon ("fire")
+     * @param {array} types elemental type of pokemon (["fire"])
      * @param {array} moves array of moves ([moves.get("flamethrower"), moves.get("scratch"), moves.get("growl"))])
      * @param {string} frontImg image url of front of pokemon ("charmanderfront.png")
      * @param {string} backImg image url of back of pokemon ("charmandeback.png")
