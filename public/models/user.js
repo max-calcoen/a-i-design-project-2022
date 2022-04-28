@@ -7,11 +7,11 @@ export class User {
         this.pwd = pwd
         // initializes pokeball inventory
         this.inventory.set('Balls', new Map())
-        this.inventory.get('Balls').set('Regular', {quantity: 15, catchchance: 30})
-        this.inventory.get('Balls').set('Great', {quantity: 5, catchchance: 50})
-        this.inventory.get('Balls').set('Ultra', {quantity: 3, catchchance: 70})
-        this.inventory.get('Balls').set('Master', {quantity: 1, catchchance: 100})
- 
+        this.inventory.get('Balls').set('Regular', { quantity: 15, catchchance: 30 })
+        this.inventory.get('Balls').set('Great', { quantity: 5, catchchance: 50 })
+        this.inventory.get('Balls').set('Ultra', { quantity: 3, catchchance: 70 })
+        this.inventory.get('Balls').set('Master', { quantity: 1, catchchance: 100 })
+
         //initializes revive inventory
         this.inventory.set('Revives', new Map())
         this.inventory.get('Revives').set('Regular', 10)
@@ -50,19 +50,19 @@ export class User {
         return true
     }
     addPokemonToPC(pokemon) {
-        if(pokemon.types.length > 1){
+        if (pokemon.types.length > 1) {
             this.PC.set(pokemon.types[0] + " " + pokemon.types[1], new Map())
         }
-        else{
+        else {
             this.PC.set(pokemon.types[0], [])
             this.PC.get(pokemon.types[0]).push(pokemon)
-        }    
+        }
     }
     //this function used specifically for accessing contents in inventory with 
-    get myPokemon (){
+    get myPokemon() {
         return this.PC
     }
-    get myDex(){
+    get myDex() {
         let myDex = []
         return myDex
     }

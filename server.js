@@ -21,7 +21,7 @@ let users = []
 app.get("/battle", (req, res) => {
     res.render("battle-interface", {
         enemyPokemon: pokedex.get("Raichu"),
-        userPokemon: podedex.get("Turtwig")
+        userPokemon: pokedex.get("Turtwig")
     })
 })
 
