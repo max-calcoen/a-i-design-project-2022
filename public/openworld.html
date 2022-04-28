@@ -13,8 +13,8 @@
             antialias: true,
             autoDensity: true,
             resolution: window.devicePixelRatio || 1,
-            width: 1425,
-            height: 690,
+            width: 1440,
+            height: 672,
         });
         window.addEventListener('keydown', handleKeyPress)
         let stage;
@@ -75,8 +75,7 @@
 
                 }
             }
-            console.log(tileW*10 + "w")
-            console.log(tileH*10 + "h")
+            
             // Make Sprite Tile
             sprite = PIXI.Sprite.from('chest.png');
             stage.addChild(sprite);
@@ -94,16 +93,31 @@
         // Takes an event and moves the canvas if it the key is one of the following: WASD
         function handleKeyPress(evt) {
             if (evt.which === 68) {
+                if(tilemap.x >-5008)
                 tilemap.x -= 16
+                console.log("Tilemap " + tilemap.x + ", " + tilemap.y)
+                console.log("Sprite " + sprite.x + ", " + sprite.y)
             }
             if (evt.which === 65) {
-                tilemap.x += 16
+                if(sprite.x > tilemap.x){
+                    tilemap.x += 16
+                    console.log("Tilemap " + tilemap.x + ", " + tilemap.y)
+                    console.log("Sprite " + sprite.x + ", " + sprite.y)
+                }
             }
             if (evt.which === 87) {
-                tilemap.y += 16
+                if(tilemap.y < sprite.y){
+                    tilemap.y += 16
+                    console.log("Tilemap " + tilemap.x + ", " + tilemap.y)
+                    console.log("Sprite " + sprite.x + ", " + sprite.y)
+                }
             }
             if (evt.which === 83) {
-                tilemap.y -= 16
+                if(tilemap.y > -2320){
+                    tilemap.y -= 16
+                    console.log("Tilemap " + tilemap.x + ", " + tilemap.y)
+                    console.log("Sprite " + sprite.x + ", " + sprite.y)
+                }
             }
         }
     </script>
