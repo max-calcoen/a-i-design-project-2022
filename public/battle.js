@@ -7,6 +7,9 @@ let battle = new BattleLogic(turtwig, raichu)
 window.onload = function () {
     showOptions()
     updateHealth()
+    document.getElementById("back").addEventListener("click", function () {
+        handleBackButtonClick()
+    })
 }
 
 
@@ -35,6 +38,7 @@ function showOptions() {
     document.getElementById("box3").children[0].addEventListener("click", handlePokemonButtonClick)
     buttons[3].innerText = "Run"
     document.getElementById("box4").children[0].addEventListener("click", handleRunButtonClick)
+    hideBackButton()
 }
 
 function handleFightButtonClick() {
@@ -67,11 +71,11 @@ function handleFightButtonClick() {
 // TODO
 function handleBagButtonClick() {
     let buttons = document.getElementsByTagName("button")
-    for(let i = 0; i < buttons.length; i++){
+    for (let i = 0; i < buttons.length; i++) {
         buttons[i].classList.add("hidden")
     }
     showBackButton()
-    
+
 }
 
 // TODO
@@ -92,17 +96,13 @@ function hideBackButton() {
     document.getElementById("back").classList.add("hidden")
 }
 
- document.getElementById("back").addEventListener("click", function () {
-    handleBackButtonClick()
-})
-
 function handleBackButtonClick() {
+    resetButtonListeners()
+    showOptions()
     let buttons = document.getElementsByTagName("button")
     for (let button of buttons) {
         button.classList.remove("hidden")
     }
-    resetButtonListeners()
-    showOptions()
     hideBackButton()
 }
 
