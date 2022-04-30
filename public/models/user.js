@@ -6,10 +6,24 @@ export class User {
     constructor(username, pwd) {
         this.username = username
         this.pwd = pwd
+<<<<<<< HEAD
         this.pc = new Map()
         this.inventory = new Map([["Pokeballs", new Map()], ["Potions", new Map()], ["Revives", new Map()]])
     }
 
+=======
+        // initializes pokeball inventory
+        this.inventory.set('Balls', new Map())
+        this.inventory.get('Balls').set('Regular', { quantity: 15, catchchance: 30 })
+        this.inventory.get('Balls').set('Great', { quantity: 5, catchchance: 50 })
+        this.inventory.get('Balls').set('Ultra', { quantity: 3, catchchance: 70 })
+        this.inventory.get('Balls').set('Master', { quantity: 1, catchchance: 100 })
+
+        //initializes revive inventory
+        this.inventory.set('Revives', new Map())
+        this.inventory.get('Revives').set('Regular', 10)
+        this.inventory.get('Revives').set('Max', 3)
+>>>>>>> 31b2c3ed83b245a8fd619a94b2d25225524884d1
 
     addPokemonToPC(pokemon) {
         if (pokemon.types.length > 1) {

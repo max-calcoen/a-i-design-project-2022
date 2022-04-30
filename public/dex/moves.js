@@ -10,7 +10,7 @@ import { Move } from "../models/move.js"
      * @param {int} accuracy chance out of 100 to hit target
      */
 export let moves = new Map()
-moves.set("Scratch", new Move("Scratch", "normal", false, 30, 40, 100))
+moves.set("Scratch", new Move("Scratch", "normal", false, 40, 40, 100))
 moves.set("Thunderbolt", new Move("Thunderbolt", "electric", true, 70, 10, 100))
 moves.set("Vine Whip", new Move("Vine Whip", "grass", true, 40, 30, 100))
 moves.set("Razor Leaf", new Move("Razor Leaf", "grass", true, 50, 20, 100))

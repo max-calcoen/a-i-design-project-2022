@@ -60,7 +60,7 @@ export class BattleLogic {
             }
         } else {
             if (this.pokemon2.canMove) {
-                damageResult = this.pokemon1.takeDamage(p1damage)
+                damageResult = this.pokemon1.takeDamage(p2damage)
                 if (damageResult) {
                     return {
                         pokemon1: this.pokemon1,

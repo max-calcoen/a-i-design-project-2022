@@ -96,6 +96,13 @@ function hideBackButton() {
     document.getElementById("back").classList.add("hidden")
 }
 
+<<<<<<< HEAD
+=======
+document.getElementById("back").addEventListener("click", function () {
+    handleBackButtonClick()
+})
+
+>>>>>>> 31b2c3ed83b245a8fd619a94b2d25225524884d1
 function handleBackButtonClick() {
     resetButtonListeners()
     showOptions()
