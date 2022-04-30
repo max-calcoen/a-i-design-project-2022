@@ -2,40 +2,12 @@ import { User } from "../user.js";
 import { Item } from "./item.js"
 
 export class Pokeball extends Item {
-    probabilityModifier = 30;
     /**
-     * @param {string} ballType type of ball being used
+     * @param {string} name name of ball being used
+     * @param {int} probabilityModifier how effective the ball is
      */
-    constructor(ballType) {
-        let validType = ["pokeball", "greatball", "ultraball", "masterball"]
-        if(validType.includes(ballType)) this.ballType = ballType;
+    constructor(name, probabilityModifier) {
+        this.name = name;
+        this.probabilityModifier = probabilityModifier;
     }
-
-    /**
-     * @param {string} ballType type of ball being used
-     */
-    catch(ballType){ //Need to check if we have pokeballs before the function is called.
-        if(ballType == "pokeball"){
-            this.probabilityModifier = 30;
-            return 30;
-        }
-        if(ballType == "greatball"){
-            this.probabilityModifier = 50;
-            return 50;
-        }
-        if(ballType == "ultraball"){
-            this.probabilityModifier = 70;
-            return 70;
-        }
-        if(ballType == "masterball"){
-            this.probabilityModifier = 100;
-            return 100;
-        } else { //defaults to pokeball if none
-            this.probabilityModifier = 30;
-            return 30;
-        }
-    }
-
-
-
 }

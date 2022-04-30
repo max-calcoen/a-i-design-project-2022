@@ -12,7 +12,6 @@ window.onload = () => {
     })
 }
 
-
 /**
  * Removes event listeners on all buttons
  */
@@ -38,6 +37,7 @@ function showOptions() {
     document.getElementById("box3").children[0].addEventListener("click", handlePokemonButtonClick)
     buttons[3].innerText = "Run"
     document.getElementById("box4").children[0].addEventListener("click", handleRunButtonClick)
+    hideBackButton()
 }
 
 function handleFightButtonClick() {
@@ -54,7 +54,6 @@ function handleFightButtonClick() {
             updateHealth()
             turtwig = turnResult.pokemon1
             raichu = turnResult.pokemon2
-            console.log(turnResult)
             if (turnResult.winner != 0) {
                 gameOver(turnResult.winner == 1 ? turtwig.name : raichu.name)
             } else {
@@ -103,12 +102,12 @@ function hideBackButton() {
 }
 
 function handleBackButtonClick() {
+    resetButtonListeners()
+    showOptions()
     let buttons = document.getElementsByTagName("button")
     for (let button of buttons) {
         button.classList.remove("hidden")
     }
-    resetButtonListeners()
-    showOptions()
     hideBackButton()
 }
 
