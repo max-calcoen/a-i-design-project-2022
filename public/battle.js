@@ -4,9 +4,12 @@ let turtwig = pokedex.get("Turtwig")
 let raichu = pokedex.get("Raichu")
 let battle = new BattleLogic(turtwig, raichu)
 
-window.onload = function () {
+window.onload = () => {
     showOptions()
     updateHealth()
+    document.getElementById("back").addEventListener("click", function () {
+        handleBackButtonClick()
+    })
 }
 
 
@@ -80,21 +83,24 @@ function handlePokemonButtonClick() {
 }
 
 // TODO
+
 function handleRunButtonClick() {
     showBackButton()
 }
 
+/**
+ * Shows back button
+ */
 function showBackButton() {
     document.getElementById("back").classList.remove("hidden")
 }
 
+/**
+ * Hides back button
+ */
 function hideBackButton() {
     document.getElementById("back").classList.add("hidden")
 }
-
-document.getElementById("back").addEventListener("click", function () {
-    handleBackButtonClick()
-})
 
 function handleBackButtonClick() {
     let buttons = document.getElementsByTagName("button")
