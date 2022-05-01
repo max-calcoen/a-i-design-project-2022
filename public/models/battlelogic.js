@@ -37,27 +37,29 @@ export class BattleLogic {
         if (this.pokemon2.types[0] == pokemon1move.type) p2stab = 1.5
         let p2type = this.getEffectiveness(pokemon2move.type, this.pokemon1.types)
         let p2damage = Math.floor(((((2 * p2level / 5) + 2) * p2power * p2attack / p1def) / 50 + 2) * p2crit * p2rand * p2stab * p2type)
-
+        function dealWithEffects(pokemans1, pokemans2) {
+            for (let i = 0; i < this.pokemans2.statusEffects.length; i++) {
+                let cantMoveCounter = 0
+                pokemans2.takedamage(pokemans2.statusEffects[i].dpround)
+                if (!pokemans2.statusEffects[i].canMove) {
+                    cantMoveCounter += 1
+                }
+                pokemans2.statusEffects[i].duration--
+                if (pokemans2.statusEffects[i].duration = 0) {
+                    pokemans2.statusEffects.splice(i, 1)
+                }
+            }
+            if (cantMoveCounter > 0) {
+                pokemans2.canMove = false
+            }
+            else {
+                pokemans2.canMove = true
+            }
+        }
         let damageResult
         if (this.pokemon1.currentStats.speed > this.pokemon2.currentStats.speed) {
             if (this.pokemon1.canMove) {
-                for (let i = 0; i < this.pokemon2.statusEffects.length; i++) {
-                    let cantMoveCounter = 0
-                    this.pokemon2.takedamage(pokemon2.statusEffects[i].dpround)
-                    if (!pokemon2.statusEffects[i].canMove) {
-                        cantMoveCounter += 1
-                    }
-                    pokemon2.statusEffects[i].duration--
-                    if (pokemon2.statusEffects[i].duration = 0) {
-                        this.pokemon2.statusEffects.splice(i, 1)
-                    }
-                }
-                if (cantMoveCounter > 0) {
-                    this.pokemon2.canMove = false
-                }
-                else {
-                    this.pokemon2.canMove = true
-                }
+                dealWithEffects(this.pokemon1, this.pokemon2)
                 damageResult = this.pokemon2.takeDamage(p1damage)
                 if (this.pokemon1move.isSpecial) {
                     this.pokemon2.statusEffects.push(inflictEffects.get(this.pokemon1move.type))
@@ -71,23 +73,7 @@ export class BattleLogic {
                 }
             }
             if (this.pokemon2.canMove) {
-                for (let i = 0; i < this.pokemon1.statusEffects.length; i++) {
-                    let cantMoveCounter = 0
-                    this.pokemon1.takedamage(pokemon1.statusEffects[i].dpround)
-                    pokemon1.statusEffects[i].duration--
-                    if (pokemon1.statusEffects[i].duration = 0) {
-                        this.pokemon1.statusEffects.splice(i, 1)
-                    }
-                    if (!pokemon1.statusEffects[i].canMove) {
-                        cantMoveCounter += 1
-                    }
-                }
-                if (cantMoveCounter > 0) {
-                    this.pokemon1.canMove = false
-                }
-                else {
-                    this.pokemon1.canMove = true
-                }
+                dealWithEffects(this.pokemon2, this.pokemon1)
                 damageResult = this.pokemon1.takeDamage(p2damage)
                 if (this.pokemon2move.isSpecial) {
                     this.pokemon1.statusEffects.push(inflictEffects.get(this.pokemon2move.type))
@@ -102,23 +88,7 @@ export class BattleLogic {
             }
         } else {
             if (this.pokemon2.canMove) {
-                for (let i = 0; i < this.pokemon1.statusEffects.length; i++) {
-                    let cantMoveCounter = 0
-                    this.pokemon1.takedamage(pokemon1.statusEffects[i].dpround)
-                    pokemon1.statusEffects[i].duration--
-                    if (pokemon1.statusEffects[i].duration = 0) {
-                        this.pokemon1.statusEffects.splice(i, 1)
-                    }
-                    if (!pokemon1.statusEffects[i].canMove) {
-                        cantMoveCounter += 1
-                    }
-                }
-                if (cantMoveCounter > 0) {
-                    this.pokemon1.canMove = false
-                }
-                else {
-                    this.pokemon1.canMove = true
-                }
+                dealWithEffects(this.pokemon2, this.pokemon1)
                 damageResult = this.pokemon1.takeDamage(p2damage)
                 if (this.pokemon2move.isSpecial) {
                     this.pokemon1.statusEffects.push(inflictEffects.get(this.pokemon2move.type))
@@ -132,23 +102,7 @@ export class BattleLogic {
                 }
             }
             if (this.pokemon1.canMove) {
-                for (let i = 0; i < this.pokemon2.statusEffects.length; i++) {
-                    let cantMoveCounter = 0
-                    this.pokemon2.takedamage(pokemon2.statusEffects[i].dpround)
-                    if (!pokemon2.statusEffects[i].canMove) {
-                        cantMoveCounter += 1
-                    }
-                    pokemon2.statusEffects[i].duration--
-                    if (pokemon2.statusEffects[i].duration = 0) {
-                        this.pokemon2.statusEffects.splice(i, 1)
-                    }
-                }
-                if (cantMoveCounter > 0) {
-                    this.pokemon2.canMove = false
-                }
-                else {
-                    this.pokemon2.canMove = true
-                }
+                dealWithEffects(this.pokemon1, this.pokemon2)
                 damageResult = this.pokemon2.takeDamage(p1damage)
                 if (this.pokemon1move.isSpecial) {
                     this.pokemon2.statusEffects.push(inflictEffects.get(this.pokemon1move.type))
