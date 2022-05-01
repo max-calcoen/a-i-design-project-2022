@@ -18,3 +18,30 @@ export class Move {
         this.accuracy = accuracy
     }
 }
+export const inflictEffects = new Map([
+    ['fire', {
+        name: 'burn',
+        canMove: true,
+        dpround: 10,
+        duration: 3
+    }],
+    ['grass', {
+        name: 'poison',
+        canMove: true,
+        dpround: 20,
+        duration: 2
+    }],
+    ['poison', {
+        name: 'paralysis',
+        canMove: false,
+        dpround: 0,
+        duration: 2
+    }],
+    ['ice', {
+        name: 'freeze',
+        canMove: false,
+        dpround: 0,
+        duration: 2
+    }]
+
+])
