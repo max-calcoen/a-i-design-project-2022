@@ -2,6 +2,7 @@
 import { createServer, Server } from "http"
 import express from "express"
 import { pokedex } from "./public/dex/pokedex.js"
+export let allUsers = []
 
 // tunables for server setup
 const SERVER_PORT = 8080
@@ -21,41 +22,28 @@ let users = []
 app.get("/battle", (req, res) => {
     res.render("battle-interface", {
         enemyPokemon: pokedex.get("Raichu"),
-        userPokemon: pokedex.get("Turtwig")
+        userPokemon: pokedex.get("Turtwig"),
+
     })
 })
 
-app.get("/bag", (req, res) => {
-    res.render("bag-GUI", {
-        bagAlert: {
-            pokeballs: 0,
-            greatballs: 0,
-            ultraballs: 0,
-            masterballs: 0,
-            regRevive: 0,
-            maxRevive: 0,
-            potion: 0,
-            superPotion: 0,
-            hyperPotion: 0,
-            maxPotion: 0
-        }
+app.post("/battle", (req, res) => {
+    let chosenPokemon = req.body.pokemon
+    res.render("battle-interface", {
+        enemyPokemon: pokedex.get("Raichu"),
+        userPokemon: chosenPokemon
     })
 })
 
-app.get("/hello", (req, res) => {
-    let name = req.query.name
-    if (!users.includes(name)) {
-        users.push(name)
-        res.render("hello", {
-            greeting: "Hello, ",
-            name
-        })
-    } else {
-        res.render("hello", {
-            greeting: "Welcome back, ",
-            name
-        })
-    }
+app.get("/", (req, res) => {
+    res.render("index", {
+        pokedex: pokedex
+    })
+})
+
+
+server.listen(SERVER_PORT, function () {
+    console.log(`Server listening on port ${SERVER_PORT}`)
 })
 
 io.on("connection", (socket) => {
@@ -65,8 +53,4 @@ io.on("connection", (socket) => {
     socket.on("disconnect", (arg) => {
         console.log("user disconnected :(")
     })
-})
-
-server.listen(SERVER_PORT, function () {
-    console.log(`Server listening on port ${SERVER_PORT}`)
 })

@@ -1,4 +1,5 @@
-mixin pokemon()
+mixin pokemon(pokemon)
+    option(value=pokemon) pokemon.name
 
 doctype html
 html(lang="en")
@@ -8,4 +9,14 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Index
     body 
-        h1 
+        ol
+            li
+                a(href="openworld.html") openworld
+            li
+                a(href="battle") battle interface
+        form(action="battle.js", method="post")
+            label(for="pokemonOptions")
+            select#pokemonOptions(name="pokemonOptions")
+                each pokemon in Array.from(pokedex.keys())
+                    +pokemon(pokemon)
+            input(type="submit" value="go!")

@@ -1,5 +1,4 @@
 export class Move {
-    #inflict
     /**
      * Contructs Move object
      * @param {string} name name of move ("Flamethrower")

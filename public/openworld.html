@@ -8,7 +8,24 @@
 
 <body>
     <script>
+        //Makes a zone on the tilemap
+        class makeZone {
+            /**
+             * @param {int} x Top left x coordinate of tile
+             * @param {int} y Top left y coordinate of tile
+             * @param {int} numTileWidth Number of tiles(width) that you want
+             * @param {int} numTileHeight Number of tiles(height) that you want
+             */
+            constructor(x, y, numTileWidth, numTileHeight) {
+                this.x = x;
+                this.y = y;
+                this.width = numTileWidth;
+                this.height = numTileHeight;
+            }
+        }
+
         let sprite;
+        let spriteArr = [];
         const renderer = PIXI.autoDetectRenderer({
             antialias: true,
             autoDensity: true,
@@ -16,7 +33,7 @@
             width: 1440,
             height: 672,
         });
-        window.addEventListener('keydown', handleKeyPress)
+        window.addEventListener('keydown', moveTilemap)
         let stage;
         let tilemap;
         let frame = 0;
@@ -59,7 +76,7 @@
             for (let i = 0; i < tileW * 4; i++) {
                 for (let j = 0; j < tileH * 4; j++) {
                     let math = Math.random() * 100;
-                    if (i/2*size < 2004) {
+                    if (math < 90) {
                         tilemap.tile(
                             'grass.png',
                             i * size,
@@ -81,41 +98,109 @@
             stage.addChild(sprite);
             sprite.x = tileW / 2 * size;
             sprite.y = tileH / 2 * size;
+
+            //Making test raichu sprite!
+            makeSprite(0, 0, '/assets/sprites/raichufront.png')
+        }
+
+        /**
+         * Makes a sprite given an X, Y and an Image
+         * image in the format of: '/assets/sprites/raichufront.png'
+         */
+        function makeSprite(x, y, image) {
+            let e = PIXI.Sprite.from(image)
+            stage.addChild(e)
+            e.x = x
+            e.y = y
+            spriteArr.push(e);
         }
 
 
+        /**
+         * Checks for sprite collisions
+         * Returns true if there is a collision, false if not
+         */
+        function spriteCollisions() {
+            for (let i = 0; i < spriteArr.length; i++) {
+                if (spriteArr[i].x < sprite.x + sprite.width &&
+                    spriteArr[i].x + spriteArr[i].width > sprite.x &&
+                    spriteArr[i].y < sprite.y + sprite.height &&
+                    spriteArr[i].height + spriteArr[i].y > sprite.y) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
+
+        function tilemapCollisions() {
+
+        }
         //Add event listener to keydown
-        window.addEventListener('keydown', handleKeyPress)
+        window.addEventListener('keydown', moveTilemap)
+
         // Takes an event and moves the canvas if it the key is one of the following: WASD
-        function handleKeyPress(evt) {
+        function moveTilemap(evt) {
             if (evt.which === 68) {
                 if (tilemap.x > -5008)
                     tilemap.x -= 16
-                console.log("Tilemap " + tilemap.x + ", " + tilemap.y)
-                console.log("Sprite " + sprite.x + ", " + sprite.y)
+                for (let i = 0; i < spriteArr.length; i++) {
+                    spriteArr[i].x -= 16
+                }
+                if (spriteCollisions() == true) {
+                    alert("You found a Pokemon!")
+                    tilemap.x += 16;
+                    for (let i = 0; i < spriteArr.length; i++) {
+                        spriteArr[i].x += 16
+                    }
+                }
             }
             if (evt.which === 65) {
                 if (sprite.x > tilemap.x) {
                     tilemap.x += 16
-                    console.log("Tilemap " + tilemap.x + ", " + tilemap.y)
-                    console.log("Sprite " + sprite.x + ", " + sprite.y)
+                    for (let i = 0; i < spriteArr.length; i++) {
+                        spriteArr[i].x += 16
+                    }
+                    if (spriteCollisions() == true) {
+                        alert("You found a Pokemon!")
+                        tilemap.x -= 16;
+                        for (let i = 0; i < spriteArr.length; i++) {
+                            spriteArr[i].x -= 16
+                        }
+                    }
                 }
             }
             if (evt.which === 87) {
                 if (tilemap.y < sprite.y) {
                     tilemap.y += 16
-                    console.log("Tilemap " + tilemap.x + ", " + tilemap.y)
-                    console.log("Sprite " + sprite.x + ", " + sprite.y)
+                    for (let i = 0; i < spriteArr.length; i++) {
+                        spriteArr[i].y += 16
+                    }
+                    if (spriteCollisions() == true) {
+                        alert("You found a Pokemon!")
+                        tilemap.y -= 16;
+                        for (let i = 0; i < spriteArr.length; i++) {
+                            spriteArr[i].y -= 16
+                        }
+                    }
                 }
             }
             if (evt.which === 83) {
                 if (tilemap.y > -2320) {
                     tilemap.y -= 16
-                    console.log("Tilemap " + tilemap.x + ", " + tilemap.y)
-                    console.log("Sprite " + sprite.x + ", " + sprite.y)
+                    for (let i = 0; i < spriteArr.length; i++) {
+                        spriteArr[i].y -= 16
+                    }
+                    if (spriteCollisions() == true) {
+                        alert("You found a Pokemon!")
+                        tilemap.y += 16;
+                        for (let i = 0; i < spriteArr.length; i++) {
+                            spriteArr[i].y += 16
+                        }
+                    }
                 }
             }
+
         }
     </script>
 </body>

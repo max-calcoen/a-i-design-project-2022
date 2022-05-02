@@ -48,7 +48,6 @@ export class Pokemon {
         }
         return false
     }
-
     /**
      * adds an array containing the id of the status_effect along with its effect values to the pokemon statuseffects array
      * @param {string} statusEffect the status effect given to the pokemon
@@ -70,7 +69,6 @@ export class Pokemon {
             this.statusEffects.push(allEffects.get(statusEffect))
         }
     }
-
     // TODO- check if working
     addExp(amt) {
         this.totalExp += amt
@@ -80,7 +78,6 @@ export class Pokemon {
             this.tempexp = 0
         }
     }
-
     /**
 
      * @param {int} amt amount of damage to take
@@ -115,8 +112,6 @@ export class Pokemon {
         }
         return false
     }
-
-
     /**
      * @returns true on faint, false otherwise
      */
