@@ -8,7 +8,8 @@
 
 <body>
     <script>
-        //Makes a zone on the tilemap
+        //Makes a zone on the tilemap 
+        // TODO EVERETT: Later if needed
         class makeZone {
             /**
              * @param {int} x Top left x coordinate of tile
@@ -26,6 +27,8 @@
 
         let sprite;
         let spriteArr = [];
+        let tilemapRocks = [];
+
         const renderer = PIXI.autoDetectRenderer({
             antialias: true,
             autoDensity: true,
@@ -67,11 +70,10 @@
 
             makeTilemap();
         });
-
         function makeTilemap() {
+
             // Clear the tilemap, in case it is being reused.
             tilemap.clear();
-
             // Fill the scene with grass and sparse rocks 
             for (let i = 0; i < tileW * 4; i++) {
                 for (let j = 0; j < tileH * 4; j++) {
@@ -88,8 +90,14 @@
                             i * size,
                             j * size,
                         );
+                        let rockCoords = {
+                            x: i * size,
+                            y: j * size,
+                            width: 32,
+                            height: 32
+                        }
+                        tilemapRocks.push(rockCoords)
                     }
-
                 }
             }
 
@@ -134,8 +142,14 @@
 
 
         function tilemapCollisions() {
-            
-
+            for (let i = 0; i < tilemapRocks.length; i++) {
+                if (tilemapRocks[i].x < sprite.x + sprite.width &&
+                    tilemapRocks[i].x + tilemapRocks[i].width > sprite.x &&
+                    tilemapRocks[i].y < sprite.y + sprite.height &&
+                    tilemapRocks[i].height + tilemapRocks[i].y > sprite.y) {
+                    return true;
+                }
+            }
             return false;
         }
         //Add event listener to keydown
@@ -150,13 +164,22 @@
                     spriteArr[i].x -= 16
                 }
                 if (spriteCollisions() == true) {
-                    alert("You found a Pokemon!")
+                    for (let i = 0; i < tilemapRocks.length; i++) {
+                        tilemapRocks[i].x += 16;
+                    }
                     tilemap.x += 16;
                     for (let i = 0; i < spriteArr.length; i++) {
                         spriteArr[i].x += 16
                     }
+                    alert("You found a Pokemon!")
                 }
-                if (tilemapCollisions() = true){
+                for (let i = 0; i < tilemapRocks.length; i++) {
+                    tilemapRocks[i].x -= 16;
+                }
+                if (tilemapCollisions() == true) {
+                    for (let i = 0; i < tilemapRocks.length; i++) {
+                        tilemapRocks[i].x += 16;
+                    }
                     tilemap.x += 16;
                     for (let i = 0; i < spriteArr.length; i++) {
                         spriteArr[i].x += 16
@@ -170,13 +193,22 @@
                         spriteArr[i].x += 16
                     }
                     if (spriteCollisions() == true) {
-                        alert("You found a Pokemon!")
+                        for (let i = 0; i < tilemapRocks.length; i++) {
+                            tilemapRocks[i].x -= 16;
+                        }
                         tilemap.x -= 16;
                         for (let i = 0; i < spriteArr.length; i++) {
                             spriteArr[i].x -= 16
                         }
+                        alert("You found a Pokemon!")
                     }
-                    if (tilemapCollisions() = true){
+                    for (let i = 0; i < tilemapRocks.length; i++) {
+                        tilemapRocks[i].x += 16;
+                    }
+                    if (tilemapCollisions() == true) {
+                        for (let i = 0; i < tilemapRocks.length; i++) {
+                            tilemapRocks[i].x -= 16;
+                        }
                         tilemap.x -= 16;
                         for (let i = 0; i < spriteArr.length; i++) {
                             spriteArr[i].x -= 16
@@ -191,13 +223,22 @@
                         spriteArr[i].y += 16
                     }
                     if (spriteCollisions() == true) {
-                        alert("You found a Pokemon!")
+                        for (let i = 0; i < tilemapRocks.length; i++) {
+                            tilemapRocks[i].y -= 16;
+                        }
                         tilemap.y -= 16;
                         for (let i = 0; i < spriteArr.length; i++) {
                             spriteArr[i].y -= 16
                         }
+                        alert("You found a Pokemon!")
                     }
-                    if (tilemapCollisions() = true){
+                    for (let i = 0; i < tilemapRocks.length; i++) {
+                        tilemapRocks[i].y += 16;
+                    }
+                    if (tilemapCollisions() == true) {
+                        for (let i = 0; i < tilemapRocks.length; i++) {
+                            tilemapRocks[i].y -= 16;
+                        }
                         tilemap.y -= 16;
                         for (let i = 0; i < spriteArr.length; i++) {
                             spriteArr[i].y -= 16
@@ -212,13 +253,22 @@
                         spriteArr[i].y -= 16
                     }
                     if (spriteCollisions() == true) {
-                        alert("You found a Pokemon!")
+                        for (let i = 0; i < tilemapRocks.length; i++) {
+                            tilemapRocks[i].y += 16;
+                        }
                         tilemap.y += 16;
                         for (let i = 0; i < spriteArr.length; i++) {
                             spriteArr[i].y += 16
                         }
+                        alert("You found a Pokemon!")
                     }
-                    if (tilemapCollisions() = true){
+                    for (let i = 0; i < tilemapRocks.length; i++) {
+                        tilemapRocks[i].y -= 16;
+                    }
+                    if (tilemapCollisions() == true) {
+                        for (let i = 0; i < tilemapRocks.length; i++) {
+                            tilemapRocks[i].y += 16;
+                        }
                         tilemap.y += 16;
                         for (let i = 0; i < spriteArr.length; i++) {
                             spriteArr[i].y += 16

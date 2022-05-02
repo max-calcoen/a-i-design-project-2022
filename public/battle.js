@@ -1,8 +1,8 @@
 import { pokedex } from "./dex/pokedex.js"
 import { BattleLogic } from "./models/battlelogic.js"
-let turtwig = pokedex.get("Turtwig")
+
 let raichu = pokedex.get("Raichu")
-let battle = new BattleLogic(turtwig, raichu)
+let battle = new BattleLogic(userPokemon, raichu)
 
 window.onload = () => {
     showOptions()
@@ -43,19 +43,19 @@ function showOptions() {
 function handleFightButtonClick() {
     resetButtonListeners()
     let BattleOptionsGrid = document.getElementById("battleOptionsGrid")
-    for (let i = 0; i < turtwig.moves.length; i++) {
-        BattleOptionsGrid.children[i].children[0].innerHTML = turtwig.moves[i].name
+    for (let i = 0; i < userPokemon.moves.length; i++) {
+        BattleOptionsGrid.children[i].children[0].innerHTML = userPokemon.moves[i].name
     }
 
     let battleOptionsDivs = document.getElementById("battleOptionsGrid").children
     for (let i = 0; i < battleOptionsDivs.length; i++) {
         document.getElementById("box" + (i + 1)).children[0].onclick = () => {
-            let turnResult = battle.turn(turtwig.moves[i], raichu.moves[Math.floor(Math.random() * 4)])
+            let turnResult = battle.turn(userPokemon.moves[i], raichu.moves[Math.floor(Math.random() * 4)])
             updateHealth()
-            turtwig = turnResult.pokemon1
+            userPokemon = turnResult.pokemon1
             raichu = turnResult.pokemon2
             if (turnResult.winner != 0) {
-                gameOver(turnResult.winner == 1 ? turtwig.name : raichu.name)
+                gameOver(turnResult.winner == 1 ? userPokemon.name : raichu.name)
             } else {
                 resetButtonListeners()
                 showOptions()
@@ -118,8 +118,8 @@ function gameOver(winner, text = winner + " Won!") {
 }
 
 function updateHealth() {
-    document.getElementById("maxNumPlayerHealth").innerText = turtwig.currentStats.maxHealth
-    document.getElementById("currentNumPlayerHealth").innerText = turtwig.currentStats.health
-    document.documentElement.style.setProperty("--player-health", (100 * turtwig.currentStats.health / turtwig.currentStats.maxHealth) + "%")
+    document.getElementById("maxNumPlayerHealth").innerText = userPokemon.currentStats.maxHealth
+    document.getElementById("currentNumPlayerHealth").innerText = userPokemon.currentStats.health
+    document.documentElement.style.setProperty("--player-health", (100 * userPokemon.currentStats.health / userPokemon.currentStats.maxHealth) + "%")
     document.documentElement.style.setProperty("--enemy-health", (100 * raichu.currentStats.health / raichu.currentStats.maxHealth) + "%")
 }

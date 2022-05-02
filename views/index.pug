@@ -1,6 +1,3 @@
-mixin pokemon(pokemon)
-    option(value=pokemon) pokemon.name
-
 doctype html
 html(lang="en")
     head
@@ -8,15 +5,25 @@ html(lang="en")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Index
-    body 
+    body
+    
         ol
             li
                 a(href="openworld.html") openworld
             li
                 a(href="battle") battle interface
-        form(action="battle.js", method="post")
-            label(for="pokemonOptions")
-            select#pokemonOptions(name="pokemonOptions")
-                each pokemon in Array.from(pokedex.keys())
-                    +pokemon(pokemon)
+        form(action="battle" method="post")
+            label(for="user") Username: 
+            input(type="text" name="username")
+            br
+            br
+            label(for="password") Password: 
+            input(type="password" name="password")
+            br
+            br
+            label(for="pokemonOptions") Choose a Pokemon:
+            br
+            select#pokemonOptions(name="pokemon")
+                each pokemon in Array.from(pokedex.values())
+                    option(value=pokemon.name) #{pokemon.name}
             input(type="submit" value="go!")
