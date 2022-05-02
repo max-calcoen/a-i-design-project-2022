@@ -134,7 +134,9 @@
 
 
         function tilemapCollisions() {
+            
 
+            return false;
         }
         //Add event listener to keydown
         window.addEventListener('keydown', moveTilemap)
@@ -154,6 +156,12 @@
                         spriteArr[i].x += 16
                     }
                 }
+                if (tilemapCollisions() = true){
+                    tilemap.x += 16;
+                    for (let i = 0; i < spriteArr.length; i++) {
+                        spriteArr[i].x += 16
+                    }
+                }
             }
             if (evt.which === 65) {
                 if (sprite.x > tilemap.x) {
@@ -163,6 +171,12 @@
                     }
                     if (spriteCollisions() == true) {
                         alert("You found a Pokemon!")
+                        tilemap.x -= 16;
+                        for (let i = 0; i < spriteArr.length; i++) {
+                            spriteArr[i].x -= 16
+                        }
+                    }
+                    if (tilemapCollisions() = true){
                         tilemap.x -= 16;
                         for (let i = 0; i < spriteArr.length; i++) {
                             spriteArr[i].x -= 16
@@ -183,6 +197,12 @@
                             spriteArr[i].y -= 16
                         }
                     }
+                    if (tilemapCollisions() = true){
+                        tilemap.y -= 16;
+                        for (let i = 0; i < spriteArr.length; i++) {
+                            spriteArr[i].y -= 16
+                        }
+                    }
                 }
             }
             if (evt.which === 83) {
@@ -193,6 +213,12 @@
                     }
                     if (spriteCollisions() == true) {
                         alert("You found a Pokemon!")
+                        tilemap.y += 16;
+                        for (let i = 0; i < spriteArr.length; i++) {
+                            spriteArr[i].y += 16
+                        }
+                    }
+                    if (tilemapCollisions() = true){
                         tilemap.y += 16;
                         for (let i = 0; i < spriteArr.length; i++) {
                             spriteArr[i].y += 16
