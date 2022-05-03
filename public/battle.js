@@ -1,7 +1,10 @@
 import { pokedex } from "./dex/pokedex.js"
 import { BattleLogic } from "./models/battlelogic.js"
 
+let userPokemon = user.pc[0]
+userPokemon = pokedex.get("Turtwig")
 let raichu = pokedex.get("Raichu")
+
 let battle = new BattleLogic(userPokemon, raichu)
 
 window.onload = () => {
@@ -47,8 +50,10 @@ function handleFightButtonClick() {
         BattleOptionsGrid.children[i].children[0].innerHTML = userPokemon.moves[i].name
     }
 
-    let battleOptionsDivs = document.getElementById("battleOptionsGrid").children
-    for (let i = 0; i < battleOptionsDivs.length; i++) {
+
+
+    let movesDivs = document.getElementById("battleOptionsGrid").children
+    for (let i = 0; i < movesDivs.length - 1; i++) {
         document.getElementById("box" + (i + 1)).children[0].onclick = () => {
             let turnResult = battle.turn(userPokemon.moves[i], raichu.moves[Math.floor(Math.random() * 4)])
             updateHealth()
@@ -60,7 +65,6 @@ function handleFightButtonClick() {
                 resetButtonListeners()
                 showOptions()
             }
-
         }
     }
     showBackButton()

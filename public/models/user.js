@@ -1,4 +1,4 @@
-import { pokedex } from "../dex/pokedex"
+import { pokedex } from "../dex/pokedex.js"
 
 export class User {
     /**
@@ -6,7 +6,7 @@ export class User {
      * @param {string} username username
      * @param {string} password password
      */
-    constructor(username,  password) {
+    constructor(username, password) {
         this.username = username
         this.password = password
         this.inventory = {

@@ -1,10 +1,9 @@
 // import neccesary modules
 import { createServer, Server } from "http"
-// import { User } from "./public/models/user.js"
+import { User } from "./public/models/user.js"
 import express from "express"
 import { pokedex } from "./public/dex/pokedex.js"
 import bodyParser from "body-parser"
-// export let allUsers = [new User("user", "pwd")]
 
 // tunables for server setup
 const SERVER_PORT = 8080
@@ -20,6 +19,9 @@ app.use(express.static(PUBLIC_FILES_DIR))
 app.set("views", "views")
 app.set("view engine", "pug")
 
+// define users
+export let allUsers = new Map([["e", new User("e", "e")]])
+
 app.get("/battle", (req, res) => {
     res.render("battle-interface", {
         enemyPokemon: pokedex.get("Raichu"),
@@ -30,17 +32,19 @@ app.get("/battle", (req, res) => {
 app.post("/battle", (req, res) => {
     let username = req.body.username
     let password = req.body.password
-    let chosenPokemon = req.body.pokemon
-    for (let user of allUsers) {
+    let userPokemon = req.body.pokemon
+    for (let user of allUsers.values()) {
         if (user.username == username && user.password == password) {
+            allUsers.get(user.username).pc[0] = pokedex.get(userPokemon)
             res.render("battle-interface", {
+                user: user,
                 enemyPokemon: pokedex.get("Raichu"),
-                userPokemon: pokedex.get(chosenPokemon)
+                userPokemon: pokedex.get(userPokemon)
             })
             return
         }
     }
-    res.send("Wrong username or password!")
+    res.send("Wrong username || password! D:")
 })
 
 app.get("/", (req, res) => {

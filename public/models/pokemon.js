@@ -84,7 +84,7 @@ export class Pokemon {
      * @returns true on faint, false otherwise
      */
     takeDamage(amt) {
-        this.currentStats.health -= amt
+        this.currentStats.health = Math.max(this.currentStats - amt, 0)
         return this.fainted
     }
 
