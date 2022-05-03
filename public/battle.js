@@ -1,8 +1,8 @@
 import { pokedex } from "./dex/pokedex.js"
 import { BattleLogic } from "./models/battlelogic.js"
-
+// hi ben i am bugfixing pls fix status effects
 let userPokemon = user.pc[0]
-userPokemon = pokedex.get("Turtwig")
+// userPokemon = pokedex.get("turtwig")
 let raichu = pokedex.get("Raichu")
 
 let battle = new BattleLogic(userPokemon, raichu)

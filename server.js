@@ -4,7 +4,10 @@ import { User } from "./public/models/user.js"
 import express from "express"
 import { pokedex } from "./public/dex/pokedex.js"
 import bodyParser from "body-parser"
+// ben
 
+// check discord, can u fix smthn rq
+// i think it has to do with the {}'s somewhere
 // tunables for server setup
 const SERVER_PORT = 8080
 const PUBLIC_FILES_DIR = "public"
@@ -19,8 +22,8 @@ app.use(express.static(PUBLIC_FILES_DIR))
 app.set("views", "views")
 app.set("view engine", "pug")
 
-// define users
-export let allUsers = new Map([["e", new User("e", "e")]])
+export let users = new Map([["e", new User("e", "e")]])
+
 
 app.get("/battle", (req, res) => {
     res.render("battle-interface", {
@@ -33,9 +36,14 @@ app.post("/battle", (req, res) => {
     let username = req.body.username
     let password = req.body.password
     let userPokemon = req.body.pokemon
-    for (let user of allUsers.values()) {
-        if (user.username == username && user.password == password) {
-            allUsers.get(user.username).pc[0] = pokedex.get(userPokemon)
+    if (!pokedex.has(userPokemon)) {
+        res.send("Pokemon not found!")
+        return
+    }
+    for (let user of users.values()) {
+        if (true || user.username == username && user.password == password) {
+            users.get(user.username).pc[0] = pokedex.get(userPokemon)
+            console.log(user.pc)
             res.render("battle-interface", {
                 user: user,
                 enemyPokemon: pokedex.get("Raichu"),
@@ -44,7 +52,7 @@ app.post("/battle", (req, res) => {
             return
         }
     }
-    res.send("Wrong username || password! D:")
+    res.send("Wrong username or password! D:")
 })
 
 app.get("/", (req, res) => {

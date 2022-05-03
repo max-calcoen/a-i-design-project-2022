@@ -1,4 +1,4 @@
-import { pokedex } from "../dex/pokedex.js"
+import { pokedex }  from "../dex/pokedex.js"
 
 export class User {
     /**

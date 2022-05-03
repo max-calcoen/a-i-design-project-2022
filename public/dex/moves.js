@@ -11,10 +11,11 @@ import { Move } from "../models/move.js"
      */
 export let moves = new Map()
 moves.set("Scratch", new Move("Scratch", "normal", false, 40, 40, 100))
+moves.set("Tackle", new Move("Tackle", "normal", false, 30, 40, 100))
 moves.set("Thunderbolt", new Move("Thunderbolt", "electric", true, 70, 10, 100))
 moves.set("Vine Whip", new Move("Vine Whip", "grass", true, 40, 30, 100))
 moves.set("Razor Leaf", new Move("Razor Leaf", "grass", true, 50, 20, 100))
 moves.set("Leech Seed", new Move("Leech Seed", "grass", true, 30, 15, 100))
 moves.set("Dragon Breath", new Move("Dragon Breath", "dragon", true, 80, 15, 100))
 moves.set("Slash", new Move("Slash", "normal", false, 70, 20, 100))
-moves.set("Ember", new Move("Ember", "normal", false, 40, 30, 100))
+moves.set("Ember", new Move("Ember", "fire", false, 40, 30, 100))

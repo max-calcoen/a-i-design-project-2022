@@ -53,22 +53,6 @@ export class Pokemon {
      * @param {string} statusEffect the status effect given to the pokemon
      */
     // TODO- check if working
-    addStatusEffect(statusEffect) {
-        let allEffects = new Map()
-        allEffects.set('Burned', {
-            duration: 2,
-            damage: this.#baseStats.maxHp * 0.1,
-            immobility: false,
-        })
-        allEffects.set('Paralyzed', {
-            duration: 2,
-            damage: 0,
-            immobility: true,
-        })
-        if (allEffects.has(statusEffect)) {
-            this.statusEffects.push(allEffects.get(statusEffect))
-        }
-    }
     // TODO- check if working
     addExp(amt) {
         this.totalExp += amt
@@ -98,7 +82,7 @@ export class Pokemon {
     }
 
     /**
-     * @param {int} pokeball pokeball object
+     * @param {Pokeball} pokeball pokeball object
      * @returns true if the pokemon has been caught, false if the pokemon escaped
      */
     catch(pokeball) {
