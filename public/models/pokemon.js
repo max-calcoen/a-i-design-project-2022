@@ -1,3 +1,4 @@
+
 export class Pokemon {
     frontImg
     backImg
@@ -31,7 +32,6 @@ export class Pokemon {
         this.canMove = true
         this.#baseCatchRate = catchRate
     }
-
     /**
      * Replace a pokemon's move with another
      * @param {Move} newMove move to learn
@@ -68,7 +68,8 @@ export class Pokemon {
      * @returns true on faint, false otherwise
      */
     takeDamage(amt) {
-        this.currentStats.health = Math.max(this.currentStats - amt, 0)
+        console.log(`dealt ${amt} damage`)
+        this.currentStats.health = Math.max(this.currentStats.health - amt, 0)
         return this.fainted
     }
 

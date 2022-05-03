@@ -60,6 +60,9 @@ app.get("/", (req, res) => {
         pokedex: pokedex
     })
 })
+app.get("/getPokedex", (req, res) => {
+    res.send("yo!")
+})
 
 server.listen(SERVER_PORT, function () {
     console.log(`Server listening on port ${SERVER_PORT}`)

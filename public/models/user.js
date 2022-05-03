@@ -1,5 +1,7 @@
-import { pokedex }  from "../dex/pokedex.js"
+import { pokedex } from "../dex/pokedex.js"
+export function readJSON(json) {
 
+}
 export class User {
     /**
      * Set up a new User with blank username and Personal Computer

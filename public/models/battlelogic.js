@@ -43,14 +43,16 @@ export class BattleLogic {
             console.log(pokemon2.statusEffects)
             let cantMoveCounter = 0
             for (let i = 0; i < pokemon2.statusEffects.length; i++) {
-                console.log(pokemon2.statusEffects)
                 pokemon2.takeDamage(pokemon2.statusEffects[i].dpround)
+                console.log(pokemon2.statusEffects, pokemon2.currentStats.health)
                 if (!pokemon2.statusEffects[i].canMove) {
                     cantMoveCounter += 1
                 }
                 pokemon2.statusEffects[i].duration--
+                console.log(pokemon2.statusEffects)
                 if (pokemon2.statusEffects[i].duration = 0) {
                     pokemon2.statusEffects.splice(i, 1)
+                    console.log(pokemon2.statusEffects)
                 }
             }
             if (cantMoveCounter > 0) {
@@ -61,12 +63,14 @@ export class BattleLogic {
             }
         }
         let damageResult
+        let effectv1 = inflictEffects.get(pokemon2move.type)
+        let effectv2 = inflictEffects.get(pokemon1move.type)
         if (this.pokemon1.currentStats.speed > this.pokemon2.currentStats.speed) {
             if (this.pokemon1.canMove) {
                 dealWithEffects(this.pokemon2)
                 damageResult = this.pokemon2.takeDamage(p1damage)
                 if (pokemon1move.isSpecial && inflictEffects.get(pokemon1move.type) != null) {
-                    this.pokemon2.statusEffects.push(inflictEffects.get(pokemon1move.type))
+                    this.pokemon2.statusEffects.push(effectv1)
                 }
                 if (damageResult) {
                     return {
@@ -80,7 +84,7 @@ export class BattleLogic {
                 dealWithEffects(this.pokemon1)
                 damageResult = this.pokemon1.takeDamage(p2damage)
                 if (pokemon2move.isSpecial && inflictEffects.get(pokemon2move.type) != null) {
-                    this.pokemon1.statusEffects.push(inflictEffects.get(pokemon2move.type))
+                    this.pokemon1.statusEffects.push(effectv1)
 
                 }
                 if (damageResult) {
@@ -97,7 +101,7 @@ export class BattleLogic {
                 damageResult = this.pokemon1.takeDamage(p2damage)
                 if (pokemon2move.isSpecial) {
                     if (pokemon2move.isSpecial && inflictEffects.get(pokemon2move.type) != null) {
-                        this.pokemon1.statusEffects.push(inflictEffects.get(pokemon2move.type))
+                        this.pokemon1.statusEffects.push(effectv1)
                     }
                 }
                 if (damageResult) {
@@ -112,7 +116,7 @@ export class BattleLogic {
                 dealWithEffects(this.pokemon2)
                 damageResult = this.pokemon2.takeDamage(p1damage)
                 if (pokemon1move.isSpecial && inflictEffects.get(pokemon1move.type) != null) {
-                    this.pokemon2.statusEffects.push(inflictEffects.get(pokemon1move.type))
+                    this.pokemon2.statusEffects.push(effectv2)
                     console.log(this.pokemon2.statusEffects)
                 }
                 if (damageResult) {
