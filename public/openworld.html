@@ -177,16 +177,6 @@
                 for (let i = 0; i < spriteArr.length; i++) {
                     spriteArr[i].x -= 16
                 }
-                if (spriteCollisions() == true) {
-                    for (let i = 0; i < tilemapRocks.length; i++) {
-                        tilemapRocks[i].x += 16;
-                    }
-                    tilemap.x += 16;
-                    for (let i = 0; i < spriteArr.length; i++) {
-                        spriteArr[i].x += 16
-                    }
-                    alert("You found a "+ pokeCollisionName +"!")
-                }
                 for (let i = 0; i < tilemapRocks.length; i++) {
                     tilemapRocks[i].x -= 16;
                 }
@@ -199,22 +189,23 @@
                         spriteArr[i].x += 16
                     }
                 }
+                if (spriteCollisions() == true) {
+                    for (let i = 0; i < tilemapRocks.length; i++) {
+                        tilemapRocks[i].x += 16;
+                    }
+                    tilemap.x += 16;
+                    for (let i = 0; i < spriteArr.length; i++) {
+                        spriteArr[i].x += 16
+                    }
+                    alert("You found a "+ pokeCollisionName +"!")
+                }
+                
             }
             if (evt.which === 65) {
                 if (sprite.x > tilemap.x) {
                     tilemap.x += 16
                     for (let i = 0; i < spriteArr.length; i++) {
                         spriteArr[i].x += 16
-                    }
-                    if (spriteCollisions() == true) {
-                        for (let i = 0; i < tilemapRocks.length; i++) {
-                            tilemapRocks[i].x -= 16;
-                        }
-                        tilemap.x -= 16;
-                        for (let i = 0; i < spriteArr.length; i++) {
-                            spriteArr[i].x -= 16
-                        }
-                        alert("You found a "+ pokeCollisionName +"!")
                     }
                     for (let i = 0; i < tilemapRocks.length; i++) {
                         tilemapRocks[i].x += 16;
@@ -228,6 +219,17 @@
                             spriteArr[i].x -= 16
                         }
                     }
+                    if (spriteCollisions() == true) {
+                        for (let i = 0; i < tilemapRocks.length; i++) {
+                            tilemapRocks[i].x -= 16;
+                        }
+                        tilemap.x -= 16;
+                        for (let i = 0; i < spriteArr.length; i++) {
+                            spriteArr[i].x -= 16
+                        }
+                        alert("You found a "+ pokeCollisionName +"!")
+                    }
+                    
                 }
             }
             if (evt.which === 87) {
@@ -235,16 +237,6 @@
                     tilemap.y += 16
                     for (let i = 0; i < spriteArr.length; i++) {
                         spriteArr[i].y += 16
-                    }
-                    if (spriteCollisions() == true) {
-                        for (let i = 0; i < tilemapRocks.length; i++) {
-                            tilemapRocks[i].y -= 16;
-                        }
-                        tilemap.y -= 16;
-                        for (let i = 0; i < spriteArr.length; i++) {
-                            spriteArr[i].y -= 16
-                        }
-                        alert("You found a "+ pokeCollisionName +"!")
                     }
                     for (let i = 0; i < tilemapRocks.length; i++) {
                         tilemapRocks[i].y += 16;
@@ -258,6 +250,17 @@
                             spriteArr[i].y -= 16
                         }
                     }
+                    if (spriteCollisions() == true) {
+                        for (let i = 0; i < tilemapRocks.length; i++) {
+                            tilemapRocks[i].y -= 16;
+                        }
+                        tilemap.y -= 16;
+                        for (let i = 0; i < spriteArr.length; i++) {
+                            spriteArr[i].y -= 16
+                        }
+                        alert("You found a "+ pokeCollisionName +"!")
+                    }
+                    
                 }
             }
             if (evt.which === 83) {
@@ -265,16 +268,6 @@
                     tilemap.y -= 16
                     for (let i = 0; i < spriteArr.length; i++) {
                         spriteArr[i].y -= 16
-                    }
-                    if (spriteCollisions() == true) {
-                        for (let i = 0; i < tilemapRocks.length; i++) {
-                            tilemapRocks[i].y += 16;
-                        }
-                        tilemap.y += 16;
-                        for (let i = 0; i < spriteArr.length; i++) {
-                            spriteArr[i].y += 16
-                        }
-                        alert("You found a "+ pokeCollisionName +"!")
                     }
                     for (let i = 0; i < tilemapRocks.length; i++) {
                         tilemapRocks[i].y -= 16;
@@ -288,6 +281,17 @@
                             spriteArr[i].y += 16
                         }
                     }
+                    if (spriteCollisions() == true) {
+                        for (let i = 0; i < tilemapRocks.length; i++) {
+                            tilemapRocks[i].y += 16;
+                        }
+                        tilemap.y += 16;
+                        for (let i = 0; i < spriteArr.length; i++) {
+                            spriteArr[i].y += 16
+                        }
+                        alert("You found a "+ pokeCollisionName +"!")
+                    }
+                    
                 }
             }
 
