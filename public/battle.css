@@ -58,7 +58,7 @@ div#battleOptionsGrid {
     grid-template-rows: 1fr 1fr;
 }
 
-div#battleOptionsGrid>div>button {
+div#battleOptionsGrid>button {
     width: 100%;
     height: 100%;
     font-size: 25px;

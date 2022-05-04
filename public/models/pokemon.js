@@ -68,7 +68,6 @@ export class Pokemon {
      * @returns true on faint, false otherwise
      */
     takeDamage(amt) {
-        console.log(`dealt ${amt} damage`)
         this.currentStats.health = Math.max(this.currentStats.health - amt, 0)
         return this.fainted
     }
@@ -140,5 +139,6 @@ export class Pokemon {
         newPokemon.level = parsedPokemonJSON.level
         newPokemon.statusEffects = parsedPokemonJSON.statusEffects
         newPokemon.canMove = parsedPokemonJSON.canMove
+        return newPokemon
     }
 }

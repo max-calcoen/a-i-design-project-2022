@@ -1,8 +1,6 @@
 import { inflictEffects } from "./move.js"
 export class BattleLogic {
     constructor(pokemon1, pokemon2) {
-        console.log(pokemon1)
-        console.log(pokemon2)
         this.pokemon1 = pokemon1
         this.pokemon2 = pokemon2
     }
@@ -15,7 +13,6 @@ export class BattleLogic {
      * @returns {Object} object in form pokemon1: pokemon1, pokemon2: pokemon2, winner: 1 if p1 knocks out p2, 2 if p2 knocks out p1, false if neither
      */
     turn(pokemon1move, pokemon2move = this.pokemon2.moves[Math.floor(Math.random() * 4)]) {
-        console.log(this.pokemon1)
         let p1level = this.pokemon1.level
         let p1power = pokemon1move.power
         let p1attack = this.pokemon1.currentStats.attack
@@ -40,19 +37,15 @@ export class BattleLogic {
         let p2type = this.getEffectiveness(pokemon2move.type, this.pokemon1.types)
         let p2damage = Math.floor(((((2 * p2level / 5) + 2) * p2power * p2attack / p1def) / 50 + 2) * p2crit * p2rand * p2stab * p2type)
         function dealWithEffects(pokemon2) {
-            console.log(pokemon2.statusEffects)
             let cantMoveCounter = 0
             for (let i = 0; i < pokemon2.statusEffects.length; i++) {
                 pokemon2.takeDamage(pokemon2.statusEffects[i].dpround)
-                console.log(pokemon2.statusEffects, pokemon2.currentStats.health)
                 if (!pokemon2.statusEffects[i].canMove) {
                     cantMoveCounter += 1
                 }
                 pokemon2.statusEffects[i].duration--
-                console.log(pokemon2.statusEffects)
                 if (pokemon2.statusEffects[i].duration = 0) {
                     pokemon2.statusEffects.splice(i, 1)
-                    console.log(pokemon2.statusEffects)
                 }
             }
             if (cantMoveCounter > 0) {
@@ -117,7 +110,6 @@ export class BattleLogic {
                 damageResult = this.pokemon2.takeDamage(p1damage)
                 if (pokemon1move.isSpecial && inflictEffects.get(pokemon1move.type) != null) {
                     this.pokemon2.statusEffects.push(effectv2)
-                    console.log(this.pokemon2.statusEffects)
                 }
                 if (damageResult) {
                     return {

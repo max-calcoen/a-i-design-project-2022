@@ -6,12 +6,6 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Index
     body
-    
-        ol
-            li
-                a(href="openworld.html") openworld
-            li
-                a(href="battle") battle interface
         form(action="battle" method="post")
             label(for="user") Username: 
             input(type="text" name="username")
@@ -21,7 +15,7 @@ html(lang="en")
             input(type="password" name="password" autocomplete="on")
             br
             br
-            label(for="pokemonOptions") Choose a Pokemon:
+            label(for="pokemonOptions") Choose a Pokemon to fight with:
             br
             select#pokemonOptions(name="pokemon")
                 each pokemon in Array.from(pokedex.values())

@@ -21,7 +21,6 @@ app.set("view engine", "pug")
 
 export let users = new Map([["e", new User("e", "e")]])
 
-
 app.get("/battle", (req, res) => {
     // res.render("battle-interface", {
     //     enemyPokemon: pokedex.get("Raichu"),
@@ -41,7 +40,6 @@ app.post("/battle", (req, res) => {
     for (let user of users.values()) {
         if (true || user.username == username && user.password == password) {
             users.get(user.username).pc[0] = pokedex.get(userPokemon)
-            console.log(user.pc)
             res.render("battle-interface", {
                 user: user,
                 enemyPokemon: pokedex.get("Raichu"),
