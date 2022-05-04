@@ -18,25 +18,25 @@ export class Move {
     }
 }
 export const inflictEffects = new Map([
-    ['fire', {
+    ['Fire', {
         name: 'burn',
         canMove: true,
         dpround: 10,
         duration: 3
     }],
-    ['grass', {
+    ['Grass', {
         name: 'poison',
         canMove: true,
         dpround: 20,
         duration: 2
     }],
-    ['poison', {
+    ['Poison', {
         name: 'paralysis',
         canMove: false,
         dpround: 0,
         duration: 2
     }],
-    ['ice', {
+    ['Ice', {
         name: 'freeze',
         canMove: false,
         dpround: 0,

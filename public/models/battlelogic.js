@@ -36,23 +36,24 @@ export class BattleLogic {
         if (this.pokemon2.types[0] == pokemon1move.type) p2stab = 1.5
         let p2type = this.getEffectiveness(pokemon2move.type, this.pokemon1.types)
         let p2damage = Math.floor(((((2 * p2level / 5) + 2) * p2power * p2attack / p1def) / 50 + 2) * p2crit * p2rand * p2stab * p2type)
-        function dealWithEffects(pokemon2) {
+        function dealWithEffects(pokemon) {
             let cantMoveCounter = 0
-            for (let i = 0; i < pokemon2.statusEffects.length; i++) {
-                pokemon2.takeDamage(pokemon2.statusEffects[i].dpround)
-                if (!pokemon2.statusEffects[i].canMove) {
+            for (let i = 0; i < pokemon.statusEffects.length; i++) {
+                console.log(pokemon.statusEffects)
+                pokemon.takeDamage(pokemon.statusEffects[i].dpround)
+                if (!pokemon.statusEffects[i].canMove) {
                     cantMoveCounter += 1
                 }
-                pokemon2.statusEffects[i].duration--
-                if (pokemon2.statusEffects[i].duration = 0) {
-                    pokemon2.statusEffects.splice(i, 1)
+                pokemon.statusEffects[i].duration--
+                if (pokemon.statusEffects[i].duration = 0) {
+                    pokemon.statusEffects.splice(i, 1)
                 }
             }
             if (cantMoveCounter > 0) {
-                pokemon2.canMove = false
+                pokemon.canMove = false
             }
             else {
-                pokemon2.canMove = true
+                pokemon.canMove = true
             }
         }
         let damageResult
@@ -63,6 +64,7 @@ export class BattleLogic {
                 dealWithEffects(this.pokemon2)
                 damageResult = this.pokemon2.takeDamage(p1damage)
                 if (pokemon1move.isSpecial && inflictEffects.get(pokemon1move.type) != null) {
+                    console.log(effectv1)
                     this.pokemon2.statusEffects.push(effectv1)
                 }
                 if (damageResult) {
@@ -127,8 +129,7 @@ export class BattleLogic {
         }
     }
 
-
-
+    // TODO: condense
     /**
      * @param {string} attack type of attacking pokemon
      * @param {string} def type of defending pokemon
