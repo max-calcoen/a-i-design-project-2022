@@ -24,15 +24,7 @@ let pokemonImgArr = []
 for (let pokemon of pokedex.values()) {
     pokemonImgArr.push(["/assets/sprites/" + pokemon.frontImg, pokemon.name])
 }
-/*
-let pokemonImgArr = [["/assets/sprites/blastoisefront.png", "Blastoise"], ["/assets/sprites/bulbasaurfront.png", "Bulbasaur"],
-["/assets/sprites/charizardfront.png", "Charizard"], ["/assets/sprites/charmanderfront.png", "Charmander"],
-["/assets/sprites/charmeleonfront.png", "Charmeleon"], ["/assets/sprites/ivysaurfront.png", "Ivysaur"],
-["/assets/sprites/pikachufront.png", "Pikachu"], ["/assets/sprites/raichufront.png", "Raichu"],
-["/assets/sprites/squirtlefront.png", "Squirtle"], ["/assets/sprites/turtwigfront.png", "Turtwig"],
-["/assets/sprites/venusaurfront.png", "Venusaur"], ["/assets/sprites/wartortlefront.png", "Wartortle"],
-["/assets/sprites/zapdosfront.png", "Zapdos"], ["", ""], ["", ""], ["", ""], ["", ""], ["", ""], ["", ""]]
-*/
+
 const renderer = PIXI.autoDetectRenderer({
     antialias: true,
     autoDensity: true,
@@ -100,13 +92,7 @@ function makeTilemap() {
                 tilemapRocks.push(rockCoords)
             }
 
-            // TODO: add rarity, add spawns/despawns every x seconds, maybe make this a function so it can be called elsewhere
-            // Putting pokemon randomly!
-            let otherMath = Math.random() * 100
-            if (otherMath > 99.7) {
-                let index = Math.floor(Math.random() * 13)
-                makeSprite(i * size, j * size, pokemonImgArr[index][0], pokemonImgArr[index][1])
-            }
+            
         }
     }
 
@@ -115,7 +101,32 @@ function makeTilemap() {
     stage.addChild(sprite)
     sprite.x = tileW / 2 * size
     sprite.y = tileH / 2 * size
+    makePokemon();
+}
 
+
+
+function makePokemon(){
+    // TODO: add rarity, add spawns/despawns every x seconds, maybe make this a function so it can be called elsewhere
+    // Putting pokemon randomly!
+    for (let i = 0; i < tileW * 4; i++) {
+        for (let j = 0; j < tileH * 4; j++) {
+            let otherMath = Math.random() * 100
+            if (otherMath > 99.7) {
+                let index = Math.floor(Math.random() * pokemonImgArr.length)
+                makeSprite(i * size, j * size, pokemonImgArr[index][0], pokemonImgArr[index][1])
+            }
+        }
+    }
+    test();
+}
+
+function test () {
+    setTimeout( ()=> {
+    delPokemon()
+    makePokemon()
+    test()
+    }, 60000)
 }
 
 /**
@@ -129,6 +140,13 @@ function makeSprite(x, y, image, name) {
     newSprite.y = y
     newSprite.name = name
     spriteArr.push(newSprite)
+}
+
+function delPokemon(){
+    for(let i = 0; i < spriteArr.length; i++){
+        stage.removeChild(spriteArr[i])
+    }
+    spriteArr = [];
 }
 
 
