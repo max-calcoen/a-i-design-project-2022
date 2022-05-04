@@ -1,10 +1,10 @@
-
+import { pokedex } from "../dex/pokedex.js"
 export class Pokemon {
     frontImg
     backImg
     #baseStats
     #maxStats
-    #baseCatchRate
+    #catchRate
     /**
      * @param {string} name name of pokemon ("Charmander")
      * @param {array} types elemental type of pokemon (["fire"])
@@ -23,14 +23,14 @@ export class Pokemon {
         this.backImg = backImg
         this.#baseStats = baseStats
         this.#maxStats = maxStats
-        this.currentStats = baseStats
+        this.currentStats = this.#baseStats
         this.totalExp = 0
-        this.tempexp = 0
+        this.tempExp = 0
         this.nick = ""
         this.level = 0
         this.statusEffects = []
         this.canMove = true
-        this.#baseCatchRate = catchRate
+        this.#catchRate = catchRate
     }
     /**
      * Replace a pokemon's move with another
@@ -48,18 +48,18 @@ export class Pokemon {
         }
         return false
     }
+
     /**
      * adds an array containing the id of the status_effect along with its effect values to the pokemon statuseffects array
      * @param {string} statusEffect the status effect given to the pokemon
      */
     // TODO- check if working
-    // TODO- check if working
     addExp(amt) {
         this.totalExp += amt
-        this.tempexp += amt
-        if (this.#getExpRequirement(this.level + 1) <= this.tempexp) {
+        this.tempExp += amt
+        if (this.#getExpRequirement(this.level + 1) <= this.tempExp) {
             this.levelUp()
-            this.tempexp = 0
+            this.tempExp = 0
         }
     }
     /**
@@ -90,7 +90,7 @@ export class Pokemon {
         if (pokeball.probabilityModifier == 100) {
             return true;
         }
-        pokeball.probabilityModifier = (pokeball.probabilityModifier * this.#baseCatchRate) / 30
+        pokeball.probabilityModifier = (pokeball.probabilityModifier * this.#catchRate) / 30
         let math = Math.random() * 100;
         if (math < pokeball.probabilityModifier) {
             return true;
@@ -113,7 +113,8 @@ export class Pokemon {
     // TODO
     levelUp(toLevel = this.level + 1) {
         // if the total exp is less than normal, boost there
-
+        toLevel
+        return false
     }
 
     /**
@@ -122,5 +123,22 @@ export class Pokemon {
      */
     #getExpRequirement(level) {
         return 0.4 * Math.pow(level, 3)
+    }
+
+    /**
+     * @param {object} parsedPokemonJSON parsed JSON object containing all Pokemon attributes (no methods)
+     * @returns {Pokemon} Pokemon object containing attributes from the JSON and methods from Pokemon class
+     */
+    static fromJSON(parsedPokemonJSON) {
+        let newPokemon = pokedex.get(parsedPokemonJSON.name)
+        newPokemon.levelUp(parsedPokemonJSON.level)
+        newPokemon.currentStats = parsedPokemonJSON.currentStats
+        newPokemon.moves = parsedPokemonJSON.moves
+        newPokemon.totalExp = parsedPokemonJSON.totalExp
+        newPokemon.tempExp = parsedPokemonJSON.tempExp
+        newPokemon.nick = parsedPokemonJSON.nick
+        newPokemon.level = parsedPokemonJSON.level
+        newPokemon.statusEffects = parsedPokemonJSON.statusEffects
+        newPokemon.canMove = parsedPokemonJSON.canMove
     }
 }

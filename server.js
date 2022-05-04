@@ -1,13 +1,10 @@
 // import neccesary modules
-import { createServer, Server } from "http"
-import { User } from "./public/models/user.js"
 import express from "express"
-import { pokedex } from "./public/dex/pokedex.js"
 import bodyParser from "body-parser"
-// ben
+import { User } from "./public/models/user.js"
+import { pokedex } from "./public/dex/pokedex.js"
+import { createServer, Server } from "http"
 
-// check discord, can u fix smthn rq
-// i think it has to do with the {}'s somewhere
 // tunables for server setup
 const SERVER_PORT = 8080
 const PUBLIC_FILES_DIR = "public"
@@ -26,10 +23,11 @@ export let users = new Map([["e", new User("e", "e")]])
 
 
 app.get("/battle", (req, res) => {
-    res.render("battle-interface", {
-        enemyPokemon: pokedex.get("Raichu"),
-        userPokemon: pokedex.get("Turtwig"),
-    })
+    // res.render("battle-interface", {
+    //     enemyPokemon: pokedex.get("Raichu"),
+    //     userPokemon: pokedex.get("Turtwig"),
+    // })
+    res.send("post request from index")
 })
 
 app.post("/battle", (req, res) => {
