@@ -29,6 +29,7 @@ app.get("/battle", (req, res) => {
     res.send("post request from index")
 })
 
+
 app.post("/battle", (req, res) => {
     let username = req.body.username
     let password = req.body.password
@@ -40,6 +41,8 @@ app.post("/battle", (req, res) => {
     for (let user of users.values()) {
         if (true || user.username == username && user.password == password) {
             users.get(user.username).pc[0] = pokedex.get(userPokemon)
+            
+
             res.render("battle-interface", {
                 user: user,
                 enemyPokemon: pokedex.get("Raichu"),
