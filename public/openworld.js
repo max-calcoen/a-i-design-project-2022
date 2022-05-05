@@ -20,10 +20,7 @@ class makeZone {
 let sprite
 let spriteArr = []
 let tilemapRocks = []
-let pokemonImgArr = []
-for (let pokemon of pokedex.values()) {
-    pokemonImgArr.push(["/assets/sprites/" + pokemon.frontImg, pokemon.name])
-}
+
 
 const renderer = PIXI.autoDetectRenderer({
     antialias: true,
@@ -71,7 +68,7 @@ function makeTilemap() {
     for (let i = 0; i < tileW * 4; i++) {
         for (let j = 0; j < tileH * 4; j++) {
             let math = Math.random() * 100
-            if (math < 90) {
+            if (math < 95) {
                 tilemap.tile(
                     'grass.png',
                     i * size,
@@ -104,7 +101,10 @@ function makeTilemap() {
     makePokemon();
 }
 
-
+let pokemonImgArr = []
+for (let pokemon of pokedex.values()) {
+    pokemonImgArr.push(["/assets/sprites/" + pokemon.frontImg, pokemon.name, pokemon.rarity])
+}
 
 function makePokemon(){
     // TODO: add rarity, add spawns/despawns every x seconds, maybe make this a function so it can be called elsewhere
@@ -113,8 +113,11 @@ function makePokemon(){
         for (let j = 0; j < tileH * 4; j++) {
             let otherMath = Math.random() * 100
             if (otherMath > 99.7) {
+                let rarityMath = Math.random() * 100
                 let index = Math.floor(Math.random() * pokemonImgArr.length)
-                makeSprite(i * size, j * size, pokemonImgArr[index][0], pokemonImgArr[index][1])
+                if(rarityMath < pokemonImgArr[index][2]){
+                    makeSprite(i * size, j * size, pokemonImgArr[index][0], pokemonImgArr[index][1])
+                }
             }
         }
     }
@@ -308,5 +311,5 @@ function moveTilemap(evt) {
 
         }
     }
-
+    
 }
