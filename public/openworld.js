@@ -105,7 +105,7 @@ let pokemonImgArr = []
 for (let pokemon of pokedex.values()) {
     pokemonImgArr.push(["/assets/sprites/" + pokemon.frontImg, pokemon.name, pokemon.rarity])
 }
-
+let e = false
 function makePokemon(){
     // TODO: add rarity, add spawns/despawns every x seconds, maybe make this a function so it can be called elsewhere
     // Putting pokemon randomly!
@@ -121,7 +121,10 @@ function makePokemon(){
             }
         }
     }
-    test();
+    if(e == false){
+        test()
+        e = true;
+    }
 }
 
 function test () {
@@ -129,7 +132,7 @@ function test () {
     delPokemon()
     makePokemon()
     test()
-    }, 60000)
+    }, 1000)
 }
 
 /**
