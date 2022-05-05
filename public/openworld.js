@@ -43,6 +43,10 @@ loader.load((_, resources) => {
     PIXI.Ticker.shared.add(() => renderer.render(stage))
     makeTilemap()
 })
+
+/**
+ * Puts grass and rocks everywhere
+ */
 function makeTilemap() {
 
     // clear the tilemap, in case it is being reused.
@@ -84,31 +88,47 @@ function makeTilemap() {
     makePokemon();
 }
 
+// Define array for the pokemon images and information
 let pokemonImgArr = []
+
+// Goes through pokedex and adds everything to the pokemon image array
 for (let pokemon of pokedex.values()) {
     pokemonImgArr.push(["/assets/sprites/" + pokemon.frontImg, pokemon.name, pokemon.rarity])
 }
-let e = false
+
+// Variable so setTimeout wont bug
+let setBug = false
+
+/**
+ * Puts pokemon randomly on the tilemap
+ */
 function makePokemon(){
-    // Putting pokemon randomly!
+    // Going through tilemap
     for (let i = 0; i < tileW * 4; i++) {
         for (let j = 0; j < tileH * 4; j++) {
+            // Math.random
             let otherMath = Math.random() * 100
+            // 0.03% chance for a pokemon to be on any tile
             if (otherMath > 99.7) {
+                // More random
                 let rarityMath = Math.random() * 100
+                // Random index for pokemonImgArr
                 let index = Math.floor(Math.random() * pokemonImgArr.length)
+                // Does rarity for any given pokemon
                 if(rarityMath < pokemonImgArr[index][2]){
                     makeSprite(i * size, j * size, pokemonImgArr[index][0], pokemonImgArr[index][1])
                 }
             }
         }
     }
-    if(e == false){
+    if(setBug == false){
         test()
-        e = true;
+        setBug = true;
     }
 }
-
+/**
+ * setTimeout recursive function for spawning and despawning pokemon once a minute
+ */
 function test () {
     setTimeout( ()=> {
     delPokemon()
@@ -117,9 +137,13 @@ function test () {
     }, 60000)
 }
 
+
 /**
- * Makes a sprite given an X, Y and an Image
- * image in the format of: '/assets/sprites/raichufront.png'
+ * Makes a sprite given an X, Y, Image, and a name
+ * @param {*} x x corrdinate of sprite
+ * @param {*} y y coordinate of sprite
+ * @param {*} image image in the format of: '/assets/sprites/raichufront.png'
+ * @param {*} name name of pokemon
  */
 function makeSprite(x, y, image, name) {
     let newSprite = PIXI.Sprite.from(image)
@@ -130,6 +154,9 @@ function makeSprite(x, y, image, name) {
     spriteArr.push(newSprite)
 }
 
+/**
+ * Deletes pokemon sprites on tilemap
+ */
 function delPokemon(){
     for(let i = 0; i < spriteArr.length; i++){
         stage.removeChild(spriteArr[i])
@@ -140,7 +167,7 @@ function delPokemon(){
 
 /**
  * Checks for sprite collisions
- * Returns true if there is a collision, false if not
+ * @returns true if there is a collision, false if not
  */
 let pokeCollisionName = ""
 function checkSpriteCollisions() {
@@ -156,7 +183,10 @@ function checkSpriteCollisions() {
     return false
 }
 
-
+/**
+ * Checks for collisons between user and tilemap
+ * @returns True if you collide with a certain tile, fasle if not
+ */
 function checkTilemapCollisions() {
     for (let i = 0; i < tilemapRocks.length; i++) {
         if (tilemapRocks[i].x < sprite.x + sprite.width &&
@@ -170,6 +200,8 @@ function checkTilemapCollisions() {
 }
 //Add event listener to keydown
 window.addEventListener('keydown', moveTilemap)
+
+
 
 // Takes an event and moves the canvas if it the key is one of the following: WASD
 function moveTilemap(evt) {
