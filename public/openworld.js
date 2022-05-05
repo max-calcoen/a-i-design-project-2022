@@ -132,7 +132,7 @@ function test () {
     delPokemon()
     makePokemon()
     test()
-    }, 1000)
+    }, 60000)
 }
 
 /**
