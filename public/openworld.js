@@ -1,21 +1,4 @@
 import { pokedex } from "./dex/pokedex.js"
-//Makes a zone on the tilemap 
-// TODO: EVERETT: Later if needed
-class makeZone {
-    /**
-     * @param {int} x Top left x coordinate of tile
-     * @param {int} y Top left y coordinate of tile
-     * @param {int} numTileWidth Number of tiles(width) that you want
-     * @param {int} numTileHeight Number of tiles(height) that you want
-     */
-    constructor(x, y, numTileWidth, numTileHeight) {
-        this.x = x
-        this.y = y
-        this.width = numTileWidth
-        this.height = numTileHeight
-    }
-}
-
 
 let sprite
 let spriteArr = []
@@ -107,7 +90,6 @@ for (let pokemon of pokedex.values()) {
 }
 let e = false
 function makePokemon(){
-    // TODO: add rarity, add spawns/despawns every x seconds, maybe make this a function so it can be called elsewhere
     // Putting pokemon randomly!
     for (let i = 0; i < tileW * 4; i++) {
         for (let j = 0; j < tileH * 4; j++) {
