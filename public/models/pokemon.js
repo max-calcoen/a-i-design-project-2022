@@ -13,9 +13,10 @@ export class Pokemon {
      * @param {string} backImg image url of back of pokemon ("charmandeback.png")
      * @param {Stat} baseStats starting / level 1 stats of the pokemon (new Stat(15, 20, 100))
      * @param {Stat} maxStats maximum possible / level 100 stats of the pokemon (new Stat(200, 250, 250))
+     * @param {int} rarity chance to appear on the tilemap
      * @param {int} catchRate catch rate modifier
      */
-    constructor(name, types, moves, frontImg, backImg, baseStats, maxStats, catchRate = 30) {
+    constructor(name, types, moves, frontImg, backImg, baseStats, maxStats, rarity, catchRate = 30) {
         this.name = name
         this.types = types
         this.moves = moves
@@ -31,6 +32,7 @@ export class Pokemon {
         this.statusEffects = []
         this.canMove = true
         this.#catchRate = catchRate
+        this.rarity = rarity
     }
     /**
      * Replace a pokemon's move with another
@@ -63,7 +65,6 @@ export class Pokemon {
         }
     }
     /**
-
      * @param {int} amt amount of damage to take
      * @returns true on faint, false otherwise
      */
