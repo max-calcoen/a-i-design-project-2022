@@ -23,9 +23,9 @@ html(lang="en")
                         | /
                         span#maxNumPlayerHealth 20
                     div#playerHealthBarContainer.healthBarContainer
-                        div#playerHealthBar.healthBar
-                img#p1(src="assets/sprites/turtwigback.png")
-                img#p2(src="assets/sprites/raichufront.png")
+                        div#playerHealthBar.healthBar 
+                img#p1(src = "../assets/sprites/" + userPokemon.backImg alt="user pokemon")
+                img#p2(src="../assets/sprites/" + enemyPokemon.frontImg alt="enemy pokemon")
             div#battleOptions
                 p#storyText What will #{userPokemon.nick} do?
                 div#battleOptionsGrid

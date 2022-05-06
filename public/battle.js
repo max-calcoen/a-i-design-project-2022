@@ -75,7 +75,7 @@ function handleBagButtonClick() {
     let labels = ['Heal', 'Catch', 'Revive', 'Return']
     let buttons = document.getElementById("battleOptionsGrid")
     let button = buttons.firstElementChild
-    for(let i = 0; i < labels.length; i++){
+    for (let i = 0; i < labels.length; i++) {
         console.log(button)
         button.innerHTML = labels[i]
         button.addEventListener('click', handleBagSubmenus(labels[i].toLowerCase()))
@@ -85,15 +85,15 @@ function handleBagButtonClick() {
 }
 function handleBagSubmenus(type) {
     resetButtonListeners()
-    let buttons = document.getElementsByTagName("button")    
+    let buttons = document.getElementsByTagName("button")
     if (type == "Revive") {
         resetButtonListeners()
-        
+
         buttons[0].innerText = "Max Revive"
         document.getElementById("box1").children[0].addEventListener("click", handleChooseItem(type, ""))
         buttons[1].innerText = "Regular Revive"
         document.getElementById("box1").children[0].addEventListener("click", handleChooseItem(type, ""))
-   
+
     }
     if (type == "Heal") {
         resetButtonListeners()
@@ -213,7 +213,7 @@ function handlePokemonButtonClick() {
 
 function handleRunButtonClick() {
     resetButtonListeners()
-    window.location.href = "../openworld.html";
+    window.location.href = "../openworld.html"
 }
 
 /**

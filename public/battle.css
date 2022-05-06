@@ -11,14 +11,14 @@
 
 body {
     margin: 0px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 div#content {
     display: grid;
     grid-template-areas:
-        'battleArea'
-        'battleOptions'
+        "battleArea"
+        "battleOptions"
     ;
     grid-template-rows: 2fr 1fr;
     height: 100vh;
@@ -27,43 +27,21 @@ div#content {
 div#battleArea {
     grid-area: battleArea;
     border-bottom: 2px solid black;
+    display: grid;
+    grid-template-rows: 1fr 8fr 1fr;
+    grid-template-columns: 1fr;
+
 }
 
 div#battleOptions {
     grid-area: battleOptions;
     display: grid;
     grid-template-areas:
-        'p battleOptionsGrid'
+        "p battleOptionsGrid"
     ;
     grid-template-columns: 3fr 2fr;
     grid-template-rows: 1fr;
 }
-
-div#battleOptions>p {
-    grid-area: p;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 30px;
-    margin: 0px;
-}
-
-div#battleOptionsGrid {
-    display: grid;
-    grid-template-areas:
-        'fight bag'
-        'pokemon run'
-    ;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-}
-
-div#battleOptionsGrid>button {
-    width: 100%;
-    height: 100%;
-    font-size: 25px;
-}
-
 
 div.healthBarContainer {
     box-sizing: content-box;
@@ -107,7 +85,7 @@ img#p1 {
     position: absolute;
     height: 100px;
     width: 100px;
-    top: 335px;
+    bottom: calc(30vh);
     left: 200px;
     z-index: -1;
 }
@@ -119,6 +97,31 @@ img#p2 {
     top: 0px;
     right: 220px;
     z-index: -1;
+}
+
+div#battleOptions>p {
+    grid-area: p;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    margin: 0px;
+}
+
+div#battleOptionsGrid {
+    display: grid;
+    grid-template-areas:
+        "fight bag"
+        "pokemon run"
+    ;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+div#battleOptionsGrid>button {
+    width: 100%;
+    height: 100%;
+    font-size: 25px;
 }
 
 .hidden {
