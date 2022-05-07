@@ -169,7 +169,7 @@ function delPokemon(){
  * Checks for sprite collisions
  * @returns true if there is a collision, false if not
  */
-let pokeCollisionName = ""
+export let pokeCollisionName = ""
 function checkSpriteCollisions() {
     for (let i = 0; i < spriteArr.length; i++) {
         if (spriteArr[i].x < sprite.x + sprite.width &&
@@ -231,7 +231,8 @@ function moveTilemap(evt) {
             for (let i = 0; i < spriteArr.length; i++) {
                 spriteArr[i].x += 16
             }
-            alert("You found a " + pokeCollisionName + "!")
+            //TODO: Make this send to battle screen against that pokemon
+            alert("You found a " + pokeCollisionName + "!") 
         }
 
     }
@@ -261,6 +262,7 @@ function moveTilemap(evt) {
                 for (let i = 0; i < spriteArr.length; i++) {
                     spriteArr[i].x -= 16
                 }
+                //TODO: Make this send to battle screen against that pokemon
                 alert("You found a " + pokeCollisionName + "!")
             }
 
@@ -292,6 +294,7 @@ function moveTilemap(evt) {
                 for (let i = 0; i < spriteArr.length; i++) {
                     spriteArr[i].y -= 16
                 }
+                //TODO: Make this send to battle screen against that pokemon
                 alert("You found a " + pokeCollisionName + "!")
             }
 
@@ -323,6 +326,7 @@ function moveTilemap(evt) {
                 for (let i = 0; i < spriteArr.length; i++) {
                     spriteArr[i].y += 16
                 }
+                //TODO: Make this send to battle screen against that pokemon
                 alert("You found a " + pokeCollisionName + "!")
             }
 
