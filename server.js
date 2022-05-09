@@ -44,7 +44,7 @@ app.post("/battle", (req, res) => {
 
             res.render("battle-interface", {
                 user: user,
-                enemyPokemon: pokedex.get("Raichuß"),
+                enemyPokemon: pokedex.get("Wartortle"),
                 userPokemon: pokedex.get(userPokemon)
             })
             return
