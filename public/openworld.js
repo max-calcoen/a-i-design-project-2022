@@ -76,7 +76,7 @@ function makeTilemap() {
                 tilemapRocks.push(rockCoords)
             }
 
-            
+
         }
     }
 
@@ -102,7 +102,7 @@ let setBug = false
 /**
  * Puts pokemon randomly on the tilemap
  */
-function makePokemon(){
+function makePokemon() {
     // Going through tilemap
     for (let i = 0; i < tileW * 4; i++) {
         for (let j = 0; j < tileH * 4; j++) {
@@ -115,13 +115,13 @@ function makePokemon(){
                 // Random index for pokemonImgArr
                 let index = Math.floor(Math.random() * pokemonImgArr.length)
                 // Does rarity for any given pokemon
-                if(rarityMath < pokemonImgArr[index][2]){
+                if (rarityMath < pokemonImgArr[index][2]) {
                     makeSprite(i * size, j * size, pokemonImgArr[index][0], pokemonImgArr[index][1])
                 }
             }
         }
     }
-    if(setBug == false){
+    if (setBug == false) {
         test()
         setBug = true;
     }
@@ -129,11 +129,11 @@ function makePokemon(){
 /**
  * setTimeout recursive function for spawning and despawning pokemon once a minute
  */
-function test () {
-    setTimeout( ()=> {
-    delPokemon()
-    makePokemon()
-    test()
+function test() {
+    setTimeout(() => {
+        delPokemon()
+        makePokemon()
+        test()
     }, 60000)
 }
 
@@ -157,8 +157,8 @@ function makeSprite(x, y, image, name) {
 /**
  * Deletes pokemon sprites on tilemap
  */
-function delPokemon(){
-    for(let i = 0; i < spriteArr.length; i++){
+function delPokemon() {
+    for (let i = 0; i < spriteArr.length; i++) {
         stage.removeChild(spriteArr[i])
     }
     spriteArr = [];
@@ -169,7 +169,7 @@ function delPokemon(){
  * Checks for sprite collisions
  * @returns true if there is a collision, false if not
  */
-export let pokeCollisionName = ""
+let pokeCollisionName = ""
 function checkSpriteCollisions() {
     for (let i = 0; i < spriteArr.length; i++) {
         if (spriteArr[i].x < sprite.x + sprite.width &&
@@ -232,7 +232,7 @@ function moveTilemap(evt) {
                 spriteArr[i].x += 16
             }
             //TODO: Make this send to battle screen against that pokemon
-            alert("You found a " + pokeCollisionName + "!") 
+            alert("You found a " + pokeCollisionName + "!")
         }
 
     }
@@ -332,5 +332,5 @@ function moveTilemap(evt) {
 
         }
     }
-    
+
 }

@@ -3,7 +3,7 @@ import { BattleLogic } from "./models/battlelogic.js"
 import { Pokemon } from "./models/pokemon.js"
 
 let userPokemon = Pokemon.fromJSON(user.pc[0])
-let enemyPokemon = pokedex.get("Raichu")
+let enemyPokemon = Pokemon.fromJSON(enemy)
 let battle = new BattleLogic(userPokemon, enemyPokemon)
 
 window.onload = () => {
@@ -49,7 +49,7 @@ function handleFightButtonClick() {
     let BattleOptionsGrid = document.getElementById("battleOptionsGrid")
     for (let i = 0; i < userPokemon.moves.length; i++) {
         if (userPokemon.moves[i] != null) {
-            BattleOptionsGrid.children[i].innerHTML = userPokemon.moves[i].name
+            BattleOptionsGrid.children[i].innerHTML = `${userPokemon.moves[i].name} <br />(${userPokemon.moves[i].power}, ${userPokemon.moves[i].type})`
         } else {
             BattleOptionsGrid.children[i].innerHTML = ""
         }
@@ -57,10 +57,14 @@ function handleFightButtonClick() {
 
     let movesDivs = document.getElementById("battleOptionsGrid").children
     for (let i = 0; i < movesDivs.length - 1; i++) {
-        console.log(userPokemon.moves[i])
         if (userPokemon.moves[i] != null) {
             movesDivs[i].onclick = () => {
-                let turnResult = battle.turn(userPokemon.moves[i], enemyPokemon.moves[Math.floor(Math.random() * 4)])
+                let enemyMove = enemyPokemon.moves[Math.floor(Math.random() * 4)]
+                while (enemyMove == null) {
+                    enemyMove = enemyPokemon.moves[Math.floor(Math.random() * 4)]
+                }
+                let turnResult = battle.turn(userPokemon.moves[i], enemyMove)
+
                 updateHealth()
                 userPokemon = turnResult.pokemon1
                 enemyPokemon = turnResult.pokemon2
