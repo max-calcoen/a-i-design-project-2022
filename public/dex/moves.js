@@ -20,7 +20,6 @@ moves.set("Dragon Breath", new Move("Dragon Breath", "dragon", true, 80, 15, 100
 moves.set("Slash", new Move("Slash", "normal", false, 70, 20, 100))
 moves.set("Ember", new Move("Ember", "fire", false, 40, 30, 100))
 moves.set("Hydro Pump", new Move("Hydro Pump", "water", true, 110, 5, 80))
-moves.set("Empty", new Move("", "normal", true, 0, 0, 0))
 moves.set("Water Pulse", new Move("Water Pulse", "water", false, 60, 20, 100))
 moves.set("Aqua Tail", new Move("Aqua Tail", "water", false, 90, 10, 90))
 moves.set("Flare Blitz", new Move("Flare Blitz", "fire", true, 120, 15, 100))

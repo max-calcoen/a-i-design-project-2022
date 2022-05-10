@@ -36,6 +36,9 @@ export class BattleLogic {
         if (this.pokemon2.types[0] == pokemon1move.type) p2stab = 1.5
         let p2type = this.getEffectiveness(pokemon2move.type, this.pokemon1.types)
         let p2damage = Math.floor(((((2 * p2level / 5) + 2) * p2power * p2attack / p1def) / 50 + 2) * p2crit * p2rand * p2stab * p2type)
+
+        console.log(`Math.floor(((((2 * ${p2level} / 5) + 2) * ${p2power} * ${p2attack} / ${p1def}) / 50 + 2) * ${p2crit} * ${p2rand} * ${p2stab} * ${p2type}) = ${p2damage}`)
+
         function dealWithEffects(pokemon) {
             let cantMoveCounter = 0
             for (let i = 0; i < pokemon.statusEffects.length; i++) {

@@ -1,7 +1,7 @@
 import { pokedex } from "./dex/pokedex.js"
 import { BattleLogic } from "./models/battlelogic.js"
 import { Pokemon } from "./models/pokemon.js"
-// hi ben i am bugfixing pls fix status effects
+
 let userPokemon = Pokemon.fromJSON(user.pc[0])
 let enemyPokemon = pokedex.get("Raichu")
 let battle = new BattleLogic(userPokemon, enemyPokemon)
@@ -18,7 +18,7 @@ window.onload = () => {
  * Removes event listeners on all buttons
  */
 function resetButtonListeners() {
-    let buttons = document.getElementsByTagName("button")
+    let buttons = document.getElementById("battleOptionsGrid").children
     for (let button of buttons) {
         let newButton = button.cloneNode(true)
         button.parentNode.replaceChild(newButton, button)
@@ -31,17 +31,16 @@ function resetButtonListeners() {
 function showOptions() {
     let buttons = document.getElementById("battleOptionsGrid")
     let button = buttons.firstElementChild
-    let buttonsLabels = ["Fight", "Bag", "Pokemon", "Run"]
-    button.innerText = buttonsLabels[0]
+    button.innerText = "Fight"
     button.addEventListener("click", handleFightButtonClick)
     button = button.nextElementSibling
-    button.innerText = buttonsLabels[1]
+    button.innerText = "Bag"
     button.addEventListener("click", handleBagButtonClick)
     button = button.nextElementSibling
-    button.innerText = buttonsLabels[2]
+    button.innerText = "Pokemon"
     button.addEventListener("click", handlePokemonButtonClick)
     button = button.nextElementSibling
-    button.innerText = buttonsLabels[3]
+    button.innerText = "Run"
     button.addEventListener("click", handleRunButtonClick)
     hideBackButton()
 }
@@ -49,21 +48,28 @@ function handleFightButtonClick() {
     resetButtonListeners()
     let BattleOptionsGrid = document.getElementById("battleOptionsGrid")
     for (let i = 0; i < userPokemon.moves.length; i++) {
-        BattleOptionsGrid.children[i].innerHTML = userPokemon.moves[i].name
+        if (userPokemon.moves[i] != null) {
+            BattleOptionsGrid.children[i].innerHTML = userPokemon.moves[i].name
+        } else {
+            BattleOptionsGrid.children[i].innerHTML = ""
+        }
     }
 
     let movesDivs = document.getElementById("battleOptionsGrid").children
     for (let i = 0; i < movesDivs.length - 1; i++) {
-        movesDivs[i].onclick = () => {
-            let turnResult = battle.turn(userPokemon.moves[i], enemyPokemon.moves[Math.floor(Math.random() * 4)])
-            updateHealth()
-            userPokemon = turnResult.pokemon1
-            enemyPokemon = turnResult.pokemon2
-            if (turnResult.winner != 0) {
-                gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name)
-            } else {
-                resetButtonListeners()
-                showOptions()
+        console.log(userPokemon.moves[i])
+        if (userPokemon.moves[i] != null) {
+            movesDivs[i].onclick = () => {
+                let turnResult = battle.turn(userPokemon.moves[i], enemyPokemon.moves[Math.floor(Math.random() * 4)])
+                updateHealth()
+                userPokemon = turnResult.pokemon1
+                enemyPokemon = turnResult.pokemon2
+                if (turnResult.winner != 0) {
+                    gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name)
+                } else {
+                    resetButtonListeners()
+                    showOptions()
+                }
             }
         }
     }
@@ -83,6 +89,7 @@ function handleBagButtonClick() {
     }
     showBackButton()
 }
+
 function handleBagSubmenus(type) {
     resetButtonListeners()
     let buttons = document.getElementsByTagName("button")
