@@ -13,8 +13,6 @@ import { Stat } from "../models/stat.js"
  * @param {int} rarity rarity for pokemon to spawn, lower = more rare
  */
 
-//Stat -- Health, Attack, Speed, Defense
-
 export let pokedex = new Map()
 pokedex.set("Bulbasaur", new Pokemon("Bulbasaur", ["grass"], [moves.get("Scratch"), moves.get("Tackle"), moves.get("Vine Whip"), moves.get("Razor Leaf")], "bulbasaurfront.png", "bulbasaurback.png", new Stat(15, 20, 20, 15), new Stat(200, 250, 250, 200), 70))
 pokedex.set("Charmander", new Pokemon("Charmander", ["fire"], [moves.get("Scratch"), moves.get("Ember"), moves.get("Dragon Breath"), moves.get("Slash")], "charmanderfront.png", "charmanderback.png", new Stat(15, 20, 20, 15), new Stat(200, 250, 250, 200), 70))

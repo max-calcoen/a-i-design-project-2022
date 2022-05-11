@@ -1,4 +1,3 @@
-import { pokedex } from "./dex/pokedex.js"
 import { BattleLogic } from "./models/battlelogic.js"
 import { Pokemon } from "./models/pokemon.js"
 
@@ -81,138 +80,59 @@ function handleFightButtonClick() {
 }
 
 function handleBagButtonClick() {
+    alert("bag button clicked")
     resetButtonListeners()
-    let labels = ['Heal', 'Catch', 'Revive', 'Return']
-    let buttons = document.getElementById("battleOptionsGrid")
-    let button = buttons.firstElementChild
+    let buttons = document.getElementById("battleOptionsGrid").children
+    let labels = [{
+        name: "Heal",
+        types: ["Potion", "Super Potion", "Hyper Potion", "M    ax Potion"],
+        image: null,
+        action: "Use"
+    },
+    {
+        name: "Catch",
+        types: ["Pokeball", "Great Ball", "Ultra Ball", "Master Ball"],
+        image: null
+    },
+    {
+        name: "Revive",
+        types: ["Revive", "Max Revive"],
+        image: null
+    }]
+
     for (let i = 0; i < labels.length; i++) {
-        console.log(button)
-        button.innerHTML = labels[i]
-        button.addEventListener('click', handleBagSubmenus(labels[i].toLowerCase()))
-        button = button.nextElementSibling
+        buttons[i].addEventListener("click", handleBagSubmenus(labels[i].name, labels[i].types))
+        buttons[i].innerHTML = labels[i].name
     }
+    buttons[3].innerText = ''
     showBackButton()
 }
 
-function handleBagSubmenus(type) {
+function handleBagSubmenus(type, subtypes) {
     resetButtonListeners()
-    let buttons = document.getElementsByTagName("button")
-    if (type == "Revive") {
-        resetButtonListeners()
-
-        buttons[0].innerText = "Max Revive"
-        document.getElementById("box1").children[0].addEventListener("click", handleChooseItem(type, ""))
-        buttons[1].innerText = "Regular Revive"
-        document.getElementById("box1").children[0].addEventListener("click", handleChooseItem(type, ""))
-
+    let buttons = document.getElementById("battleOptionsGrid").children
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].innerText = ""
     }
-    if (type == "Heal") {
-        resetButtonListeners()
-        buttons[0].innerText = "Potions"
-        document.getElementById("box1").children[0].addEventListener("click", handleChooseItem(type, "Potion"))
-        buttons[1].innerText = "Potions"
-        document.getElementById("box2").children[0].addEventListener("click", handleChooseItem(type, "Potion"))
-        buttons[2].innerText = "Potions"
-        document.getElementById("box3").children[0].addEventListener("click", handleChooseItem(type, "Potion"))
-        buttons[3].innerText = "Potions"
-        document.getElementById("box4").children[0].addEventListener("click", handleChooseItem(type, "Potion"))
+    resetButtonListeners()
+    for (let i = 0; i < subtypes.length; i++) {
+        buttons[i].innerText = subtypes[i]
+        buttons[i].addEventListener('click', handleChooseItem(type, subtypes[i]))
     }
-    if (type == "Catch") {
-        resetButtonListeners()
-        buttons[0].innerText = "Pokeball"
-        document.getElementById("box1").children[0].addEventListener("click", handleChooseItem(type, "Pokeball"))
-        buttons[1].innerText = "Great Ball"
-        document.getElementById("box2").children[0].addEventListener("click", handleChooseItem(type, "Great Ball"))
-        buttons[2].innerText = "Ultra Ball"
-        document.getElementById("box3").children[0].addEventListener("click", handleChooseItem(type, "Ultra Ball"))
-        buttons[3].innerText = "Master Ball"
-        document.getElementById("box4").children[0].addEventListener("click", handleChooseItem(type, "Master Ball"))
-    }
-    showBackButton()
 }
+
 function handleChooseItem(item, type) {
-    //TODO: have the 2nd button show the number of each item and have 3rd button 
-    //show an image for the particular item, and have the 4th show the stats of the item
     resetButtonListeners()
-    let buttons = document.getElementsByTagName("button")
-    if (item == "Catch") {
-        buttons[0].innerText = "Use"
-        if (type == "Great Ball") {
-            //TODO: add image for the balls and add access to User inventory Use funcitons
-            document.getElementById("box1").children[0].addEventListener("click", handleUseItem(item, type))
-        }
-        if (type == "Pokeball") {
-            //TODO: add image for the balls and add access to User inventory Use funcitons
-            document.getElementById("box1").children[0].addEventListener("click", handleUseItem(item, type))
-        }
-        if (type == "Ultra Ball") {
-            //TODO: add image for the balls and add access to User inventory Use funcitons
-            document.getElementById("box1").children[0].addEventListener("click", handleUseItem(item, type))
+    let buttons = document.getElementById("battleOptionsGrid").children
 
-        }
-        if (type == "Master Ball") {
-            //TODO: add image for the balls and add access to User inventory Use funcitons
-            document.getElementById("box1").children[0].addEventListener("click", handleUseItem(item, type))
-
-        }
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].innerText = ''
     }
-    if (item == "Potions") {
-        if (type = "Potion") {
-
-        }
-    }
-    if (item == "Revives") {
-        if (type = "Great Ball") {
-        }
-    }
-
-    showOptions()
+    buttons[0].innerText = 'Use'
+    buttons[0].addEventListener('Click', handleUseItem(item, type))
 }
 
 function handleUseItem(item, type) {
-    if (item == "Potion") {
-        if (type == "Potion") {
-
-        }
-        if (type == "Super Potion") {
-
-        }
-        if (type == "Hyper Potion") {
-
-        }
-        if (type == "Max Potion") {
-
-        }
-
-    }
-    if (item == "Revive") {
-        if (type == "Max") {
-
-        }
-        if (type == "Regular") {
-
-        }
-
-    }
-    if (item == "Ball") {
-        if (type == "Pokeball") {
-
-        }
-        if (type == "Great Ball") {
-
-        }
-        if (type == "Ultra Ball") {
-
-        }
-        if (type == "Master Ball") {
-
-        }
-    }
-    //TODO: use the item passed in 
-
-
-
-
 
 }
 // TODO

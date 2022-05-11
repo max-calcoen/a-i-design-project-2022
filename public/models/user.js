@@ -1,4 +1,13 @@
-import { pokedex } from "../dex/pokedex.js"
+function handleChooseItem(item, type) {
+    resetButtonListeners()
+    let buttons = document.getElementById("battleOptionsGrid").children
+
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].innerText = ''
+    }
+    buttons[0].innerText = 'Use'
+    buttons[0].addEventListener('Click', handleUseItem(item, type))
+}
 export function readJSON(json) {
 
 }

@@ -22,11 +22,7 @@ app.set("view engine", "pug")
 export let users = new Map([["e", new User("e", "e")]])
 
 app.get("/battle", (req, res) => {
-    // res.render("battle-interface", {
-    //     enemyPokemon: pokedex.get("Raichu"),
-    //     userPokemon: pokedex.get("Turtwig"),
-    // })
-    res.send("post request from index")
+    res.send("Error: send post request from index")
 })
 
 
