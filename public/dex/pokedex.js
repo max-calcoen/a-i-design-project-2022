@@ -14,6 +14,8 @@ import { Stat } from "../models/stat.js"
  */
 export let pokedex = new Map()
 
+
+// TODO: test if 100% robust
 /**
  * Construct Pokemon object from JSON
  * @param {object} parsedPokemonJSON parsed JSON object containing all Pokemon attributes (no methods)
