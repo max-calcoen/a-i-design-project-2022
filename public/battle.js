@@ -16,7 +16,8 @@ window.onload = () => {
  * Removes event listeners on all buttons
  */
 function resetButtonListeners() {
-    let buttons = document.getElementsByTagName("button")
+    let buttons = Array.from(document.getElementsByTagName("button"))
+    buttons.pop()
     for (let button of buttons) {
         let newButton = button.cloneNode(true)
         button.parentNode.replaceChild(newButton, button)
@@ -45,11 +46,12 @@ function showOptions() {
 }
 function handleFightButtonClick() {
     resetButtonListeners()
-    let BattleOptionsGrid = document.getElementById("battleOptionsGrid").children
+    let battleOptionsGrid = Array.from(document.getElementById("battleOptionsGrid").children)
+    battleOptionsGrid.pop()
     for (let i = 0; i < userPokemon.moves.length; i++) {
         if (userPokemon.moves[i] != null) {
-            BattleOptionsGrid[i].innerHTML = `${userPokemon.moves[i].name} <br />(${userPokemon.moves[i].power}, ${userPokemon.moves[i].type})`
-            BattleOptionsGrid[i].onclick = () => {
+            battleOptionsGrid[i].innerHTML = `${userPokemon.moves[i].name} <br />(${userPokemon.moves[i].power}, ${userPokemon.moves[i].type})`
+            battleOptionsGrid[i].onclick = () => {
                 let enemyMove = enemyPokemon.moves[Math.floor(Math.random() * 4)]
                 while (enemyMove == null) {
                     enemyMove = enemyPokemon.moves[Math.floor(Math.random() * 4)]
@@ -66,61 +68,64 @@ function handleFightButtonClick() {
                 }
             }
         } else {
-            BattleOptionsGrid[i].innerHTML = ""
+            battleOptionsGrid[i].innerHTML = ""
         }
     }
     showBackButton()
 }
-// FIXME: we need to fix this whole thing
+
 function handleBagButtonClick() {
-    resetButtonListeners()
+    /*resetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
     let labels = [{
-        name: 'Heal',
-        types: ['Potion', 'Super Potion', 'Hyper Potion', 'Max Potion'],
+        name: "Heal",
+        types: ["Potion", "Super Potion", "Hyper Potion", "Max Potion"],
         image: null,
-        action: 'Use'
+        action: "Use"
     },
     {
-        name: 'Catch',
-        types: ['Pokeball', 'Great Ball', 'Ultra Ball', 'Master Ball'],
+        name: "Catch",
+        types: ["Pokeball", "Great Ball", "Ultra Ball", "Master Ball"],
         image: null
     },
     {
-        name: 'Revive',
-        types: ['Revive', 'Max Revive'],
+        name: "Revive",
+        types: ["Revive", "Max Revive"],
         image: null
     }]
 
     for (let i = 0; i < labels.length; i++) {
-        buttons[i].addEventListener('click', handleBagSubmenus(labels[i].name, labels[i].types))
+        buttons[i].addEventListener("click", handleBagSubmenus(labels[i].name, labels[i].types))
         buttons[i].innerHTML = labels[i].name
     }
-    buttons[3].innerText = ''
+    buttons[3].innerText = ""
     showBackButton()
+    */
+    alert("lol")
 }
+
 function handleBagSubmenus(type, subtypes) {
-    /**esetButtonListeners()
+    resetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
     for (let i = 0; i < buttons.length; i++) {
-        buttons[i].innerText = ''
+        buttons[i].innerText = ""
     }
     resetButtonListeners()
     for (let i = 0; i < subtypes.length; i++) {
         buttons[i].innerText = subtypes[i]
-        buttons[i].addEventListener('click', handleChooseItem(type, subtypes[i]))
-    }*/
+        buttons[i].addEventListener("click", handleChooseItem(type, subtypes[i]))
+    }
+
 }
 
 function handleChooseItem(item, type) {
-    //resetButtonListeners()
-    //let buttons = document.getElementById("battleOptionsGrid").children
+    resetButtonListeners()
+    let buttons = document.getElementById("battleOptionsGrid").children
 
-    //for (let i = 0; i < buttons.length; i++) {
-  //      buttons[i].innerText = ''
-//}
-    //buttons[0].innerText = 'Use'
-    //buttons[0].addEventListener('Click', handleUseItem(item, type))
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].innerText = ""
+        buttons[i].addEventListener("click", handleUseItem(item, type))
+    }
 }
 
 function handleUseItem(item, type) {

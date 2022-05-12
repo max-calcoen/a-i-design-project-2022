@@ -204,6 +204,24 @@ function checkTilemapCollisions() {
 //Add event listener to keydown
 window.addEventListener('keydown', moveTilemap)
 
+function sendData(path, value, name, method = 'post') {
+
+    const form = document.createElement('form');
+    form.method = method;
+    form.action = path;
+    document.body.appendChild(form);
+
+    const formField = document.createElement('input');
+    formField.type = 'hidden';
+    formField.name = name;
+    formField.value = value;
+
+    form.appendChild(formField);
+
+    form.submit();
+}
+
+
 /**
  * Takes a keydown event and moves the canvas if it the key is one of the following: W, A, S or D
  * @param {evt} evt keydown event object
@@ -235,8 +253,11 @@ function moveTilemap(evt) {
             for (let i = 0; i < spriteArr.length; i++) {
                 spriteArr[i].x += 16
             }
-            //TODO: Make this send to battle screen against that pokemon
-            alert("You found a " + pokeCollisionName + "!")
+
+            /*
+            PUT CODE HERE TO SEND TEST POST REQUEST WITH data TO "/test" ROUTE (SEE SERVER.JS)
+            */
+            sendData("/battle", pokeCollisionName, pokeCollisionName, "POST")
         }
 
     }
@@ -266,8 +287,7 @@ function moveTilemap(evt) {
                 for (let i = 0; i < spriteArr.length; i++) {
                     spriteArr[i].x -= 16
                 }
-                //TODO: Make this send to battle screen against that pokemon
-                alert("You found a " + pokeCollisionName + "!")
+                sendData("/battle", pokeCollisionName, pokeCollisionName, "POST")
             }
 
         }
@@ -298,8 +318,7 @@ function moveTilemap(evt) {
                 for (let i = 0; i < spriteArr.length; i++) {
                     spriteArr[i].y -= 16
                 }
-                //TODO: Make this send to battle screen against that pokemon
-                alert("You found a " + pokeCollisionName + "!")
+                sendData("/battle", pokeCollisionName, pokeCollisionName, "POST")
             }
 
         }
@@ -330,8 +349,7 @@ function moveTilemap(evt) {
                 for (let i = 0; i < spriteArr.length; i++) {
                     spriteArr[i].y += 16
                 }
-                //TODO: Make this send to battle screen against that pokemon
-                alert("You found a " + pokeCollisionName + "!")
+                sendData("/battle", pokeCollisionName, pokeCollisionName, "POST")
             }
         }
     }

@@ -25,6 +25,11 @@ app.get("/battle", (req, res) => {
     res.send("Error: send post request from index")
 })
 
+app.post("/test", (req, res) => {
+    let data = req.body.pokeName
+    res.send("data: " + pokeName)
+})
+
 
 app.post("/battle", (req, res) => {
     let username = req.body.username
