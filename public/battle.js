@@ -71,9 +71,8 @@ function handleFightButtonClick() {
     }
     showBackButton()
 }
-
+// FIXME: we need to fix this whole thing
 function handleBagButtonClick() {
-    alert("bag button clicked")
     resetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
     let labels = [{
@@ -94,16 +93,14 @@ function handleBagButtonClick() {
     }]
 
     for (let i = 0; i < labels.length; i++) {
-
         buttons[i].addEventListener('click', handleBagSubmenus(labels[i].name, labels[i].types))
         buttons[i].innerHTML = labels[i].name
-
     }
     buttons[3].innerText = ''
     showBackButton()
 }
 function handleBagSubmenus(type, subtypes) {
-    resetButtonListeners()
+    /**esetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
     for (let i = 0; i < buttons.length; i++) {
         buttons[i].innerText = ''
@@ -112,18 +109,18 @@ function handleBagSubmenus(type, subtypes) {
     for (let i = 0; i < subtypes.length; i++) {
         buttons[i].innerText = subtypes[i]
         buttons[i].addEventListener('click', handleChooseItem(type, subtypes[i]))
-    }
+    }*/
 }
 
 function handleChooseItem(item, type) {
-    resetButtonListeners()
-    let buttons = document.getElementById("battleOptionsGrid").children
+    //resetButtonListeners()
+    //let buttons = document.getElementById("battleOptionsGrid").children
 
-    for (let i = 0; i < buttons.length; i++) {
-        buttons[i].innerText = ''
-    }
-    buttons[0].innerText = 'Use'
-    buttons[0].addEventListener('Click', handleUseItem(item, type))
+    //for (let i = 0; i < buttons.length; i++) {
+  //      buttons[i].innerText = ''
+//}
+    //buttons[0].innerText = 'Use'
+    //buttons[0].addEventListener('Click', handleUseItem(item, type))
 }
 
 function handleUseItem(item, type) {
