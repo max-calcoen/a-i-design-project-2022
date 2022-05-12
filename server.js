@@ -36,12 +36,12 @@ app.post("/battle", (req, res) => {
     }
     for (let user of users.values()) {
         if (true || user.username == username && user.password == password) {
-            users.get(user.username).pc[0] = pokedex.get(userPokemon)
+            users.get(user.username).pc[0] = pokedex.getNewPokemon(userPokemon)
 
             res.render("battle-interface", {
                 user: user,
-                enemyPokemon: pokedex.get("Zapdos"),
-                userPokemon: pokedex.get(userPokemon)
+                enemyPokemon: pokedex.getNewPokemon("Zapdos"),
+                userPokemon: pokedex.getNewPokemon(userPokemon)
             })
             return
         }

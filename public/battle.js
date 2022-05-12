@@ -1,8 +1,7 @@
 import { BattleLogic } from "./models/battlelogic.js"
-import { Pokemon } from "./models/pokemon.js"
-// hi ben i am bugfixing pls fix status effects
-let userPokemon = Pokemon.fromJSON(user.pc[0])
-let enemyPokemon = pokedex.get("Raichu")
+import { pokedex } from "./dex/pokedex.js"
+let userPokemon = pokedex.fromJSON(user.pc[0])
+let enemyPokemon = pokedex.fromJSON(enemy)
 let battle = new BattleLogic(userPokemon, enemyPokemon)
 
 window.onload = () => {
@@ -46,24 +45,28 @@ function showOptions() {
 }
 function handleFightButtonClick() {
     resetButtonListeners()
-    let BattleOptionsGrid = document.getElementById("battleOptionsGrid")
+    let BattleOptionsGrid = document.getElementById("battleOptionsGrid").children
     for (let i = 0; i < userPokemon.moves.length; i++) {
-        BattleOptionsGrid.children[i].innerHTML = userPokemon.moves[i].name
-    }
-
-    let movesDivs = document.getElementById("battleOptionsGrid").children
-    for (let i = 0; i < movesDivs.length - 1; i++) {
-        movesDivs[i].onclick = () => {
-            let turnResult = battle.turn(userPokemon.moves[i], enemyPokemon.moves[Math.floor(Math.random() * 4)])
-            updateHealth()
-            userPokemon = turnResult.pokemon1
-            enemyPokemon = turnResult.pokemon2
-            if (turnResult.winner != 0) {
-                gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name)
-            } else {
-                resetButtonListeners()
-                showOptions()
+        if (userPokemon.moves[i] != null) {
+            BattleOptionsGrid[i].innerHTML = `${userPokemon.moves[i].name} <br />(${userPokemon.moves[i].power}, ${userPokemon.moves[i].type})`
+            BattleOptionsGrid[i].onclick = () => {
+                let enemyMove = enemyPokemon.moves[Math.floor(Math.random() * 4)]
+                while (enemyMove == null) {
+                    enemyMove = enemyPokemon.moves[Math.floor(Math.random() * 4)]
+                }
+                let turnResult = battle.turn(userPokemon.moves[i], enemyMove)
+                updateHealth()
+                userPokemon = turnResult.pokemon1
+                enemyPokemon = turnResult.pokemon2
+                if (turnResult.winner != 0) {
+                    gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name)
+                } else {
+                    resetButtonListeners()
+                    showOptions()
+                }
             }
+        } else {
+            BattleOptionsGrid[i].innerHTML = ""
         }
     }
     showBackButton()

@@ -1,4 +1,4 @@
-import { User } from "../user.js";
+import { User } from "../user.js"
 import { Item } from "./item.js"
 
 export class Pokeball extends Item {

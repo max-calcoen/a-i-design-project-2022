@@ -12,8 +12,38 @@ import { Stat } from "../models/stat.js"
  * @param {Stat} maxStats maximum possible / level 100 stats of the pokemon (new Stat(200, 250, 250))
  * @param {int} rarity rarity for pokemon to spawn, lower = more rare
  */
-
 export let pokedex = new Map()
+
+/**
+ * Construct Pokemon object from JSON
+ * @param {object} parsedPokemonJSON parsed JSON object containing all Pokemon attributes (no methods)
+ * @returns {Pokemon} Pokemon object containing attributes from the JSON and methods from Pokemon class
+ */
+pokedex.fromJSON = function (parsedPokemonJSON) {
+    let newPokemon = new Pokemon(parsedPokemonJSON.name, parsedPokemonJSON.types,
+        parsedPokemonJSON.moves, parsedPokemonJSON.frontImg, parsedPokemonJSON.backImg,
+        parsedPokemonJSON.baseStats, parsedPokemonJSON.maxStats, parsedPokemonJSON.rarity)
+    newPokemon.currentStats = parsedPokemonJSON.currentStats
+    newPokemon.moves = parsedPokemonJSON.moves
+    newPokemon.totalExp = parsedPokemonJSON.totalExp
+    newPokemon.tempExp = parsedPokemonJSON.tempExp
+    newPokemon.nick = parsedPokemonJSON.nick
+    newPokemon.level = parsedPokemonJSON.level
+    newPokemon.statusEffects = parsedPokemonJSON.statusEffects
+    newPokemon.canMove = parsedPokemonJSON.canMove
+    newPokemon.levelUp(parsedPokemonJSON.level)
+    return newPokemon
+}
+
+/**
+ * Gets a Pokemon from the Pokedex with given name
+ * @param {name} name name of pokemon
+ * @returns Pokemon cloned from Pokedex
+ */
+pokedex.getNewPokemon = function (name) {
+    return pokedex.fromJSON(JSON.parse(JSON.stringify(pokedex.get(name))))
+}
+
 pokedex.set("Bulbasaur", new Pokemon("Bulbasaur", ["grass"], [moves.get("Scratch"), moves.get("Tackle"), moves.get("Vine Whip"), moves.get("Razor Leaf")], "bulbasaurfront.png", "bulbasaurback.png", new Stat(15, 20, 20, 15), new Stat(200, 250, 250, 200), 70))
 pokedex.set("Charmander", new Pokemon("Charmander", ["fire"], [moves.get("Scratch"), moves.get("Ember"), moves.get("Dragon Breath"), moves.get("Slash")], "charmanderfront.png", "charmanderback.png", new Stat(15, 20, 20, 15), new Stat(200, 250, 250, 200), 70))
 pokedex.set("Turtwig", new Pokemon("Turtwig", ["grass"], [moves.get("Scratch"), moves.get("Vine Whip"), moves.get("Razor Leaf"), moves.get("Leech Seed")], "turtwigfront.png", "turtwigback.png", new Stat(20, 25, 20, 20), new Stat(250, 300, 250, 200), 70))

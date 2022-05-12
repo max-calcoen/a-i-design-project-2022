@@ -3,6 +3,11 @@ import { pokedex } from "./dex/pokedex.js"
 let sprite
 let spriteArr = []
 let tilemapRocks = []
+let stage
+let tilemap
+let frame = 0
+
+const RESET_SPAWNS_TIME = 60000
 
 
 const renderer = PIXI.autoDetectRenderer({
@@ -13,9 +18,7 @@ const renderer = PIXI.autoDetectRenderer({
     height: 672,
 })
 window.addEventListener('keydown', moveTilemap)
-let stage
-let tilemap
-let frame = 0
+
 
 document.body.appendChild(renderer.view)
 
@@ -122,19 +125,19 @@ function makePokemon() {
         }
     }
     if (setBug == false) {
-        test()
+        spawnPokemon()
         setBug = true;
     }
 }
 /**
  * setTimeout recursive function for spawning and despawning pokemon once a minute
  */
-function test() {
+function spawnPokemon() {
     setTimeout(() => {
         delPokemon()
         makePokemon()
-        test()
-    }, 60000)
+        spawnPokemon()
+    }, RESET_SPAWNS_TIME)
 }
 
 
@@ -165,11 +168,11 @@ function delPokemon() {
 }
 
 
+let pokeCollisionName = ""
 /**
  * Checks for sprite collisions
  * @returns true if there is a collision, false if not
  */
-let pokeCollisionName = ""
 function checkSpriteCollisions() {
     for (let i = 0; i < spriteArr.length; i++) {
         if (spriteArr[i].x < sprite.x + sprite.width &&
@@ -201,9 +204,10 @@ function checkTilemapCollisions() {
 //Add event listener to keydown
 window.addEventListener('keydown', moveTilemap)
 
-
-
-// Takes an event and moves the canvas if it the key is one of the following: WASD
+/**
+ * Takes a keydown event and moves the canvas if it the key is one of the following: W, A, S or D
+ * @param {evt} evt keydown event object
+ */
 function moveTilemap(evt) {
     if (evt.which === 68) {
         if (tilemap.x > -5008)
@@ -329,8 +333,6 @@ function moveTilemap(evt) {
                 //TODO: Make this send to battle screen against that pokemon
                 alert("You found a " + pokeCollisionName + "!")
             }
-
         }
     }
-
 }

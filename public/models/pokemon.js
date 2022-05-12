@@ -1,4 +1,3 @@
-import { pokedex } from "../dex/pokedex.js"
 export class Pokemon {
     frontImg
     backImg
@@ -123,23 +122,5 @@ export class Pokemon {
      */
     #getExpRequirement(level) {
         return 0.4 * Math.pow(level, 3)
-    }
-
-    /**
-     * @param {object} parsedPokemonJSON parsed JSON object containing all Pokemon attributes (no methods)
-     * @returns {Pokemon} Pokemon object containing attributes from the JSON and methods from Pokemon class
-     */
-    static fromJSON(parsedPokemonJSON) {
-        let newPokemon = pokedex.get(parsedPokemonJSON.name)
-        newPokemon.levelUp(parsedPokemonJSON.level)
-        newPokemon.currentStats = parsedPokemonJSON.currentStats
-        newPokemon.moves = parsedPokemonJSON.moves
-        newPokemon.totalExp = parsedPokemonJSON.totalExp
-        newPokemon.tempExp = parsedPokemonJSON.tempExp
-        newPokemon.nick = parsedPokemonJSON.nick
-        newPokemon.level = parsedPokemonJSON.level
-        newPokemon.statusEffects = parsedPokemonJSON.statusEffects
-        newPokemon.canMove = parsedPokemonJSON.canMove
-        return newPokemon
     }
 }

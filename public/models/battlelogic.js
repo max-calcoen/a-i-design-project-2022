@@ -529,7 +529,6 @@ export class BattleLogic {
         types.get("fairy").set("dark", 0.5)
         types.get("fairy").set("fairy", 1)
 
-        // TODO: fix
         if (defendTypes.length == 1) return types.get(attackType).get(defendTypes[0])
         return types.get(attackType).get(defendTypes[0]) * types.get(attackType).get(defendTypes[1])
     }
