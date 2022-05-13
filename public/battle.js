@@ -41,6 +41,7 @@ function showOptions() {
     button.addEventListener("click", handleRunButtonClick)
     button = button.nextElementSibling
     button.addEventListener("click", handleBackButtonClick)
+    button.innerText = 'Back to Main'
     hideBackButton()
 }
 function handleFightButtonClick() {
@@ -104,10 +105,16 @@ function handleBagSubmenus(type, subtypes) {
     resetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
     for (let i = 0; i < buttons.length - 1; i++) {
-        buttons[i].innerText = subtypes[i]
-        buttons[i].addEventListener('click', event => {
-            handleChooseItem(type, subtypes)
-        })
+        if(subtypes[i] == undefined){
+            buttons[i].innerText = ' '
+        }
+        else{
+            buttons[i].innerText = subtypes[i]
+            buttons[i].addEventListener('click', event => {
+                handleChooseItem(type, subtypes)
+            })
+        }
+        
     }
 }
 
@@ -128,6 +135,12 @@ function handleChooseItem(item, type) {
 }
 // TODO
 function handlePokemonButtonClick() {
+    let buttons = document.getElementById('battleOptionsGrid').children
+    buttons.splice(0,4);
+    let menuArea = document.getElementById('battleOptionsGrid')
+    user.pc.sort()
+    for(let i = 0; i< user.pc.length; i++)
+        menuArea.appendChild(document.createTextNode('Nickname: '+user.pc[i].nick))
     showBackButton()
 }
 
