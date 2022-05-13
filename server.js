@@ -25,17 +25,30 @@ app.get("/battle", (req, res) => {
     res.send("Error: send post request from index")
 })
 
-app.post("/test", (req, res) => {
-    let data = req.body.pokeName
-    res.send("data: " + pokeName)
-})
-
 
 app.post("/battle", (req, res) => {
+    
+
+    let userPokemon
+    if(req.body.pokemon == undefined){
+        userPokemon = "Charmander"
+    } else {
+        userPokemon = req.body.pokemon
+    }
+
+
+    let enemyPokemon
+    if(req.body.enemyName == undefined){
+        enemyPokemon = "Zapdos"
+    } else {
+        enemyPokemon = req.body.enemyName
+    }
+
+
     let username = req.body.username
     let password = req.body.password
-    let userPokemon = req.body.pokemon
     if (!pokedex.has(userPokemon)) {
+        console.log(userPokemon + enemyPokemon)
         res.send("Pokemon not found!")
         return
     }
@@ -45,7 +58,7 @@ app.post("/battle", (req, res) => {
 
             res.render("battle-interface", {
                 user: user,
-                enemyPokemon: pokedex.getNewPokemon("Zapdos"),
+                enemyPokemon: pokedex.getNewPokemon(enemyPokemon),
                 userPokemon: pokedex.getNewPokemon(userPokemon)
             })
             return

@@ -257,7 +257,7 @@ function moveTilemap(evt) {
             /*
             PUT CODE HERE TO SEND TEST POST REQUEST WITH data TO "/test" ROUTE (SEE SERVER.JS)
             */
-            sendData("/battle", pokeCollisionName, pokeCollisionName, "POST")
+            sendData("/battle", pokeCollisionName, "enemyName", "POST")
         }
 
     }
@@ -287,7 +287,7 @@ function moveTilemap(evt) {
                 for (let i = 0; i < spriteArr.length; i++) {
                     spriteArr[i].x -= 16
                 }
-                sendData("/battle", pokeCollisionName, pokeCollisionName, "POST")
+                sendData("/battle", pokeCollisionName, "enemyName", "POST")
             }
 
         }
@@ -318,7 +318,7 @@ function moveTilemap(evt) {
                 for (let i = 0; i < spriteArr.length; i++) {
                     spriteArr[i].y -= 16
                 }
-                sendData("/battle", pokeCollisionName, pokeCollisionName, "POST")
+                sendData("/battle", pokeCollisionName, "enemyName", "POST")
             }
 
         }
@@ -349,7 +349,7 @@ function moveTilemap(evt) {
                 for (let i = 0; i < spriteArr.length; i++) {
                     spriteArr[i].y += 16
                 }
-                sendData("/battle", pokeCollisionName, pokeCollisionName, "POST")
+                sendData("/battle", pokeCollisionName, "enemyName", "POST")
             }
         }
     }
