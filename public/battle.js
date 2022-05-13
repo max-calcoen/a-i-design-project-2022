@@ -105,6 +105,7 @@ function handleBagSubmenus(type, subtypes) {
     let buttons = document.getElementById("battleOptionsGrid").children
     for (let i = 0; i < buttons.length - 1; i++) {
         buttons[i].innerText = subtypes[i]
+     
         buttons[i].addEventListener('click', event => {
             handleChooseItem(type, subtypes)
         })
@@ -115,7 +116,7 @@ function handleChooseItem(item, type) {
     resetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
     for (let i = 0; i < buttons.length - 1; i++) {
-        buttons[i].innerText = ""
+        buttons[i].innerText = " "
     }
     buttons[0].innerText = 'USE'
     
