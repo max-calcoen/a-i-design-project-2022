@@ -4,6 +4,7 @@ import bodyParser from "body-parser"
 import { User } from "./public/models/user.js"
 import { pokedex } from "./public/dex/pokedex.js"
 import { createServer, Server } from "http"
+import * as SQLite from "sql.js"
 
 // tunables for server setup
 const SERVER_PORT = 8080
@@ -19,7 +20,8 @@ app.use(express.static(PUBLIC_FILES_DIR))
 app.set("views", "views")
 app.set("view engine", "pug")
 
-export let users = new Map([["e", new User("e", "e")]])
+export let users = new Map()
+
 
 app.get("/battle", (req, res) => {
     res.send("Error: send post request from index")
