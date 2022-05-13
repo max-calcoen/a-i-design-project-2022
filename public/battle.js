@@ -1,5 +1,6 @@
 import { BattleLogic } from "./models/battlelogic.js"
 import { pokedex } from "./dex/pokedex.js"
+import {imageMap} from "./itemImages.js"
 let userPokemon = pokedex.fromJSON(user.pc[0])
 let enemyPokemon = pokedex.fromJSON(enemy)
 let battle = new BattleLogic(userPokemon, enemyPokemon)
@@ -8,6 +9,7 @@ window.onload = () => {
     showOptions()
     updateHealth()
 }
+
 /**
  * Removes event listeners on all buttons
  */
@@ -19,6 +21,7 @@ function resetButtonListeners() {
         button.parentNode.replaceChild(newButton, button)
     }
 }
+
 /**
  * Shows game options (Fight, Bag, Pokemon, Run)
  */
@@ -60,7 +63,7 @@ function handleFightButtonClick() {
                 enemyPokemon = turnResult.pokemon2
                 if (turnResult.winner != 0) {
                     gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name)
-                    /*
+                     /*
                     if(turnResult.winner == 1){
                         console.log(userPokemon.level)
                         userPokemon.levelUp();
@@ -85,13 +88,14 @@ function handleBagButtonClick() {
     let labels = [{
         name: "Heal",
         types: ["Potion", "Super Potion", "Hyper Potion", "Max Potion"],
-        image: null,
         action: "Use"
     },
     {
         name: "Catch",
-        types: ["Pokeball", "Great Ball", "Ultra Ball", "Master Ball"],
-        image: null
+        types: [ "Pokeball",
+         "Great Ball", 
+         "Ultra Ball", 
+         "Master Ball", ],
     },
     {
         name: "Revive",
@@ -101,12 +105,12 @@ function handleBagButtonClick() {
     for(let i = 0; i< labels.length; i++){
         buttons[i].innerText = labels[i].name
         buttons[i].addEventListener('click', event => {
-            handleBagSubmenus(labels[i].name, labels[i].types)
+            handleBagSubmenus(labels[i].types)
         })
     }
     showBackButton()
 }
-function handleBagSubmenus(type, subtypes) {
+function handleBagSubmenus(subtypes) {
     resetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
     for (let i = 0; i < buttons.length - 1; i++) {
@@ -116,20 +120,23 @@ function handleBagSubmenus(type, subtypes) {
         else{
             buttons[i].innerText = subtypes[i]
             buttons[i].addEventListener('click', event => {
-                handleChooseItem(type, subtypes)
+                handleChooseItem(subtypes[i])
             })
         }
         
     }
 }
 
-function handleChooseItem(item, type) {
+function handleChooseItem(item) {
+    
     resetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
     for (let i = 0; i < buttons.length - 1; i++) {
         buttons[i].innerText = " "
     }
     buttons[0].innerText = 'USE'
+    buttons[1].innerHTML = imageMap.get(item)
+    
     
    /* buttons[0].addEventListener('click', event => {
        if(item == 'potion'){
