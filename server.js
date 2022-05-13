@@ -31,7 +31,7 @@ app.post("/battle", (req, res) => {
 
     let userPokemon
     if(req.body.pokemon == undefined){
-        userPokemon = "Charmander"
+        userPokemon = "Zapdos"
     } else {
         userPokemon = req.body.pokemon
     }

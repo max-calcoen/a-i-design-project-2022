@@ -112,7 +112,7 @@ export class Pokemon {
     // TODO
     levelUp(toLevel = this.level + 1) {
         // if the total exp is less than normal, boost there
-        toLevel
+        this.level += toLevel
         return false
     }
 

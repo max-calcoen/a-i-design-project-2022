@@ -8,7 +8,6 @@ window.onload = () => {
     showOptions()
     updateHealth()
 }
-
 /**
  * Removes event listeners on all buttons
  */
@@ -20,7 +19,6 @@ function resetButtonListeners() {
         button.parentNode.replaceChild(newButton, button)
     }
 }
-
 /**
  * Shows game options (Fight, Bag, Pokemon, Run)
  */
@@ -62,6 +60,13 @@ function handleFightButtonClick() {
                 enemyPokemon = turnResult.pokemon2
                 if (turnResult.winner != 0) {
                     gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name)
+                    /*
+                    if(turnResult.winner == 1){
+                        console.log(userPokemon.level)
+                        userPokemon.levelUp();
+                        console.log(userPokemon.level)
+                    }
+                    */
                 } else {
                     resetButtonListeners()
                     showOptions()
@@ -105,7 +110,6 @@ function handleBagSubmenus(type, subtypes) {
     resetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
     for (let i = 0; i < buttons.length - 1; i++) {
-<<<<<<< HEAD
         if(subtypes[i] == undefined){
             buttons[i].innerText = ' '
         }
@@ -116,13 +120,6 @@ function handleBagSubmenus(type, subtypes) {
             })
         }
         
-=======
-        buttons[i].innerText = subtypes[i]
-     
-        buttons[i].addEventListener('click', event => {
-            handleChooseItem(type, subtypes)
-        })
->>>>>>> 7fffbf9b2caaeb949f4df291046a903be07d9d2a
     }
 }
 

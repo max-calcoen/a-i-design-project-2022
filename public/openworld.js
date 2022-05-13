@@ -7,7 +7,6 @@ let stage
 let tilemap
 let frame = 0
 
-const RESET_SPAWNS_TIME = 60000
 
 
 const renderer = PIXI.autoDetectRenderer({
@@ -130,6 +129,13 @@ function makePokemon() {
     }
 }
 /**
+ * @returns miliseconds before pokemon respawn
+ */
+function msForSpawn(){
+    return 60000;
+}
+
+/**
  * setTimeout recursive function for spawning and despawning pokemon once a minute
  */
 function spawnPokemon() {
@@ -137,7 +143,7 @@ function spawnPokemon() {
         delPokemon()
         makePokemon()
         spawnPokemon()
-    }, RESET_SPAWNS_TIME)
+    }, msForSpawn())
 }
 
 
