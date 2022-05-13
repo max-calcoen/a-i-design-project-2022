@@ -4,7 +4,6 @@ import bodyParser from "body-parser"
 import { User } from "./public/models/user.js"
 import { pokedex } from "./public/dex/pokedex.js"
 import { createServer, Server } from "http"
-import * as SQLite from "sql.js"
 
 // tunables for server setup
 const SERVER_PORT = 8080
