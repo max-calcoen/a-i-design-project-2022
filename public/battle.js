@@ -7,9 +7,6 @@ let battle = new BattleLogic(userPokemon, enemyPokemon)
 window.onload = () => {
     showOptions()
     updateHealth()
-    document.getElementById("back").addEventListener("click", function () {
-        handleBackButtonClick()
-    })
 }
 
 /**
@@ -42,6 +39,8 @@ function showOptions() {
     button = button.nextElementSibling
     button.innerText = buttonsLabels[3]
     button.addEventListener("click", handleRunButtonClick)
+    button = button.nextElementSibling
+    button.addEventListener("click", handleBackButtonClick)
     hideBackButton()
 }
 function handleFightButtonClick() {
@@ -104,7 +103,7 @@ function handleBagButtonClick() {
 function handleBagSubmenus(type, subtypes) {
     resetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
-    for (let i = 0; i < buttons.length; i++) {
+    for (let i = 0; i < buttons.length - 1; i++) {
         buttons[i].innerText = subtypes[i]
         buttons[i].addEventListener('click', event => {
             handleChooseItem(type, subtypes)
@@ -115,11 +114,15 @@ function handleBagSubmenus(type, subtypes) {
 function handleChooseItem(item, type) {
     resetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
-    for (let i = 0; i < buttons.length; i++) {
+    for (let i = 0; i < buttons.length - 1; i++) {
         buttons[i].innerText = ""
     }
     buttons[0].innerText = 'USE'
+    
    /* buttons[0].addEventListener('click', event => {
+       if(item == 'potion'){
+        user.inventory.potionitem).get(type).use
+    }
         user.inventory.get(item).get(type).use
     })*/
 }
