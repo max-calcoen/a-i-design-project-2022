@@ -75,7 +75,7 @@ function handleFightButtonClick() {
 }
 
 function handleBagButtonClick() {
-    /*resetButtonListeners()
+    resetButtonListeners
     let buttons = document.getElementById("battleOptionsGrid").children
     let labels = [{
         name: "Heal",
@@ -93,42 +93,35 @@ function handleBagButtonClick() {
         types: ["Revive", "Max Revive"],
         image: null
     }]
-
-    for (let i = 0; i < labels.length; i++) {
-        buttons[i].addEventListener("click", handleBagSubmenus(labels[i].name, labels[i].types))
-        buttons[i].innerHTML = labels[i].name
+    for(let i = 0; i< labels.length; i++){
+        buttons[i].innerText = labels[i].name
+        buttons[i].addEventListener('click', event => {
+            handleBagSubmenus(labels[i].name, labels[i].types)
+        })
     }
-    buttons[3].innerText = ""
     showBackButton()
-    */
-    alert("lol")
 }
-
 function handleBagSubmenus(type, subtypes) {
     resetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
     for (let i = 0; i < buttons.length; i++) {
-        buttons[i].innerText = ""
-    }
-    resetButtonListeners()
-    for (let i = 0; i < subtypes.length; i++) {
         buttons[i].innerText = subtypes[i]
-        buttons[i].addEventListener("click", handleChooseItem(type, subtypes[i]))
+        buttons[i].addEventListener('click', event => {
+            handleChooseItem(type, subtypes)
+        })
     }
-
 }
 
 function handleChooseItem(item, type) {
     resetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
-
     for (let i = 0; i < buttons.length; i++) {
         buttons[i].innerText = ""
-        buttons[i].addEventListener("click", handleUseItem(item, type))
     }
-}
-
-function handleUseItem(item, type) {
+    buttons[0].innerText = 'USE'
+   /* buttons[0].addEventListener('click', event => {
+        user.inventory.get(item).get(type).use
+    })*/
 }
 // TODO
 function handlePokemonButtonClick() {
