@@ -1,4 +1,4 @@
-import { Pokeball } from "./item/pokeball.js"
+import { Pokeball } from "./../../models/item/pokeball.js"
 /**
  * @param {string} type type of ball being used
  * @param {int} probabilityModifier probability modifier of catch

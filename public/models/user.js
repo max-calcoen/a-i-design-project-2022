@@ -1,13 +1,4 @@
-function handleChooseItem(item, type) {
-    resetButtonListeners()
-    let buttons = document.getElementById("battleOptionsGrid").children
 
-    for (let i = 0; i < buttons.length; i++) {
-        buttons[i].innerText = ''
-    }
-    buttons[0].innerText = 'Use'
-    buttons[0].addEventListener('Click', handleUseItem(item, type))
-}
 export function readJSON(json) {
 
 }
@@ -18,26 +9,26 @@ export class User {
      * @param {string} password password
      */
     constructor(username, password) {
+        // TODO: ADD USER TO DB ON USER CREATION
         this.username = username
         this.password = password
         this.inventory = {
             pokeballs: new Map(),
-            potions: new Map()
+            potions: new Map(),
+            revives: new Map()
         }
-        this.pc = []
+        this.pc = [null, null, null, null]
     }
 
     /**
      * Adds the given Pokemon to the user's Personal Computer
      * @param {Pokemon} pokemon pokemon to add to pc
-     * @param {string} nick nickname of pokemon
      * @returns false if pc is full, true on success
      */
-    addPokemonToPc(pokemon, nick) {
+    addPokemonToPc(pokemon) {
         if (this.pc.length == 4) {
             return false
         }
-        pokemon.nick = nick
         this.pc.push(pokemon)
         return true
     }

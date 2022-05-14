@@ -1,0 +1,37 @@
+doctype html
+head
+  style.
+    #surveyContainer {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+    .header {
+        display: flex;
+        color: #000000;
+        justify-content: center;
+        align-items: center;
+        font-size: 100px;
+        margin-bottom: 8%;
+        font-family: Verdana;
+    }
+    .hidden{
+        display: none;
+    }
+    #button4{
+        width: 10%;
+        height: 10%;
+        font-size: large;
+    }
+body
+
+    .header Choose a Starter Pokemon 
+    #surveyContainer
+        button#button1(onclick="confirmk(1)")
+            img(src="assets/sprites/bulbasaurfront.png" width="250px" height=" 250px")
+        button#button2(onclick="confirmk(2)")
+            img(src="assets/sprites/squirtlefront.png" width="250px" height=" 250px")
+        button#button3(onclick="confirmk(3)")
+            img(src="assets/sprites/charmanderfront.png" width="250px" height=" 250px")
+        button#button4.hidden(onclick="caller()") Confirm
+    script(src="pugjs/starterPokemon.js")

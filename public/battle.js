@@ -1,6 +1,9 @@
 import { BattleLogic } from "./models/battlelogic.js"
 import { pokedex } from "./dex/pokedex.js"
-import {imageMap} from "./itemImages.js"
+import { imageMap } from "./itemImages.js"
+import { potions } from "./dex/items/potions.js"
+import { pokeballs } from "./dex/items/pokeballs.js"
+import { revives } from "./dex/items/revives.js"
 let userPokemon = pokedex.fromJSON(user.pc[0])
 let enemyPokemon = pokedex.fromJSON(enemy)
 let battle = new BattleLogic(userPokemon, enemyPokemon)
@@ -42,7 +45,7 @@ function showOptions() {
     button.addEventListener("click", handleRunButtonClick)
     button = button.nextElementSibling
     button.addEventListener("click", handleBackButtonClick)
-    button.innerText = 'Back to Main'
+    button.innerText = "Back to Main"
     hideBackButton()
 }
 function handleFightButtonClick() {
@@ -104,7 +107,7 @@ function handleBagButtonClick() {
     }]
     for(let i = 0; i< labels.length; i++){
         buttons[i].innerText = labels[i].name
-        buttons[i].addEventListener('click', event => {
+        buttons[i].addEventListener("click", event => {
             handleBagSubmenus(labels[i].types)
         })
     }
@@ -115,44 +118,70 @@ function handleBagSubmenus(subtypes) {
     let buttons = document.getElementById("battleOptionsGrid").children
     for (let i = 0; i < buttons.length - 1; i++) {
         if(subtypes[i] == undefined){
-            buttons[i].innerText = ' '
+            buttons[i].innerText = " "
         }
         else{
             buttons[i].innerText = subtypes[i]
-            buttons[i].addEventListener('click', event => {
-                handleChooseItem(subtypes[i])
+            buttons[i].addEventListener("click", event => {
+                handleChooseItem(subtypes[0], subtypes[i])
             })
         }
         
     }
 }
 
-function handleChooseItem(item) {
+function handleChooseItem(itemClass, item) {
     
     resetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
     for (let i = 0; i < buttons.length - 1; i++) {
         buttons[i].innerText = " "
     }
-    buttons[0].innerText = 'USE'
+   buttons[0].innerText = "USE"
     buttons[1].innerHTML = imageMap.get(item)
-    
-    
-   /* buttons[0].addEventListener('click', event => {
-       if(item == 'potion'){
-        user.inventory.potionitem).get(type).use
+    buttons[0].addEventListener("click", event => {
+       if(itemClass == "Potion"){
+           if(user.inventory.potion.get(type) > 0){
+
+                return {
+                    
+                }
+           }
     }
-        user.inventory.get(item).get(type).use
-    })*/
+    if(itemCLass == 'Pokeball'){
+        if(user.inventory.pokeballs.get(type) > 0){
+            if(pokedex.get(pokeCollisionName).catch(balls.get(type))){
+                user.inventory.pokeballs.get(type)--
+                return {
+                    success: true,
+                    message: 'Congratulations, ' + 'you caught the wild ' + pokeCollisionName
+                }
+            }
+            else {
+                user.inventory.pokeballs.get(type)--
+                return {
+                    success: false,
+                    message: 'Oh no! ' + pokeCollisionName + ' broke free!'
+                }
+            }
+        }
+        else{
+            return {
+                success: false,
+                message: 'Bruh you dont have anymore ' + type + '/s'
+            }
+        }
+    }   
+    })
 }
 // TODO
 function handlePokemonButtonClick() {
-    let buttons = document.getElementById('battleOptionsGrid').children
+    let buttons = document.getElementById("battleOptionsGrid").children
     buttons.splice(0,4);
-    let menuArea = document.getElementById('battleOptionsGrid')
+    let menuArea = document.getElementById("battleOptionsGrid")
     user.pc.sort()
     for(let i = 0; i< user.pc.length; i++)
-        menuArea.appendChild(document.createTextNode('Nickname: '+user.pc[i].nick))
+        menuArea.appendChild(document.createTextNode("Nickname: "+user.pc[i].nick))
     showBackButton()
 }
 
@@ -160,7 +189,24 @@ function handlePokemonButtonClick() {
 
 function handleRunButtonClick() {
     resetButtonListeners()
-    window.location.href = "../openworld.html"
+    sendData("/openworld", "openworld", "POST")
+}
+
+function sendData(path, name, method = 'post') {
+
+    const form = document.createElement('form');
+    form.method = method;
+    form.action = path;
+    document.body.appendChild(form);
+
+    const formField = document.createElement('input');
+    formField.type = 'hidden';
+    formField.name = name;
+    
+
+    form.appendChild(formField);
+
+    form.submit();
 }
 
 /**

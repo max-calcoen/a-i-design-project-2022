@@ -1,9 +1,5 @@
-// TODO: class Revive extends Potion
-
-export class Potion extends Item {
+export class Potion {
     // Potion, super poton, max potion, revive, max revive
-    #type
-    #amt
     /**
      * Contructs Potion object
      * @param {string} type potion or revive?
@@ -34,7 +30,7 @@ export class Potion extends Item {
         }
     }
 }
-export class Revive extends Item {
+export class Revive {
     // Potion, super poton, max potion, revive, max revive
     percentheal
 
@@ -53,14 +49,14 @@ export class Revive extends Item {
         if (pokemon.currentStats.health > 0) {
             return {
                 success: false,
-                message: "cannot use a revive on a living pokemon bozo..."
+                message: "cannot use a revive on a living pokemon..."
             }
         }
 
         else {
             return {
                 success: pokemon.heal(pokemon.currenStats.maxHealth * this.percentheal),
-                message: "successfully used the " + this.name + " revive"
+                message: "Successfully used the " + this.name + " revive"
             }
         }
     }

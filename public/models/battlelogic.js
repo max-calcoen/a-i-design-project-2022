@@ -64,7 +64,8 @@ export class BattleLogic {
         let effectv2 = inflictEffects.get(pokemon1move.type)
         if (this.pokemon1.currentStats.speed > this.pokemon2.currentStats.speed) {
             if (this.pokemon1.canMove) {
-                this.#dealWithEffects(this.pokemon2)
+                if(this.pokemon1.move.pp >= 1){
+                    this.#dealWithEffects(this.pokemon2)
                 if (pokemon1move.accuracy > Math.random() * 101) {
                     damageResult = this.pokemon2.takeDamage(p1damage)
                     if (pokemon1move.isSpecial && inflictEffects.get(pokemon1move.type) != null) {
@@ -86,6 +87,7 @@ export class BattleLogic {
                     }
                 } else {
                     alert(`${this.pokemon1.name}'s attack missed!`)
+                }
                 }
             }
             if (this.pokemon2.canMove) {
@@ -141,28 +143,8 @@ export class BattleLogic {
                 }
             }
             if (this.pokemon1.canMove) {
-                if (pokemon1move.accuracy > Math.random() * 101) {
-                    this.#dealWithEffects(this.pokemon2)
-                    damageResult = this.pokemon2.takeDamage(p1damage)
-                    if (pokemon1move.isSpecial && inflictEffects.get(pokemon1move.type) != null) {
-                        this.pokemon2.statusEffects.push(effectv2)
-                    }
-                    alert(`${this.pokemon1.name} used ${pokemon1move.name} and did ${p1damage} damage!`)
-                    if (p1type > 1) {
-                        alert("It was super effective!")
-                    }
-                    else if (p1type > 1) {
-                        alert("It was not very effective!")
-                    }
-                    if (damageResult) {
-                        return {
-                            pokemon1: this.pokemon1,
-                            pokemon2: this.pokemon2,
-                            winner: 1
-                        }
-                    }
-                } else {
-                    alert(`${this.pokemon1.name}'s attack missed!`)
+                if(this.pokemon1.move.pp >= 10){
+                    
                 }
             }
         }

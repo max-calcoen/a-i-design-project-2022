@@ -1,4 +1,4 @@
-import { Potion } from "./models/item/potion.js"
+import { Potion } from "./../../models/item/heal.js"
 
 export let potions = new Map()
 potions.set("Potion", new Potion("Potion", 20))
