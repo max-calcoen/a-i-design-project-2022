@@ -4595,7 +4595,6 @@ var PIXI = (function (exports) {
               'color: #ff2424; background: #fff; padding:5px 0;',
               'color: #ff2424; background: #fff; padding:5px 0;',
               'color: #ff2424; background: #fff; padding:5px 0;' ];
-          (_a = globalThis.console).log.apply(_a, args);
       }
       else if (globalThis.console) {
           globalThis.console.log("PixiJS " + VERSION + " - " + type + " - http://www.pixijs.com/");

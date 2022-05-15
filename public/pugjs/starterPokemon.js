@@ -19,8 +19,8 @@ function caller() {
     if (pokemon == 3) {
         pokeName = "Charmander"
     }
-    sendData("/battle", pokeName, "pokemon", "POST") // May have to change routes and stuff later yk
-}
+    // MAX: TODO: Add choosen pokemon to pc
+    sendData("/openworld", pokeName, "pokemon", "POST") 
 
 function sendData(path, value, name, method = "post") {
     const form = document.createElement("form");
@@ -33,4 +33,6 @@ function sendData(path, value, name, method = "post") {
     formField.value = value
     form.appendChild(formField)
     form.submit();
+}
+
 }

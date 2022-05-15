@@ -1,5 +1,5 @@
 import { inflictEffects } from "./move.js"
-import { caught } from "../battle.js"
+import { turnType } from "../battle.js"
 export class BattleLogic {
     constructor(pokemon1, pokemon2) {
         this.pokemon1 = pokemon1
@@ -34,9 +34,26 @@ export class BattleLogic {
      */
     // TODO: implement bag, pokemon, run, and status effects (including turn)
     turn(pokemon1move, pokemon2move) {
-        if (typeof pokemon1move == 'boolean' && pokemon1move) {
+        if (pokemon1move == 'Attempted Catch') {
+            this.pokemon1.statusEffects.push({
+                    name: "Attempted Catch",
+                    canMove: false,
+                    dpround: 0,
+                    duration: 1
+            })
+        }
+        if(pokemon1move == 'Successful Catch'){
             return
         }
+        if(pokemon1move == 'Chose New'){
+            this.pokemon1.statusEffects.push({
+                name: "Chose New",
+                canMove: false,
+                dpround: 0,
+                duration: 1
+        })
+        }
+        if(pokemon1move == 'Healed/Revived')
         let p1level = this.pokemon1.level
         let p1power = pokemon1move.power
         let p1attack = this.pokemon1.currentStats.attack
@@ -68,6 +85,7 @@ export class BattleLogic {
         if (this.pokemon1.currentStats.speed > this.pokemon2.currentStats.speed) {
             if (this.pokemon1.canMove) {
                 if (this.pokemon1.move.pp >= 1) {
+                    this.pokemon1.move.pp--
                     this.#dealWithEffects(this.pokemon2)
                     if (pokemon1move.accuracy > Math.random() * 101) {
                         damageResult = this.pokemon2.takeDamage(p1damage)
@@ -91,6 +109,8 @@ export class BattleLogic {
                     } else {
                         alert(`${this.pokemon1.name}'s attack missed!`)
                     }
+                } else {
+                    alert("Not enough PP to attack, attack skipped, don't use this attack again.")
                 }
             }
             if (this.pokemon2.canMove) {
@@ -143,11 +163,6 @@ export class BattleLogic {
                     }
                 } else {
                     alert(`${this.pokemon2.name}'s attack missed!`)
-                }
-            }
-            if (this.pokemon1.canMove) {
-                if (this.pokemon1.move.pp >= 10) {
-
                 }
             }
         }

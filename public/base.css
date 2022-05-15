@@ -1,0 +1,225 @@
+:root {
+    --old-player-health: 100%;
+    --old-enemy-health: 100%;
+    --player-health: 100%;
+    --enemy-health: 100%;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+div#content {
+    display: grid;
+    grid-template-areas:
+        "battleArea"
+        "battleOptions"
+    ;
+    grid-template-rows: 2fr 1fr;
+    height: 100vh;
+}
+
+div#battleArea {
+    grid-area: battleArea;
+    border-bottom: 2px solid black;
+    display: grid;
+    grid-template-rows: 1fr 8fr 1fr;
+    grid-template-columns: 1fr;
+
+}
+
+div#battleOptions {
+    grid-area: battleOptions;
+    display: grid;
+    grid-template-areas:
+        "p battleOptionsGrid"
+    ;
+    grid-template-columns: 3fr 2fr;
+    grid-template-rows: 1fr;
+}
+
+div.healthBarContainer {
+    box-sizing: content-box;
+    margin: 0px;
+    border: 2px solid black;
+    border-radius: 1px;
+    width: 200px;
+    height: 20px;
+}
+
+div.healthBar {
+    height: 20px;
+    background-color: gray;
+}
+
+div#playerHealthBar {
+    width: var(--player-health);
+    animation-name: slidePlayerHealth;
+    animation-duration: 1s;
+}
+
+div#enemyHealthBar {
+    width: var(--enemy-health);
+    animation-name: slideEnemyHealth;
+    animation-duration: 1s;
+}
+
+div#playerHealth {
+    position: absolute;
+    bottom: calc(100vh / 3 + 15px);
+    left: 10px;
+}
+
+div#enemyHealth {
+    position: absolute;
+    top: 15px;
+    right: 10px;
+}
+
+img#p1 {
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    bottom: calc(30vh);
+    left: 200px;
+    z-index: -1;
+}
+
+img#p2 {
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    top: 0px;
+    right: 220px;
+    z-index: -1;
+}
+
+div#battleOptions>p {
+    grid-area: p;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    margin: 0px;
+}
+
+div#battleOptionsGrid {
+    display: grid;
+    grid-template-areas:
+        "fight bag"
+        "pokemon run"
+    ;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+div#battleOptionsGrid>button {
+    width: 100%;
+    height: 100%;
+    font-size: 25px;
+}
+
+.hidden {
+    display: none;
+}
+
+button#back {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    font-size: 15px !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+
+@keyframes slidePlayerHealth {
+    from {
+        width: var(--old-player-health);
+    }
+
+    to {
+        width: var(--player-health);
+    }
+}
+
+@keyframes slideEnemyHealth {
+    from {
+        width: var(--old-player-health);
+    }
+
+    to {
+        width: var(--player-health);
+    }
+}
+
+#indexHeader {
+    display: flex;
+    font-size: 100px;
+    justify-content: center;
+}
+
+.indexButton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 48px;
+    font-family: 'Franklin Gothic Medium', Arial, sans-serif;
+    font-style: none;
+    text-decoration: none;
+    color: black;
+    margin: 1%;
+    padding: 5%;
+}
+
+a:link{
+    color: black;
+    text-decoration: none;
+}
+a:visited{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: black;
+    text-decoration: none;
+}
+a:active{
+    color: black;
+    text-decoration: none;
+}
+
+.indexButton:hover{
+    background-color: antiquewhite ;
+}
+
+#createHeader{
+    display: flex;
+    font-size: 100px;
+    justify-content: center;
+}
+
+.input{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1%;
+    font-size: 48px;
+}
+
+#signButton{
+    font-size: 48px;
+    height: auto;
+    width: auto;
+    padding: 3%;
+}
+
+.textInput{
+    height: auto;
+    font-size: 36px;
+}
