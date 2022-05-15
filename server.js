@@ -20,7 +20,8 @@ const io = new Server(server)
 const SQL = await initSqlJs()
 let db
 let data
-let database
+export let database
+
 fs.access("./db.sqlite", fs.F_OK, (err) => {
     if (err) {
         db = new SQL.Database()
@@ -39,10 +40,6 @@ app.use(express.static(PUBLIC_FILES_DIR))
 app.set("views", "views")
 app.set("view engine", "pug")
 
-// tunables for encryption
-const SALT_ROUNDS = 5
-
-
 export let users = new Map()
 users.set("", new User("", "e")) // THIS IS TEST USER
 
@@ -55,22 +52,24 @@ app.post("/openworld", (req, res) => {
 })
 
 
-app.get("/test", (req, res) => {
-    res.render("index", {
-        pokedex: pokedex,
-        errorMessage: ""
-    })
-})
+
 let loginPassword
 app.post("/login", (req, res) => {
 
     let username = req.body.username
     let password = req.body.password
-    if (!database.users.has(username)) {
-        res.redirect(307, "/?errorMessage=There are no registered users with this username")
+    let userid
+    for (let user of database.users) {
+        if (user[1] == username) {
+            userid = user[0]
+            break
+        }
+        res.redirect(307, "/login?errorMessage=There are no registered users with this username")
         return
     }
-    let hash = database.users.get(username).password
+    let hash = database.getUserById(userid)[2]
+
+    // let hash = database.users.get(username).password
     bcrypt.compare(password, hash, (err, result) => {
         if (result) {
             res.redirect(307, "/openworld")
@@ -101,34 +100,15 @@ app.post("/createaccount", (req, res) => {
         res.redirect("/?errorMessage=Password must be less than or equal to 15 characters!")
         return
     }
-    if (users.has(createAccountUsername)) {
-        res.redirect("/?errorMessage=There is already an account associated with this username")
-        return
+    for (let user of database.users) {
+        if (user[1] == createAccountUsername) {
+            res.redirect("/?errorMessage=There is already an account associated with this username")
+            return
+        }
     }
-    // MAX:
-    // start to add the User to the DB
-
-    // add user to db: set username to given username, set password to hashed password
+    database.createNewUser(createAccountUsername, createAccountPassword)
     res.render("starterpokemon")
     return
-
-})
-
-app.post("/legacybattle", (req, res) => {
-    let userPokemon = req.body.pokemon ? req.body.pokemon : "Zapdos"
-    let enemyPokemon = "Zapdos"
-    if (!pokedex.has(userPokemon)) {
-        res.send("Pokemon not found!")
-        return
-    }
-    if (req.body.enemyName != undefined) {
-        enemyPokemon = req.body.enemyName
-    }
-    res.render("battle-interface", {
-        user: {},
-        enemyPokemon: pokedex.getNewPokemon(enemyPokemon),
-        userPokemon: pokedex.getNewPokemon(userPokemon)
-    })
 })
 
 app.post("/battle", (req, res) => {

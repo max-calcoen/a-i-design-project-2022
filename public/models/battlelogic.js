@@ -91,34 +91,31 @@ export class BattleLogic {
         let effectv2 = inflictEffects.get(pokemon1move.type)
         if (this.pokemon1.currentStats.speed > this.pokemon2.currentStats.speed) {
             if (this.pokemon1.canMove) {
-                if (this.pokemon1.move.pp >= 1) {
-                    this.pokemon1.move.pp--
-                    this.#dealWithEffects(this.pokemon2)
-                    if (pokemon1move.accuracy > Math.random() * 101) {
-                        damageResult = this.pokemon2.takeDamage(p1damage)
-                        if (pokemon1move.isSpecial && inflictEffects.get(pokemon1move.type) != null) {
-                            console.log(effectv1)
-                            this.pokemon2.statusEffects.push(effectv1)
+
+                this.#dealWithEffects(this.pokemon2)
+                if (pokemon1move.accuracy > Math.random() * 101) {
+                    damageResult = this.pokemon2.takeDamage(p1damage)
+                    if (pokemon1move.isSpecial && inflictEffects.get(pokemon1move.type) != null) {
+                        console.log(effectv1)
+                        this.pokemon2.statusEffects.push(effectv1)
+                    }
+                    alert(`${this.pokemon1.name} used ${pokemon1move.name}! It did ${p1damage} damage!`)
+                    if (p1type > 1) {
+                        alert("It was super effective!")
+                    } else if (p1type > 1) {
+                        alert("It was not very effective!")
+                    }
+                    if (damageResult) {
+                        return {
+                            pokemon1: this.pokemon1,
+                            pokemon2: this.pokemon2,
+                            winner: 1
                         }
-                        alert(`${this.pokemon1.name} used ${pokemon1move.name}! It did ${p1damage} damage!`)
-                        if (p1type > 1) {
-                            alert("It was super effective!")
-                        } else if (p1type > 1) {
-                            alert("It was not very effective!")
-                        }
-                        if (damageResult) {
-                            return {
-                                pokemon1: this.pokemon1,
-                                pokemon2: this.pokemon2,
-                                winner: 1
-                            }
-                        }
-                    } else {
-                        alert(`${this.pokemon1.name}'s attack missed!`)
                     }
                 } else {
-                    alert("Not enough PP to attack, attack skipped, don't use this attack again.")
+                    alert(`${this.pokemon1.name}'s attack missed!`)
                 }
+
             }
             if (this.pokemon2.canMove) {
                 this.#dealWithEffects(this.pokemon1)

@@ -1,23 +1,22 @@
-import {
-    BattleLogic
-} from "./models/battlelogic.js"
-import {
-    pokedex
-} from "./dex/pokedex.js"
-import {
-    imageMap
-} from "./itemImages.js"
-import {
-    potions
-} from "./dex/items/potions.js"
-import {
-    pokeballs
-} from "./dex/items/pokeballs.js"
-import {
-    revives
-} from "./dex/items/revives.js"
-
-let userPokemon = pokedex.fromJson(user.pc[0])
+import { User } from './models/user.js'
+import { BattleLogic } from "./models/battlelogic.js"
+import { pokedex } from "./dex/pokedex.js"
+import { imageMap } from "./itemImages.js"
+import { potions } from "./dex/items/potions.js"
+import { pokeballs } from "./dex/items/pokeballs.js"
+import { revives } from "./dex/items/revives.js"
+let user = new User('hi', 'whee')
+let userPokemon = user.pc[0]
+user.inventory.pokeballs.set("Pokeball", 20)
+user.inventory.pokeballs.set("Great Ball", 10)
+user.inventory.pokeballs.set("Ultra Ball", 5)
+user.inventory.pokeballs.set("Master Ball", 1)
+user.inventory.potions.set("Potion", 20)
+user.inventory.potions.set("Super Potion", 15)
+user.inventory.potions.set("Hyper Potion", 10)
+user.inventory.potions.set("Max Potion", 5)
+user.inventory.revives.set("Revive", 30)
+user.inventory.revives.set("Max Revive", 10)
 let enemyPokemon = pokedex.fromJSON(enemy)
 let battle = new BattleLogic(userPokemon, enemyPokemon)
 let chosenPokemon = user.pc
@@ -155,11 +154,17 @@ function handleChooseItem(itemClass, item) {
     if (itemClass == 'Potion') {
         buttons[0].innerText = "USE:" + user.inventory.potions.get(item)
     }
+    if (itemClass == 'Pokeball') {
+        buttons[0].innerText = "USE:" + user.inventory.pokeballs.get(item)
+    }
+    if (itemClass == 'Revive') {
+        buttons[0].innerText = "USE:" + user.inventory.pokeballs.get(item)
+    }
 
     buttons[1].innerHTML = imageMap.get(item)
     buttons[0].addEventListener("click", event => {
         if (itemClass == "Potion" || itemClass == "Revive") {
-            if (user.inventory.potion.get(item) > 0) {
+            if (user.inventory.potions.get(item) > 0) {
                 handleHealMenus(itemClass, item)
             } else {
                 return {
@@ -169,17 +174,18 @@ function handleChooseItem(itemClass, item) {
             }
         }
         if (itemClass == 'Pokeball') {
-            if (user.inventory.pokeballs.get(type) > 0) {
-                if (pokedex.get(pokeCollisionName).catch(balls.get(type))) {
-                    user.inventory.pokeballs.get(type)--
+            if (user.inventory.pokeballs.get(item) > 0) {
+                if (pokedex.get(userPokemon.name).catch(pokeballs.get(item))) {
+                    console.log(user.inventory.pokeballs)
                     turnType = 'Successful Catch'
+                    user.pc.push(enemyPokemon)
                     let turnResult = battle.turn(turnType, enemyMove)
                     updateHealth()
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
                 } else {
                     turnType = 'Attempted Catch'
-                    user.inventory.pokeballs.get(type)--
+                    user.inventory.pokeballs.get(item)--
                     alert('Oh no! ' + turnResult.pokemon2 + ' broke free!')
                     let turnResult = battle.turn(turnType, enemyMove)
                     updateHealth()
