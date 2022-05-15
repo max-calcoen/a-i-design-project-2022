@@ -1,0 +1,5 @@
+export let imageMap = new Map()
+imageMap.set('Pokeball', '<img src="./assets/sprites/Pokeball.jpg"')
+imageMap.set('Great Ball', '<img src="./assets/sprites/Great_Ball.jpg"')
+imageMap.set('Ultra Ball',  '<img src="./assets/sprites/Ultra_Ball.jpg"')
+imageMap.set('Master Ball',  '<img src="./assets/sprites/Master_Ball.jpg"')

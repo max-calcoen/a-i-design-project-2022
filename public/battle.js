@@ -131,7 +131,7 @@ function handleBagSubmenus(subtypes) {
     }
 }
 
-export let caught
+export let caught = false
 function handleChooseItem(itemClass, item) {
 
     resetButtonListeners()
@@ -144,10 +144,7 @@ function handleChooseItem(itemClass, item) {
     buttons[0].addEventListener("click", event => {
         if (itemClass == "Potion") {
             if (user.inventory.potion.get(type) > 0) {
-
-                return {
-
-                }
+                handleUseMenus()
             }
         }
         if (itemCLass == 'Pokeball') {
@@ -156,27 +153,58 @@ function handleChooseItem(itemClass, item) {
                 if (pokedex.get(pokeCollisionName).catch(balls.get(type))) {
                     user.inventory.pokeballs.get(type)--
                     caught = true
-                    return {
-                        success: true,
-                        message: 'Congratulations, ' + 'you caught the wild ' + pokeCollisionName
-                    }
+                    let turnResult = battle.turn(caught, enemyMove)
+                    updateHealth()
+                    userPokemon = turnResult.pokemon1
+                    enemyPokemon = turnResult.pokemon2
                 }
                 else {
                     user.inventory.pokeballs.get(type)--
+                    alert( 'Oh no! ' + turnResult.pokemon2 + ' broke free!')
+                    return
+                }
+                }
+                else {
                     return {
                         success: false,
-                        message: 'Oh no! ' + pokeCollisionName + ' broke free!'
+                        message: 'Bruh you dont have anymore ' + type + 's'
                     }
                 }
+                
             }
-            else {
-                return {
-                    success: false,
-                    message: 'Bruh you dont have anymore ' + type + 's'
-                }
-            }
-        }
     })
+}
+function createMenuItem(pokemon) {
+    let newButton = document.createElement('button');
+    li.innerText = pokemon;
+    return newButton;
+}
+function handleUseMenus(type, item){
+    resetButtonListeners()
+    let buttons = document.getElementById('battleOptionsGrid').children
+    buttons.splice(0, buttons.length)
+
+if(type == 'Potion'){
+    let healablePokemon = []
+    for(let i = 0; i < user.pc.length;i++){
+if(user.pc[i].currentStats.health > 0&& user.pc[i].currentStats.health < user.pc[i].maxHP){
+    healablePokemon.push(user.pc[i])
+}
+    }
+    for(let pokemon of healablePokemon){
+        buttons.appendChild(createMenuItem(pokemon))
+    }
+}
+else{
+    let revivablePokemon = []
+    for(let i = 0; i < user.pc.length;i++){
+if(user.pc[i].currentStats.health == 0){
+    revivablePokemon.push(user.pc[i])
+}
+
+}
+    
+    
 }
 // TODO
 function handlePokemonButtonClick() {
