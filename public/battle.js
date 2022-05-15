@@ -4,6 +4,7 @@ import { imageMap } from "./itemImages.js"
 import { potions } from "./dex/items/potions.js"
 import { pokeballs } from "./dex/items/pokeballs.js"
 import { revives } from "./dex/items/revives.js"
+
 let userPokemon = pokedex.fromJSON(user.pc[0])
 let enemyPokemon = pokedex.fromJSON(enemy)
 let battle = new BattleLogic(userPokemon, enemyPokemon)
@@ -66,13 +67,13 @@ function handleFightButtonClick() {
                 enemyPokemon = turnResult.pokemon2
                 if (turnResult.winner != 0) {
                     gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name)
-                     /*
-                    if(turnResult.winner == 1){
-                        console.log(userPokemon.level)
-                        userPokemon.levelUp();
-                        console.log(userPokemon.level)
-                    }
-                    */
+                    /*
+                   if(turnResult.winner == 1){
+                       console.log(userPokemon.level)
+                       userPokemon.levelUp();
+                       console.log(userPokemon.level)
+                   }
+                   */
                 } else {
                     resetButtonListeners()
                     showOptions()
@@ -95,17 +96,17 @@ function handleBagButtonClick() {
     },
     {
         name: "Catch",
-        types: [ "Pokeball",
-         "Great Ball", 
-         "Ultra Ball", 
-         "Master Ball", ],
+        types: ["Pokeball",
+            "Great Ball",
+            "Ultra Ball",
+            "Master Ball",],
     },
     {
         name: "Revive",
         types: ["Revive", "Max Revive"],
         image: null
     }]
-    for(let i = 0; i< labels.length; i++){
+    for (let i = 0; i < labels.length; i++) {
         buttons[i].innerText = labels[i].name
         buttons[i].addEventListener("click", event => {
             handleBagSubmenus(labels[i].types)
@@ -117,71 +118,74 @@ function handleBagSubmenus(subtypes) {
     resetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
     for (let i = 0; i < buttons.length - 1; i++) {
-        if(subtypes[i] == undefined){
+        if (subtypes[i] == undefined) {
             buttons[i].innerText = " "
         }
-        else{
+        else {
             buttons[i].innerText = subtypes[i]
             buttons[i].addEventListener("click", event => {
                 handleChooseItem(subtypes[0], subtypes[i])
             })
         }
-        
+
     }
 }
 
+export let caught
 function handleChooseItem(itemClass, item) {
-    
+
     resetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
     for (let i = 0; i < buttons.length - 1; i++) {
         buttons[i].innerText = " "
     }
-   buttons[0].innerText = "USE"
+    buttons[0].innerText = "USE"
     buttons[1].innerHTML = imageMap.get(item)
     buttons[0].addEventListener("click", event => {
-       if(itemClass == "Potion"){
-           if(user.inventory.potion.get(type) > 0){
+        if (itemClass == "Potion") {
+            if (user.inventory.potion.get(type) > 0) {
 
                 return {
-                    
+
                 }
-           }
-    }
-    if(itemCLass == 'Pokeball'){
-        if(user.inventory.pokeballs.get(type) > 0){
-            if(pokedex.get(pokeCollisionName).catch(balls.get(type))){
-                user.inventory.pokeballs.get(type)--
-                return {
-                    success: true,
-                    message: 'Congratulations, ' + 'you caught the wild ' + pokeCollisionName
+            }
+        }
+        if (itemCLass == 'Pokeball') {
+            caught = false
+            if (user.inventory.pokeballs.get(type) > 0) {
+                if (pokedex.get(pokeCollisionName).catch(balls.get(type))) {
+                    user.inventory.pokeballs.get(type)--
+                    caught = true
+                    return {
+                        success: true,
+                        message: 'Congratulations, ' + 'you caught the wild ' + pokeCollisionName
+                    }
+                }
+                else {
+                    user.inventory.pokeballs.get(type)--
+                    return {
+                        success: false,
+                        message: 'Oh no! ' + pokeCollisionName + ' broke free!'
+                    }
                 }
             }
             else {
-                user.inventory.pokeballs.get(type)--
                 return {
                     success: false,
-                    message: 'Oh no! ' + pokeCollisionName + ' broke free!'
+                    message: 'Bruh you dont have anymore ' + type + 's'
                 }
             }
         }
-        else{
-            return {
-                success: false,
-                message: 'Bruh you dont have anymore ' + type + '/s'
-            }
-        }
-    }   
     })
 }
 // TODO
 function handlePokemonButtonClick() {
     let buttons = document.getElementById("battleOptionsGrid").children
-    buttons.splice(0,4);
+    buttons.splice(0, 4);
     let menuArea = document.getElementById("battleOptionsGrid")
     user.pc.sort()
-    for(let i = 0; i< user.pc.length; i++)
-        menuArea.appendChild(document.createTextNode("Nickname: "+user.pc[i].nick))
+    for (let i = 0; i < user.pc.length; i++)
+        menuArea.appendChild(document.createTextNode("Nickname: " + user.pc[i].nick))
     showBackButton()
 }
 
@@ -202,7 +206,7 @@ function sendData(path, name, method = 'post') {
     const formField = document.createElement('input');
     formField.type = 'hidden';
     formField.name = name;
-    
+
 
     form.appendChild(formField);
 

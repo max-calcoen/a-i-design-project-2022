@@ -51,7 +51,7 @@ export class Pokemon {
     }
 
     /**
-     * adds an array containing the id of the status_effect along with its effect values to the pokemon statuseffects array
+     * Adds an array containing the id of the status_effect along with its effect values to the pokemon statuseffects array
      * @param {string} statusEffect the status effect given to the pokemon
      */
     // TODO- check if working

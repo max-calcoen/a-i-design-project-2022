@@ -1,4 +1,5 @@
 import { inflictEffects } from "./move.js"
+import { caught } from "../battle.js"
 export class BattleLogic {
     constructor(pokemon1, pokemon2) {
         this.pokemon1 = pokemon1
@@ -8,20 +9,19 @@ export class BattleLogic {
     #dealWithEffects(pokemon) {
         let cantMoveCounter = 0
         for (let i = 0; i < pokemon.statusEffects.length; i++) {
-            console.log(pokemon.statusEffects)
+            // console.log(pokemon.statusEffects)
             pokemon.takeDamage(pokemon.statusEffects[i].dpround)
             if (!pokemon.statusEffects[i].canMove) {
                 cantMoveCounter += 1
             }
-            pokemon.statusEffects[i].duration--
             if (pokemon.statusEffects[i].duration = 0) {
                 pokemon.statusEffects.splice(i, 1)
             }
+            pokemon.statusEffects[i].duration--
         }
         if (cantMoveCounter > 0) {
             pokemon.canMove = false
-        }
-        else {
+        } else {
             pokemon.canMove = true
         }
     }
@@ -34,6 +34,9 @@ export class BattleLogic {
      */
     // TODO: implement bag, pokemon, run, and status effects (including turn)
     turn(pokemon1move, pokemon2move) {
+        if (typeof pokemon1move == 'boolean' && pokemon1move) {
+            return
+        }
         let p1level = this.pokemon1.level
         let p1power = pokemon1move.power
         let p1attack = this.pokemon1.currentStats.attack
@@ -64,30 +67,30 @@ export class BattleLogic {
         let effectv2 = inflictEffects.get(pokemon1move.type)
         if (this.pokemon1.currentStats.speed > this.pokemon2.currentStats.speed) {
             if (this.pokemon1.canMove) {
-                if(this.pokemon1.move.pp >= 1){
+                if (this.pokemon1.move.pp >= 1) {
                     this.#dealWithEffects(this.pokemon2)
-                if (pokemon1move.accuracy > Math.random() * 101) {
-                    damageResult = this.pokemon2.takeDamage(p1damage)
-                    if (pokemon1move.isSpecial && inflictEffects.get(pokemon1move.type) != null) {
-                        console.log(effectv1)
-                        this.pokemon2.statusEffects.push(effectv1)
-                    }
-                    alert(`${this.pokemon1.name} used ${pokemon1move.name}! It did ${p1damage} damage!`)
-                    if (p1type > 1) {
-                        alert("It was super effective!")
-                    } else if (p1type > 1) {
-                        alert("It was not very effective!")
-                    }
-                    if (damageResult) {
-                        return {
-                            pokemon1: this.pokemon1,
-                            pokemon2: this.pokemon2,
-                            winner: 1
+                    if (pokemon1move.accuracy > Math.random() * 101) {
+                        damageResult = this.pokemon2.takeDamage(p1damage)
+                        if (pokemon1move.isSpecial && inflictEffects.get(pokemon1move.type) != null) {
+                            console.log(effectv1)
+                            this.pokemon2.statusEffects.push(effectv1)
                         }
+                        alert(`${this.pokemon1.name} used ${pokemon1move.name}! It did ${p1damage} damage!`)
+                        if (p1type > 1) {
+                            alert("It was super effective!")
+                        } else if (p1type > 1) {
+                            alert("It was not very effective!")
+                        }
+                        if (damageResult) {
+                            return {
+                                pokemon1: this.pokemon1,
+                                pokemon2: this.pokemon2,
+                                winner: 1
+                            }
+                        }
+                    } else {
+                        alert(`${this.pokemon1.name}'s attack missed!`)
                     }
-                } else {
-                    alert(`${this.pokemon1.name}'s attack missed!`)
-                }
                 }
             }
             if (this.pokemon2.canMove) {
@@ -143,8 +146,8 @@ export class BattleLogic {
                 }
             }
             if (this.pokemon1.canMove) {
-                if(this.pokemon1.move.pp >= 10){
-                    
+                if (this.pokemon1.move.pp >= 10) {
+
                 }
             }
         }

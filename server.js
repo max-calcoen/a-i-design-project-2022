@@ -20,6 +20,10 @@ app.use(express.static(PUBLIC_FILES_DIR))
 app.set("views", "views")
 app.set("view engine", "pug")
 
+// tunables for encryption
+const SALT_ROUNDS = 5
+
+
 export let users = new Map()
 users.set("", new User("", "e")) // THIS IS TEST USER
 
@@ -31,42 +35,58 @@ app.post("/openworld", (req, res) => {
     res.render("openworld")
 })
 
-app.post("/battle", (req, res) => {
-    let userPokemon
-    if(req.body.pokemon == undefined){
-        userPokemon = "Zapdos"
-    } else {
-        userPokemon = req.body.pokemon
-    }
-
-    let enemyPokemon
-    if (req.body.enemyName == undefined){
-        enemyPokemon = "Zapdos"
-    } else {
-        enemyPokemon = req.body.enemyName
-    }
-    
-    let loginUsername = req.body.loginUsername
-    let loginPassword = req.body.loginPassword
-    if (loginUsername != undefined || loginPassword != undefined) { // user is trying to log in
-        // check login, using bcrypt.compare
-        // if correct login: send to openworld, with login information stored in the post request
-        // if not correct login: post back to "/" route with error message "Incorrect login information!"
-    } else { // user is trying to create account
-        // validate input: check if username less than or equal to 10 and more than 4 characters and if password is more than 5 and less than 15 characters
-        // if invalid: post to "/" with error message "Please enter a valid username!" or "Please enter a valid password! Passwords must be longer than or equal to 5 characters and less than or equal to 15 characters."
-        // check if username already exists
-        // if so, post to "/" with error message "You already have an account associated with this username!"
-        // if everything is fine so far, then start to add the User to the DB
-        // add user to db: set username to given username, set password to hashed password
-        // reroute to starterPokemon.pug
-
-        // TODO: INSTEAD OF USERS MAP, USERS IS A CLASS THAT HAS ACCESSORS THAT FETCH FROM DB
-        
-    }
-
+app.post("/login", (req, res) => {
     let username = req.body.username
     let password = req.body.password
+    if (!users.has(loginUsername)) {
+        res.redirect(307, "/?errorMessage=There are no registered users with this username")
+        return
+    }
+    let hash = users.get(loginUsername).password
+    bcrypt.compare(loginPassword, hash, (err, result) => {
+        if (result) {
+            // if correct login: send to openworld, with login information stored in the post request
+        } else {
+            res.redirect("/?errorMessage=Incorrect username or password!")
+        }
+    })
+})
+
+app.post("/createAccount", (req, res) => {
+    let createAccountUsername = req.body.createAccountUsername
+    let createAccountPassword = req.body.createAccountPassword
+    if (!createAccountUsername.length >= 4) {
+        res.redirect("/?errorMessage=Username must be greater than or equal to 4 characters!")
+        return
+    }
+    if (!createAccountUsername.length <= 10) {
+        res.redirect("/?errorMessage=Username must be less than or equal to 15 characters!")
+        return
+    }
+    if (!createAccountPassword.length >= 5) {
+        res.redirect("/?errorMessage=Password must be greater than or equal to 5 characters!")
+        return
+    }
+    if (!createAccountPassword.length <= 15) {
+        res.redirect("/?errorMessage=Password must be less than or equal to 15 characters!")
+        return
+    }
+    if (users.has(loginUsername)) {
+        res.redirect("/?errorMessage=There is already an account associated with this username")
+    }
+    // start to add the User to the DB
+    // add user to db: set username to given username, set password to hashed password
+    // reroute to starterPokemon.pug
+
+})
+
+app.post("/battle", (req, res) => {
+    let userPokemon = req.body.pokemon ? req.body.pokemon : "Zapdos"
+
+    let enemyPokemon = "Zapdos"
+    if (req.body.enemyName != undefined) {
+        enemyPokemon = req.body.enemyName
+    }
     if (!pokedex.has(userPokemon)) {
         res.send("Pokemon not found!")
         return
@@ -74,7 +94,7 @@ app.post("/battle", (req, res) => {
     for (let user of users.values()) {
         if (true || user.username == username && user.password == password) {
             users.get(user.username).pc[0] = pokedex.getNewPokemon(userPokemon)
-            
+
             res.render("battle-interface", {
                 user: user,
                 enemyPokemon: pokedex.getNewPokemon(enemyPokemon),
@@ -87,8 +107,10 @@ app.post("/battle", (req, res) => {
 })
 
 app.get("/", (req, res) => {
+    let errorMessage = req.query.errorMessage
     res.render("index", {
-        pokedex: pokedex
+        pokedex: pokedex,
+        errorMessage: errorMessage ? "Error: " + errorMessage : ""
     })
 })
 
@@ -104,18 +126,3 @@ io.on("connection", (socket) => {
         console.log("user disconnected :(")
     })
 })
-
-function hashPassword(password) {
-    const SALT_ROUNDS = 5
-    let returnHash = false
-    bcrypt.genSalt(SALT_ROUNDS, (err, salt) => {
-        bcrypt.hash(password, salt, (err, hash) => {
-            returnHash = hash
-        })
-    })
-    return returnHash
-}
-
-function comparePasswords(p1, p2) {
-    return bcrypt.compare(p1, p2)
-}

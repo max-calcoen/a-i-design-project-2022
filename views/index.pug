@@ -21,3 +21,4 @@ html(lang="en")
                 each pokemon in Array.from(pokedex.values())
                     option(value=pokemon.name) #{pokemon.name}
             input(type="submit" value="go!")
+            p#error #{errorMessage}
