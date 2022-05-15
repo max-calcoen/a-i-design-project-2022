@@ -36,24 +36,31 @@ export class BattleLogic {
     turn(pokemon1move, pokemon2move) {
         if (pokemon1move == 'Attempted Catch') {
             this.pokemon1.statusEffects.push({
-                    name: "Attempted Catch",
-                    canMove: false,
-                    dpround: 0,
-                    duration: 1
+                name: "Attempted Catch",
+                canMove: false,
+                dpround: 0,
+                duration: 1
             })
         }
-        if(pokemon1move == 'Successful Catch'){
+        if (pokemon1move == 'Successful Catch') {
             return
         }
-        if(pokemon1move == 'Chose New'){
+        if (pokemon1move == 'Chose New') {
             this.pokemon1.statusEffects.push({
                 name: "Chose New",
                 canMove: false,
                 dpround: 0,
                 duration: 1
-        })
+            })
         }
-        if(pokemon1move == 'Healed/Revived')
+        if (pokemon1move == 'Healed/Revived') {
+            this.pokemon1.statusEffects.push({
+                name: "Healed",
+                canMove: false,
+                dpround: 0,
+                duration: 1
+            })
+        }
         let p1level = this.pokemon1.level
         let p1power = pokemon1move.power
         let p1attack = this.pokemon1.currentStats.attack

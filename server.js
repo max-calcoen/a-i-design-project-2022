@@ -18,10 +18,19 @@ const server = createServer(app)
 const io = new Server(server)
 
 const SQL = await initSqlJs()
-const data = fs.readFileSync("./db.sqlite")
-let db = new SQL.Database(data)
-let database = new Database(db, fs, bcrypt)
-database.printUsers()
+let db
+let data
+let database
+fs.access("./db.sqlite", fs.F_OK, (err) => {
+    if (err) {
+        db = new SQL.Database()
+        database = new Database(db, fs, bcrypt)
+        return
+    }
+    data = fs.readFileSync("./db.sqlite")
+    db = new SQL.Database(data)
+    database = new Database(db, fs, bcrypt)
+})
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(PUBLIC_FILES_DIR))
@@ -52,7 +61,6 @@ app.get("/test", (req, res) => {
         errorMessage: ""
     })
 })
-
 let loginPassword
 app.post("/login", (req, res) => {
 
@@ -95,7 +103,7 @@ app.post("/createaccount", (req, res) => {
     }
     if (users.has(createAccountUsername)) {
         res.redirect("/?errorMessage=There is already an account associated with this username")
-        return 
+        return
     }
     // MAX:
     // start to add the User to the DB
@@ -137,7 +145,6 @@ app.post("/battle", (req, res) => {
     for (let user of users.values()) {
         if (true || user.username == username && user.password == password) {
             users.get(user.username).pc[0] = pokedex.getNewPokemon(userPokemon)
-
             res.render("battle-interface", {
                 user: user,
                 enemyPokemon: pokedex.getNewPokemon(enemyPokemon),

@@ -20,9 +20,8 @@ import {
 let userPokemon = pokedex.fromJson(user.pc[0])
 let enemyPokemon = pokedex.fromJSON(enemy)
 let battle = new BattleLogic(userPokemon, enemyPokemon)
-let chosenPokemon = []
-export let turnType 
-
+let chosenPokemon = user.pc
+export let turnType
 window.onload = () => {
     showOptions()
     updateHealth()
@@ -66,7 +65,7 @@ function showOptions() {
 
 function handleFightButtonClick() {
     resetButtonListeners()
-    
+
     let battleOptionsGrid = Array.from(document.getElementById("battleOptionsGrid").children)
     battleOptionsGrid.pop()
     for (let i = 0; i < userPokemon.moves.length; i++) {
@@ -107,21 +106,21 @@ function handleBagButtonClick() {
     resetButtonListeners
     let buttons = document.getElementById("battleOptionsGrid").children
     let labels = [{
-            name: "Heal",
-            types: ["Potion", "Super Potion", "Hyper Potion", "Max Potion"],
-        },
-        {
-            name: "Catch",
-            types: ["Pokeball",
-                "Great Ball",
-                "Ultra Ball",
-                "Master Ball",
-            ]
-        },
-        {
-            name: "Revive",
-            types: ["Revive", "Max Revive"],
-        }
+        name: "Heal",
+        types: ["Potion", "Super Potion", "Hyper Potion", "Max Potion"],
+    },
+    {
+        name: "Catch",
+        types: ["Pokeball",
+            "Great Ball",
+            "Ultra Ball",
+            "Master Ball",
+        ]
+    },
+    {
+        name: "Revive",
+        types: ["Revive", "Max Revive"],
+    }
     ]
     for (let i = 0; i < labels.length; i++) {
         buttons[i].innerText = labels[i].name
@@ -169,10 +168,10 @@ function handleChooseItem(itemClass, item) {
                 }
             }
         }
-        if (itemCLass == 'Pokeball') {
+        if (itemClass == 'Pokeball') {
             if (user.inventory.pokeballs.get(type) > 0) {
                 if (pokedex.get(pokeCollisionName).catch(balls.get(type))) {
-                    user.inventory.pokeballs.get(type) --
+                    user.inventory.pokeballs.get(type)--
                     turnType = 'Successful Catch'
                     let turnResult = battle.turn(turnType, enemyMove)
                     updateHealth()
@@ -180,7 +179,7 @@ function handleChooseItem(itemClass, item) {
                     enemyPokemon = turnResult.pokemon2
                 } else {
                     turnType = 'Attempted Catch'
-                    user.inventory.pokeballs.get(type) --
+                    user.inventory.pokeballs.get(type)--
                     alert('Oh no! ' + turnResult.pokemon2 + ' broke free!')
                     let turnResult = battle.turn(turnType, enemyMove)
                     updateHealth()
@@ -198,7 +197,6 @@ function handleChooseItem(itemClass, item) {
         }
     })
 }
-
 function createHealButtons(pokemon) {
     let newButton = document.createElement('button');
     li.innerText = pokemon.nick + ' hp: ' + pokemon.currentStats.health + '/' + pokemon.maxHP
@@ -222,6 +220,9 @@ function handleHealMenus(type, item) {
                     let turnResult = battle.turn(turnType, enemyMove)
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
+                    if (turnResult.winner != 0) {
+                        gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name)
+                    }
                 })
             }
         }
@@ -236,6 +237,10 @@ function handleHealMenus(type, item) {
                     let turnResult = battle.turn(turnType, enemyMove)
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
+                    if (turnResult.winner != 0) {
+                        gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name)
+                    }
+                    return
                 })
             }
         }
@@ -254,35 +259,42 @@ function handlePokemonButtonClick() {
             buttons[2].innerText = 'Send to Battle'
             buttons[2].addEventListener('click', event => {
                 let ppCounter = 0
-                for(let j = 0; j<4; j++){
+                for (let j = 0; j < 4; j++) {
                     ppCounter += chosenPokemon[i].moves[j].pp
                 }
-                if(userPokemon == chosenPokemon[i]){
+                if (userPokemon == chosenPokemon[i]) {
                     alert('This pokemon is already on the battlefield bozo')
                     showBackButton()
                 }
-                else if(chosenPokemon[i].currentStats.health == 0){
+                else if (chosenPokemon[i].currentStats.health == 0) {
                     alert('This pokemon is dead my guy')
                     showBackButton()
                 }
-                else if(ppCounter == 0){
-
+                else if (ppCounter == 0) {
+                    alert('This pokemon is exhausted and cant fight')
                 }
-                else{
+                else {
                     userPokemon = chosenPokemon[i]
                     alert(chosenPokemon[i] + ', I choose you!')
                     turnType = 'Chose New'
                     let turnResult = battle.turn(turnType, enemyMove)
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
+                    for (let i = 0; i < chosenPokemon.length; i++) {
+
+                    }
+                    if (turnResult.winner != 0) {
+
+                        gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name)
+                    }
                     showOptions()
-                } 
+                }
             })
             buttons[3].appendChild('li')
             buttons[3].appendChild('li')
             buttons[3].children[0].innerText = 'HP: ' + chosenPokemon[i].currentStats.health + '/' + chosenPokemon[i].maxHP
             for (let j = 0; j < chosenPokemon[i].moves[j].length; i++) {
-                buttons[3].children[1].innerText = 'PP: ' + chosenPokemon[i].moves[j].pp 
+                buttons[3].children[1].innerText = 'PP: ' + chosenPokemon[i].moves[j].pp
             }
             showBackButton()
         })
