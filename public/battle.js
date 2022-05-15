@@ -1,9 +1,21 @@
-import { BattleLogic } from "./models/battlelogic.js"
-import { pokedex } from "./dex/pokedex.js"
-import { imageMap } from "./itemImages.js"
-import { potions } from "./dex/items/potions.js"
-import { pokeballs } from "./dex/items/pokeballs.js"
-import { revives } from "./dex/items/revives.js"
+import {
+    BattleLogic
+} from "./models/battlelogic.js"
+import {
+    pokedex
+} from "./dex/pokedex.js"
+import {
+    imageMap
+} from "./itemImages.js"
+import {
+    potions
+} from "./dex/items/potions.js"
+import {
+    pokeballs
+} from "./dex/items/pokeballs.js"
+import {
+    revives
+} from "./dex/items/revives.js"
 
 let userPokemon = pokedex.fromJSON(user.pc[0])
 let enemyPokemon = pokedex.fromJSON(enemy)
@@ -49,6 +61,7 @@ function showOptions() {
     button.innerText = "Back to Main"
     hideBackButton()
 }
+
 function handleFightButtonClick() {
     resetButtonListeners()
     let battleOptionsGrid = Array.from(document.getElementById("battleOptionsGrid").children)
@@ -90,22 +103,24 @@ function handleBagButtonClick() {
     resetButtonListeners
     let buttons = document.getElementById("battleOptionsGrid").children
     let labels = [{
-        name: "Heal",
-        types: ["Potion", "Super Potion", "Hyper Potion", "Max Potion"],
-        action: "Use"
-    },
-    {
-        name: "Catch",
-        types: ["Pokeball",
-            "Great Ball",
-            "Ultra Ball",
-            "Master Ball",],
-    },
-    {
-        name: "Revive",
-        types: ["Revive", "Max Revive"],
-        image: null
-    }]
+            name: "Heal",
+            types: ["Potion", "Super Potion", "Hyper Potion", "Max Potion"],
+            action: "Use"
+        },
+        {
+            name: "Catch",
+            types: ["Pokeball",
+                "Great Ball",
+                "Ultra Ball",
+                "Master Ball",
+            ],
+        },
+        {
+            name: "Revive",
+            types: ["Revive", "Max Revive"],
+            image: null
+        }
+    ]
     for (let i = 0; i < labels.length; i++) {
         buttons[i].innerText = labels[i].name
         buttons[i].addEventListener("click", event => {
@@ -114,14 +129,14 @@ function handleBagButtonClick() {
     }
     showBackButton()
 }
+
 function handleBagSubmenus(subtypes) {
     resetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
     for (let i = 0; i < buttons.length - 1; i++) {
         if (subtypes[i] == undefined) {
             buttons[i].innerText = " "
-        }
-        else {
+        } else {
             buttons[i].innerText = subtypes[i]
             buttons[i].addEventListener("click", event => {
                 handleChooseItem(subtypes[0], subtypes[i])
@@ -132,6 +147,7 @@ function handleBagSubmenus(subtypes) {
 }
 
 export let caught = false
+
 function handleChooseItem(itemClass, item) {
 
     resetButtonListeners()
@@ -143,137 +159,143 @@ function handleChooseItem(itemClass, item) {
     buttons[1].innerHTML = imageMap.get(item)
     buttons[0].addEventListener("click", event => {
         if (itemClass == "Potion") {
-            if (user.inventory.potion.get(type) > 0) {
-                handleUseMenus()
+            if (user.inventory.potion.get(item) > 0) {
+                handleUseMenus(itemClass, item)
+            }
+            else{
+                return{
+                    success: false,
+                    message: 'you dont have any left bozo'
+                }
             }
         }
         if (itemCLass == 'Pokeball') {
             caught = false
             if (user.inventory.pokeballs.get(type) > 0) {
                 if (pokedex.get(pokeCollisionName).catch(balls.get(type))) {
-                    user.inventory.pokeballs.get(type)--
+                    user.inventory.pokeballs.get(type) --
                     caught = true
                     let turnResult = battle.turn(caught, enemyMove)
                     updateHealth()
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
-                }
-                else {
-                    user.inventory.pokeballs.get(type)--
-                    alert( 'Oh no! ' + turnResult.pokemon2 + ' broke free!')
+                } else {
+                    user.inventory.pokeballs.get(type) --
+                    alert('Oh no! ' + turnResult.pokemon2 + ' broke free!')
                     return
                 }
+            } else {
+                return {
+                    success: false,
+                    message: 'Bruh you dont have anymore ' + type + 's'
                 }
-                else {
-                    return {
-                        success: false,
-                        message: 'Bruh you dont have anymore ' + type + 's'
-                    }
-                }
-                
             }
+
+        }
     })
 }
+
 function createMenuItem(pokemon) {
     let newButton = document.createElement('button');
-    li.innerText = pokemon;
+    li.innerText = pokemon.nick + ' hp: ' + pokemon.currentStats.health + '/' + pokemon.maxHP
     return newButton;
 }
-function handleUseMenus(type, item){
+
+function handleUseMenus(type, item) {
     resetButtonListeners()
     let buttons = document.getElementById('battleOptionsGrid').children
-    buttons.splice(0, buttons.length)
-
-if(type == 'Potion'){
-    let healablePokemon = []
-    for(let i = 0; i < user.pc.length;i++){
-if(user.pc[i].currentStats.health > 0&& user.pc[i].currentStats.health < user.pc[i].maxHP){
-    healablePokemon.push(user.pc[i])
-}
+    for (let i = 0; i < buttons.length; i++) {
+        buttons.pop()
     }
-    for(let pokemon of healablePokemon){
-        buttons.appendChild(createMenuItem(pokemon))
+    if (type == 'Potion') {
+        for (let i = 0; i < user.pc.length; i++) {
+            if (user.pc[i].currentStats.health > 0 && user.pc[i].currentStats.health < user.pc[i].maxHP) {
+                buttons.appendChild(createMenuItem(user.pc[i])).addEventListener('click', event =>{
+                    return user.pc[i].heal(potions.get(item).amountToHeal)
+                })
+
+            }
+        }
+    } else {
+        let revivablePokemon = []
+        for (let i = 0; i < user.pc.length; i++) {
+            if (user.pc[i].currentStats.health == 0) {
+                revivablePokemon.push(user.pc[i])
+            }
+
+        }
+
+
     }
 }
-else{
-    let revivablePokemon = []
-    for(let i = 0; i < user.pc.length;i++){
-if(user.pc[i].currentStats.health == 0){
-    revivablePokemon.push(user.pc[i])
-}
-
-}
-    
-    
-}
-// TODO
-function handlePokemonButtonClick() {
-    let buttons = document.getElementById("battleOptionsGrid").children
-    buttons.splice(0, 4);
-    let menuArea = document.getElementById("battleOptionsGrid")
-    user.pc.sort()
-    for (let i = 0; i < user.pc.length; i++)
-        menuArea.appendChild(document.createTextNode("Nickname: " + user.pc[i].nick))
-    showBackButton()
-}
-
-// TODO
-
-function handleRunButtonClick() {
-    resetButtonListeners()
-    sendData("/openworld", "openworld", "POST")
-}
-
-function sendData(path, name, method = 'post') {
-
-    const form = document.createElement('form');
-    form.method = method;
-    form.action = path;
-    document.body.appendChild(form);
-
-    const formField = document.createElement('input');
-    formField.type = 'hidden';
-    formField.name = name;
-
-
-    form.appendChild(formField);
-
-    form.submit();
-}
-
-/**
- * Shows back button
- */
-function showBackButton() {
-    document.getElementById("back").classList.remove("hidden")
-}
-
-/**
- * Hides back button
- */
-function hideBackButton() {
-    document.getElementById("back").classList.add("hidden")
-}
-
-function handleBackButtonClick() {
-    resetButtonListeners()
-    showOptions()
-    let buttons = document.getElementsByTagName("button")
-    for (let button of buttons) {
-        button.classList.remove("hidden")
+    // TODO
+    function handlePokemonButtonClick() {
+        let buttons = document.getElementById("battleOptionsGrid").children
+        buttons.splice(0, 4);
+        let menuArea = document.getElementById("battleOptionsGrid")
+        user.pc.sort()
+        for (let i = 0; i < user.pc.length; i++)
+            menuArea.appendChild(document.createTextNode("Nickname: " + user.pc[i].nick))
+        showBackButton()
     }
-    hideBackButton()
-}
 
-function gameOver(winner, text = winner + " Won!") {
-    showOptions()
-    resetButtonListeners()
-    document.getElementById("storyText").innerText = text
-}
+    // TODO
 
-function updateHealth() {
-    document.getElementById("maxNumPlayerHealth").innerText = userPokemon.currentStats.maxHealth
-    document.getElementById("currentNumPlayerHealth").innerText = userPokemon.currentStats.health
-    document.documentElement.style.setProperty("--player-health", (100 * userPokemon.currentStats.health / userPokemon.currentStats.maxHealth) + "%")
-    document.documentElement.style.setProperty("--enemy-health", (100 * enemyPokemon.currentStats.health / enemyPokemon.currentStats.maxHealth) + "%")
-}
+    function handleRunButtonClick() {
+        resetButtonListeners()
+        sendData("/openworld", "openworld", "POST")
+    }
+
+    function sendData(path, name, method = 'post') {
+
+        const form = document.createElement('form');
+        form.method = method;
+        form.action = path;
+        document.body.appendChild(form);
+
+        const formField = document.createElement('input');
+        formField.type = 'hidden';
+        formField.name = name;
+
+
+        form.appendChild(formField);
+
+        form.submit();
+    }
+
+    /**
+     * Shows back button
+     */
+    function showBackButton() {
+        document.getElementById("back").classList.remove("hidden")
+    }
+
+    /**
+     * Hides back button
+     */
+    function hideBackButton() {
+        document.getElementById("back").classList.add("hidden")
+    }
+
+    function handleBackButtonClick() {
+        resetButtonListeners()
+        showOptions()
+        let buttons = document.getElementsByTagName("button")
+        for (let button of buttons) {
+            button.classList.remove("hidden")
+        }
+        hideBackButton()
+    }
+
+    function gameOver(winner, text = winner + " Won!") {
+        showOptions()
+        resetButtonListeners()
+        document.getElementById("storyText").innerText = text
+    }
+
+    function updateHealth() {
+        document.getElementById("maxNumPlayerHealth").innerText = userPokemon.currentStats.maxHealth
+        document.getElementById("currentNumPlayerHealth").innerText = userPokemon.currentStats.health
+        document.documentElement.style.setProperty("--player-health", (100 * userPokemon.currentStats.health / userPokemon.currentStats.maxHealth) + "%")
+        document.documentElement.style.setProperty("--enemy-health", (100 * enemyPokemon.currentStats.health / enemyPokemon.currentStats.maxHealth) + "%")
+    }
