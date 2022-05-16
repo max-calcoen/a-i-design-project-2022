@@ -20,6 +20,23 @@ window.onload = () => {
     showOptions()
     updateHealth()
 }
+let user = {
+    pc: [],
+    inventory: new Map()
+}
+const items = [
+    "Pokeball",
+    "Great Ball",
+    "Ultra Ball",
+    "Master Ball",
+    "Potion", 
+    "Super Potion", 
+    "Hyper Potion", 
+    "Max Potion",
+    "Revive",
+    "Max Revive"
+]
+
 /**
  * Removes event listeners on all buttons
  */
@@ -145,15 +162,10 @@ function handleChooseItem(itemClass, item) {
     for (let i = 0; i < buttons.length - 1; i++) {
         buttons[i].innerText = " "
     }
-    if (itemClass == 'Potion') {
-        buttons[0].innerText = "USE: " + user.inventory.potions.get(item) + ' left'
-    }
-    if (itemClass == 'Pokeball') {
-        buttons[0].innerText = "USE: " + user.inventory.pokeballs.get(item) + ' left'
-    }
-    if (itemClass == 'Revive') {
-        buttons[0].innerText = "USE: " + user.inventory.pokeballs.get(item) + ' left'
-    }
+    
+        buttons[0].innerText = "USE: " + user.inventory.get(item) + ' left'
+
+   
 
     buttons[1].innerHTML = imageMap.get(item)
     buttons[0].addEventListener("click", event => {
@@ -316,7 +328,28 @@ function sendData(path, values, names, method = "POST") {
     }
     form.submit()
 }
+function updateBattleUser(){
+    for(let i = 0; i< items.length;i++){
+        user.inventory.set(items[i], database.getInventoryByUserId(userId).get(items[i]))
+    } 
+    user.pc.splice(0, user.pc.length)
+    for(let i = 1; i < database.getPcByUserId(userId).length; i++){
+        user.pc.push(pokedex.fromJSON(database.getPcByUserId(userId[i])))
+    }
+}
 
+function updateDatabaseUser(){
+    for(let i = 1; i < database.getPcByUserId(userId).length; i++){
+       database.getPcByUserId
+    }
+    
+    for(let i = 0; i< items.length;i++){
+        database.updateInventoryByUserId(userId, items[i], user.pokeballs.get(items[i]))
+    }
+    for(let g = 0; g<user.pc.length; g++){
+       //TODO: link to database
+    }
+}
 /**
  * Shows back button
  */

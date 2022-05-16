@@ -1,34 +1,9 @@
 {
-  "name": "design-project",
-  "version": "1.0.0",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo 'Error: no test specified' && exit 1",
-    "start": "node server.js"
-  },
-  "author": "Max Calcoen, Everett Villager, Ben Wang",
-  "type": "module",
-  "license": "ISC",
+  "name": "node.js",
+  "version": "0.0.1-security",
+  "description": "security holding package",
+  "repository": "npm/security-holder",
   "dependencies": {
-    "bcrypt": "^5.0.1",
-    "body-parser": "^1.20.0",
-    "express": "^4.17.3",
-    "express.js": "^1.0.0",
-    "fs": "^0.0.1-security",
-    "http": "^0.0.1-security",
-    "node.js": "^0.0.1-security",
-    "package": "^1.0.1",
-    "pug": "^3.0.2",
-    "socket.io": "^4.4.1",
-    "sql.js": "^1.6.2"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/max-calcoen/a-i-design-project-2022.git"
-  },
-  "bugs": {
-    "url": "https://github.com/max-calcoen/a-i-design-project-2022/issues"
-  },
-  "homepage": "https://github.com/max-calcoen/a-i-design-project-2022#readme",
-  "description": ""
+    "express": "^4.18.1"
+  }
 }

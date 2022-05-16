@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
         this.#bcrypt.hash(password, SALT_ROUNDS, (err, hash) => {
             password = hash
             let sqlstr = "INSERT INTO users(`id`, `username`, `password`, `inventoryid`, `pcid`) VALUES(" + this.#idCount + ", '" + username + "', '" + password + "', " + this.#idCount + ", " + this.#idCount + ");\
-            INSERT INTO inventory(`id`, `pokeballCount`, `greatballCount`, `ultraballCount`, `potionsCount`, `superpotionsCount`, `hyperpotionsCount`, `maxpotionsCount`) VALUES(" + this.#idCount + ", 0, 0, 0, 0, 0, 0, 0);\
+            INSERT INTO inventory(`id`, `Pokeballs`, `Great Balls`, `Ultra Balls`, `Master Balls`,`Potions`, `Super Potions`, `Hyper Potions`, `Max Potions`) VALUES(" + this.#idCount + ", 0, 0, 0, 0, 0, 0, 0);\
             INSERT INTO pc(`id`, `pokemon1`, `pokemon2`, `pokemon3`, `pokemon4`) VALUES(" + this.#idCount + ", null, null, null, null);"
             this.#db.run(sqlstr)
             this.writeToDisk()
@@ -79,8 +79,8 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
     updateInventoryByUserId(userId, name, quantity) {
         this.fetchFromDisk()
         let inventoryId = this.getInventoryByUserId(userId)[0]
-        let nameIndex = new Map([["pokeballCount", 1], ["greatballCount", 2], ["ultraballCount", 3], ["potionsCount", 4], ["superpoitionsCount", 5], ["hyperpotionCount", 6], ["maxpotionsCount", 7]])
-        if (!nameIndex.has(name)) throw new Error("wrong name- put in the form \"pokeballCount\" or similar")
+        let nameIndex = new Map([["Pokeballs", 1], ["Great Balls", 2], ["Ultra Balls", 3], ["Master Balls", 1], ["Potions", 4], ["Super Potions", 5], ["Hyper Potions", 6], ["Max Potions", 7]])
+        if (!nameIndex.has(name)) throw new Error("wrong name- put in the form \"Pokeballs\" or similar")
         let storedQuantity = this.getInventoryByUserId(userId)[nameIndex.get(name)]
         if (storedQuantity + quantity < 0) return false
         let sqlstr = "UPDATE `inventory` SET " + name + "=" + (storedQuantity + quantity) + " WHERE `id`=" + inventoryId + ";"
