@@ -176,7 +176,7 @@ function handleChooseItem(itemClass, item) {
         if (itemClass == 'Pokeball') {
             if (user.inventory.pokeballs.get(item) > 0) {
                 if (pokedex.get(userPokemon.name).catch(pokeballs.get(item))) {
-                    console.log(user.inventory.pokeballs)
+                    user.inventory.pokeballs.set(item, user.inventory.pokeballs.get(item) - 1)
                     turnType = 'Successful Catch'
                     user.pc.push(enemyPokemon)
                     let turnResult = battle.turn(turnType, enemyMove)
@@ -185,7 +185,7 @@ function handleChooseItem(itemClass, item) {
                     enemyPokemon = turnResult.pokemon2
                 } else {
                     turnType = 'Attempted Catch'
-                    user.inventory.pokeballs.get(item)--
+                    user.inventory.pokeballs.set(item, user.inventory.pokeballs.get(item) - 1)
                     alert('Oh no! ' + turnResult.pokemon2 + ' broke free!')
                     let turnResult = battle.turn(turnType, enemyMove)
                     updateHealth()
