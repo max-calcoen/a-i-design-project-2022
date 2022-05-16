@@ -20,7 +20,7 @@ const io = new Server(server)
 const SQL = await initSqlJs()
 let db
 let data
-export let database
+let database
 
 fs.access("./db.sqlite", fs.F_OK, (err) => {
     if (err) {
@@ -46,6 +46,21 @@ users.set("", new User("", "e")) // THIS IS TEST USER
 
 
 /*
+updateInventoryByUserId(userId, name, quantity) {
+        this.fetchFromDisk()
+        let inventoryId = this.getInventoryByUserId(userId)[0]
+        let nameIndex = new Map([["pokeballCount", 1], ["greatballCount", 2], ["ultraballCount", 3], ["potionsCount", 4], ["superpoitionsCount", 5], ["hyperpotionCount", 6], ["maxpotionsCount", 7]])
+        if (!nameIndex.has(name)) throw new Error("wrong name- put in the form \"pokeballCount\" or similar")
+        let storedQuantity = this.getInventoryByUserId(userId)[nameIndex.get(name)]
+        if (storedQuantity + quantity < 0) return false
+        let sqlstr = "UPDATE `inventory` SET " + name + "=" + (storedQuantity + quantity) + " WHERE `id`=" + inventoryId + ";"
+        this.#db.run(sqlstr)
+        this.writeToDisk()
+        return true
+    }
+*/
+/*
+database.updateInventoryByUserId(userId, "Pokeball", 20)
 
 user.inventory.pokeballs.set("Pokeball", 20)
 user.inventory.pokeballs.set("Great Ball", 10)
@@ -58,9 +73,9 @@ user.inventory.potions.set("Max Potion", 5)
 user.inventory.revives.set("Revive", 30)
 user.inventory.revives.set("Max Revive", 10)
 
-
-
 */
+
+
 app.get("/battle", (req, res) => {
     res.send("Error: send post request from index")
 })

@@ -3,22 +3,32 @@ export class Database {
     #idCount = 0
     #fs
     #bcrypt
-    constructor(db, fs, bcrypt) {
-        this.#db = db
-        this.#fs = fs
-        this.#bcrypt = bcrypt
-        let sqlstr = "CREATE TABLE IF NOT EXISTS users(`id` int, `username` varchar(15), `password` char(60), `inventoryid` int, `pcid` int);\
+    constructor(fs, bcrypt) {
+
+        fs.access("./db.sqlite", fs.F_OK, (err) => {
+            if (err) {
+                db = new SQL.Database()
+                this.#db = db
+                this.#fs = fs
+                this.#bcrypt = bcrypt
+                let sqlstr = "CREATE TABLE IF NOT EXISTS users(`id` int, `username` varchar(15), `password` char(60), `inventoryid` int, `pcid` int);\
 CREATE TABLE IF NOT EXISTS inventory(`id` int, `pokeballCount` int, `greatballCount` int, `ultraballCount` int, `potionsCount` int, `superpotionsCount` int, `hyperpotionsCount` int, `maxpotionsCount` int);\
 CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nvarchar(4000), `pokemon3` nvarchar(4000), `pokemon4` nvarchar(4000));"
-        this.#db.run(sqlstr)
-        sqlstr = "SELECT MAX(id) FROM users"
-        let result = db.exec(sqlstr)
-        if (result[0].values[0][0] == null) {
-            this.#idCount = 0
-        } else {
-            this.#idCount = result[0].values[0][0] + 1
-        }
-        this.writeToDisk()
+                this.#db.run(sqlstr)
+                sqlstr = "SELECT MAX(id) FROM users"
+                let result = db.exec(sqlstr)
+                if (result[0].values[0][0] == null) {
+                    this.#idCount = 0
+                } else {
+                    this.#idCount = result[0].values[0][0] + 1
+                }
+                this.writeToDisk()
+                return
+            }
+            data = fs.readFileSync("./db.sqlite")
+            db = new SQL.Database(data)
+            database = new Database(db, fs, bcrypt)
+        })
     }
 
     /**
@@ -27,6 +37,7 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
      * @returns {array} a pc in the form [pcid, {json} pokemon1, {json} pokemon2, {json} pokemon3, {json} pokemon4]
      */
     getPcByUserId(id) {
+        this.fetchFromDisk()
         let sqlstr = "SELECT `pcid` FROM `users` WHERE `id`='" + id + "';"
         let result = this.#db.exec(sqlstr)
         if (result.length == 0) {
@@ -44,6 +55,7 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
      * @param {string} password password (to be encrypted with bcrypt)
      */
     createNewUser(username, password) {
+        this.fetchFromDisk()
         // tunable for encryption
         const SALT_ROUNDS = 5
         this.#bcrypt.hash(password, SALT_ROUNDS, (err, hash) => {
@@ -65,6 +77,7 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
      * @returns true on success, false on error
      */
     updateInventoryByUserId(userId, name, quantity) {
+        this.fetchFromDisk()
         let inventoryId = this.getInventoryByUserId(userId)[0]
         let nameIndex = new Map([["pokeballCount", 1], ["greatballCount", 2], ["ultraballCount", 3], ["potionsCount", 4], ["superpoitionsCount", 5], ["hyperpotionCount", 6], ["maxpotionsCount", 7]])
         if (!nameIndex.has(name)) throw new Error("wrong name- put in the form \"pokeballCount\" or similar")
@@ -81,6 +94,7 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
      * @returns {array} array containing inventory data, in the form 
      */
     getInventoryByUserId(userId) {
+        this.fetchFromDisk()
         let sqlstr = "result.shift()FROM `inventory` WHERE `id`=" + inventoryId + ";"
         let result = this.#db.exec(sqlstr)
         return result
@@ -92,6 +106,7 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
      * @param {Pokemon} pokemon pokemon to add to pc
      */
     insertPokemonIntoUserPC(userId, pokemon) {
+        this.fetchFromDisk()
         let pcId = this.getPcByUserId(userId)[0]
         let sqlstr = "SELECT `pokemon1`, `pokemon2`, `pokemon3`, `pokemon4` FROM `pc` WHERE id=" + pcId + ";"
         let result = this.#db.exec(sqlstr)
@@ -127,6 +142,7 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
      * @returns {array} array containing a user's data, in the form [id, username, password, inventoryid, pcid]
      */
     getUserByUserId(userId) {
+        this.fetchFromDisk()
         let sqlstr = "SELECT * FROM `users` WHERE `id`='" + userId + "'"
         let result = this.#db.exec(sqlstr)
         return result[0].values[0]
@@ -145,12 +161,14 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
      * Clears user data
      */
     resetUserTable() {
+        this.fetchFromDisk()
         let sqlstr = "DELETE FROM users;"
         this.#db.run(sqlstr)
         this.writeToDisk()
     }
 
     get users() {
+        this.fetchFromDisk()
         let sqlstr = "SELECT * FROM users;"
         let result = this.#db.exec(sqlstr)
         if (result.length == 0) {
@@ -160,12 +178,14 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
     }
     //#region debugging tools
     printUsers() {
+        this.fetchFromDisk()
         let sqlstr = "SELECT * FROM `users`"
         let result = this.#db.exec(sqlstr)
         console.dir(result, { depth: null })
     }
 
     printPcs() {
+        this.fetchFromDisk()
         let sqlstr = "SELECT * FROM `pc`"
         let result = this.#db.exec(sqlstr)
         console.log(result)
@@ -173,11 +193,10 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
     }
 
     printInventory() {
+        this.fetchFromDisk()
         let sqlstr = "SELECT * FROM `inventory`"
         let result = this.#db.exec(sqlstr)
         console.dir(result, { depth: null })
     }
     //#endregion
-
-
 }
