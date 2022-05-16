@@ -59,6 +59,34 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
     }
 
     /**
+     * @param {int} userId user id
+     * @param {string} name name of item
+     * @param {int} quantity quantity of item to add
+     * @returns true on success, false on error
+     */
+    updateInventoryByUserId(userId, name, quantity) {
+        let inventoryId = this.getInventoryByUserId(userId)[0]
+        let nameIndex = new Map([["pokeballCount", 1], ["greatballCount", 2], ["ultraballCount", 3], ["potionsCount", 4], ["superpoitionsCount", 5], ["hyperpotionCount", 6], ["maxpotionsCount", 7]])
+        if (!nameIndex.has(name)) throw new Error("wrong name- put in the form \"pokeballCount\" or similar")
+        let storedQuantity = this.getInventoryByUserId(userId)[nameIndex.get(name)]
+        if (storedQuantity + quantity < 0) return false
+        let sqlstr = "UPDATE `inventory` SET " + name + "=" + (storedQuantity + quantity) + " WHERE `id`=" + inventoryId + ";"
+        this.#db.run(sqlstr)
+        this.writeToDisk()
+        return true
+    }
+
+    /**
+     * @param {int} userId user id
+     * @returns {array} array containing inventory data, in the form 
+     */
+    getInventoryByUserId(userId) {
+        let sqlstr = "result.shift()FROM `inventory` WHERE `id`=" + inventoryId + ";"
+        let result = this.#db.exec(sqlstr)
+        return result
+    }
+    
+    /**
      * Inserts the given Pokemon into the given user's PC
      * @param {int} userId userId, used to find correct pc
      * @param {Pokemon} pokemon pokemon to add to pc
@@ -78,6 +106,19 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
         this.#db.run(sqlstr)
         this.writeToDisk()
         return true
+    }
+
+    fetchFromDisk() {
+        fs.access("./db.sqlite", fs.F_OK, (err) => {
+            if (err) {
+                db = new SQL.Database()
+                this = new Database(db, fs, bcrypt)
+                return
+            }
+            data = fs.readFileSync("./db.sqlite")
+            db = new SQL.Database(data)
+            this = new Database(db, fs, bcrypt)
+        })
     }
 
     /**
@@ -127,6 +168,7 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
     printPcs() {
         let sqlstr = "SELECT * FROM `pc`"
         let result = this.#db.exec(sqlstr)
+        console.log(result)
         console.dir(result, { depth: null })
     }
 

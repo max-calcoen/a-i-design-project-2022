@@ -44,6 +44,23 @@ app.set("view engine", "pug")
 export let users = new Map()
 users.set("", new User("", "e")) // THIS IS TEST USER
 
+
+/*
+
+user.inventory.pokeballs.set("Pokeball", 20)
+user.inventory.pokeballs.set("Great Ball", 10)
+user.inventory.pokeballs.set("Ultra Ball", 5)
+user.inventory.pokeballs.set("Master Ball", 1)
+user.inventory.potions.set("Potion", 20)
+user.inventory.potions.set("Super Potion", 15)
+user.inventory.potions.set("Hyper Potion", 10)
+user.inventory.potions.set("Max Potion", 5)
+user.inventory.revives.set("Revive", 30)
+user.inventory.revives.set("Max Revive", 10)
+
+
+
+*/
 app.get("/battle", (req, res) => {
     res.send("Error: send post request from index")
 })
@@ -64,19 +81,25 @@ app.post("/openworld", (req, res) => {
 app.post("/login", (req, res) => {
     let username = req.body.username
     let password = req.body.password
-    let userid
+    let userId
+    console.log("DATABASE USERS: " + database.users)
     for (let user of database.users) {
+        console.log(user)
         if (user[1] == username) {
-            userid = user[0]
-            break
+            userId = user[0]
         }
-        res.redirect(307, "/login?errorMessage=There are no registered users with this username")
+    }
+    if (!userId) {
+        res.redirect(307, "/login?errorMessage=There are no registered users with this username") // Not working correctly
         return
     }
-    let hash = database.getUserByUserId(userid)[2]
+    console.log(userId)
+    let hash = database.getUserByUserId(userId)[2]
     bcrypt.compare(password, hash, (err, result) => {
         if (result) {
-            res.redirect(307, "/openworld")
+            res.render("openworld", {
+                userId: userId
+            })
         } else {
             res.redirect("/?errorMessage=Incorrect username or password!")
         }

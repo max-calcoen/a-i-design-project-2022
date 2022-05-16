@@ -6,26 +6,16 @@ import { potions } from "./dex/items/potions.js"
 import { pokeballs } from "./dex/items/pokeballs.js"
 import { revives } from "./dex/items/revives.js"
 
-
+let database = new Database()
 // FIXME: NEEDS TO CHANGE
 
-/*
-user.inventory.pokeballs.set("Pokeball", 20)
-user.inventory.pokeballs.set("Great Ball", 10)
-user.inventory.pokeballs.set("Ultra Ball", 5)
-user.inventory.pokeballs.set("Master Ball", 1)
-user.inventory.potions.set("Potion", 20)
-user.inventory.potions.set("Super Potion", 15)
-user.inventory.potions.set("Hyper Potion", 10)
-user.inventory.potions.set("Max Potion", 5)
-user.inventory.revives.set("Revive", 30)
-user.inventory.revives.set("Max Revive", 10)
-*/
 
+userPokemon = pokedex.fromJSON(userPokemon)
+enemyPokemon = pokedex.fromJSON(enemyPokemon)
 
 let battle = new BattleLogic(userPokemon, enemyPokemon)
 let chosenPokemon = userPokemon
-export let turnType
+let turnType
 window.onload = () => {
     showOptions()
     updateHealth()
@@ -187,6 +177,7 @@ function handleChooseItem(itemClass, item) {
                     updateHealth()
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
+                    return getNewPokemon(enemyPokemon)
                 } else {
                     turnType = 'Attempted Catch'
                     user.inventory.pokeballs.set(item, user.inventory.pokeballs.get(item) - 1)
@@ -213,7 +204,7 @@ function handleHealMenus(type, item) {
     if (type == "Potion") {
         for (let i = 0; i < buttons.length; i++) {
             buttons[i].innerText = user.pc[i].name
-            if (user.pc[i].currentStats.health > 0 && user.pc[i].currentStats.health < user.pc[i].maxHP) {
+            if (user.pc[i].currentStats.health > 0 && user.pc[i].currentStats.health < user.pc[i].currentStats.maxHealth) {
                 buttons[i].addEventListener('click', event => {
                     resetButtonListeners();
                     showOptions();
@@ -243,7 +234,7 @@ function handleHealMenus(type, item) {
                     resetButtonListeners();
                     showOptions();
                     turnType = 'Healed/Revived'
-                    user.pc[i].heal(potions.get(item).percentHeal * user.pc[i].maxHP)
+                    user.pc[i].heal(potions.get(item).percentHeal * user.pc[i].currentStats.maxHealth)
                     user.inventory.revives.set(item, user.inventory.revives.get(item) - 1)
                     let turnResult = battle.turn(turnType, enemyMove)
                     userPokemon = turnResult.pokemon1
@@ -332,7 +323,36 @@ function sendData(path, values, names, method = "POST") {
 function showBackButton() {
     document.getElementById("back").classList.remove("hidden")
 }
-
+function getNewPokemon(newPokemon){
+    let buttons = document.getElementById('battleOptionsGrid').children
+    resetButtonListeners()
+    for(let i = 0; i<buttons.length; i++){
+        buttons[i].innerText = ' '
+    }
+    buttons[0].innerText = 'Keep'
+    buttons[0].addEventListener('click', event => {
+        if(user.pc.length == 4){
+            //need to link to pc
+            resetButtonListeners()
+            for(let i = 0; i< buttons.length;i++){
+                buttons[i].innerText = user.pc[i]
+                alert('Click on the pokemon you want to release')
+                buttons[i].addEventListener('click', event =>{
+                    
+                })
+            }
+        }
+        else{
+            user.pc.push(newPokemon)
+        }
+    })
+    buttons[1].innerText = 'Release'
+    buttons[1].addEventListener('click', event =>{
+        alert(newPokemon + ', Be Free!')
+        showOptions()
+        return
+    })
+}
 /**
  * Hides back button
  */

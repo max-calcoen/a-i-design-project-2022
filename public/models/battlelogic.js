@@ -1,5 +1,4 @@
 import { inflictEffects } from "./move.js"
-import { turnType } from "../battle.js"
 export class BattleLogic {
     constructor(pokemon1, pokemon2) {
         this.pokemon1 = pokemon1
@@ -34,6 +33,7 @@ export class BattleLogic {
      */
     // TODO: implement bag, pokemon, run, and status effects (including turn)
     turn(pokemon1move, pokemon2move) {
+        console.log(pokemon1move)
         if (pokemon1move == 'Attempted Catch') {
             this.pokemon1.statusEffects.push({
                 name: "Attempted Catch",
@@ -71,7 +71,6 @@ export class BattleLogic {
         let p1stab = 1
         if (this.pokemon1.types[0] == pokemon1move.type) p1stab = 1.5
 
-        console.log(this.pokemon1.types, this.pokemon2.types)
         let p1type = BattleLogic.getEffectiveness(pokemon1move.type, this.pokemon2.types)
 
         let p1damage = Math.floor(((((2 * p1level / 5) + 2) * p1power * p1attack / p2def) / 50 + 2) * p1crit * p1rand * p1stab * p1type)
@@ -125,7 +124,6 @@ export class BattleLogic {
                     damageResult = this.pokemon1.takeDamage(p2damage)
                     if (pokemon2move.isSpecial && inflictEffects.get(pokemon2move.type) != null) {
                         this.pokemon1.statusEffects.push(effectv1)
-
                     }
                     alert(`${this.pokemon2.name} used ${pokemon2move.name}!`)
                     if (p2type > 1) {
@@ -169,6 +167,30 @@ export class BattleLogic {
                     }
                 } else {
                     alert(`${this.pokemon2.name}'s attack missed!`)
+                }
+            }
+            if (this.pokemon1.canMove) {
+                this.#dealWithEffects(this.pokemon2)
+                if (pokemon1move.accuracy > Math.random() * 101) {
+                    damageResult = this.pokemon2.takeDamage(p1damage)
+                    if (pokemon1move.isSpecial && inflictEffects.get(pokemon1move.type) != null) {
+                        this.pokemon2.statusEffects.push(effectv2)
+                    }
+                    alert(`${this.pokemon1.name} used ${pokemon1move.name} and did ${p1damage} damage!`)
+                    if (p1type > 1) {
+                        alert("It was super effective!")
+                    } else if (p1type > 1) {
+                        alert("It was not very effective!")
+                    }
+                    if (damageResult) {
+                        return {
+                            pokemon1: this.pokemon1,// live share ending
+                            pokemon2: this.pokemon2,
+                            winner: 2
+                        }
+                    }
+                } else {
+                    alert(`${this.pokemon1.name}'s attack missed!`)
                 }
             }
         }
