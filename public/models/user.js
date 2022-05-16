@@ -4,7 +4,7 @@ export class User {
     constructor(username, password) {
         this.username = username
         this.password = password
-        this.pc = [pokedex.get('Bulbasaur'), pokedex.get('Charmander'), pokedex.get('Pikachu'), pokedex.get('Squirtle')]
+        this.pc = []
         this.inventory = {
             pokeballs: new Map(),
             potions: new Map(),

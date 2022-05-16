@@ -6,7 +6,7 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         link(rel="stylesheet", href="/base.css")
         script(type="text/javascript").
-            //- let user = !{JSON.stringify(user)}
+            let user = !{JSON.stringify(user)}
             let enemy = !{JSON.stringify(enemyPokemon)}
         script(type="module" src="../battle.js")
         title Battle

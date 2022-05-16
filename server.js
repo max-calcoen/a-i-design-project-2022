@@ -31,7 +31,9 @@ fs.access("./db.sqlite", fs.F_OK, (err) => {
     data = fs.readFileSync("./db.sqlite")
     db = new SQL.Database(data)
     database = new Database(db, fs, bcrypt)
+    database.insertPokemonIntoUserPC(0, pokedex.getNewPokemon("Raichu"))
 })
+
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(PUBLIC_FILES_DIR))
@@ -48,6 +50,12 @@ app.get("/battle", (req, res) => {
 })
 
 app.post("/openworld", (req, res) => {
+    let userId = req.body.userId
+    console.log(userId)
+    if (req.body.pokemon != undefined || req.body.pokemon != null) {
+        pokedex.getNewPokemon(req.body.pokemon)
+        database.insertPokemonIntoUserPC(userId, pokedex.getNewPokemon(req.body.pokemon))
+    }
     res.render("openworld")
 })
 
@@ -66,9 +74,7 @@ app.post("/login", (req, res) => {
         res.redirect(307, "/login?errorMessage=There are no registered users with this username")
         return
     }
-    let hash = database.getUserById(userid)[2]
-
-    // let hash = database.users.get(username).password
+    let hash = database.getUserByUserId(userid)[2]
     bcrypt.compare(password, hash, (err, result) => {
         if (result) {
             res.redirect(307, "/openworld")
@@ -76,7 +82,6 @@ app.post("/login", (req, res) => {
             res.redirect("/?errorMessage=Incorrect username or password!")
         }
     })
-
 })
 
 app.post("/createaccount", (req, res) => {
@@ -111,16 +116,23 @@ app.post("/createaccount", (req, res) => {
 })
 
 app.post("/battle", (req, res) => {
-    let userPokemon = req.body.pokemon ? req.body.pokemon : "Zapdos"
+    let enemyPokemon;
+    let userId = req.body.userId;
 
-    let enemyPokemon = "Zapdos"
+    // let userPokemon = database.getPcByUserId(userId)[1];
+    let userPokemon = "Squirtle"
+
+
     if (req.body.enemyName != undefined) {
         enemyPokemon = req.body.enemyName
+    } else {
+        enemyPokemon = "Charmander"
     }
     if (!pokedex.has(userPokemon)) {
-        res.send("Pokemon not found!")
+        res.send("Pokemon Not Found!")
         return
     }
+
     for (let user of users.values()) {
         if (true || user.username == username && user.password == password) {
             users.get(user.username).pc[0] = pokedex.getNewPokemon(userPokemon)
@@ -142,7 +154,6 @@ app.post("/", (req, res) => {
         errorMessage: errorMessage ? "Error: " + errorMessage : ""
     })
 })
-
 server.listen(SERVER_PORT, function () {
     console.log(`Server listening on port ${SERVER_PORT}`)
 })

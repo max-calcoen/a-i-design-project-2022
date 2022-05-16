@@ -1,5 +1,3 @@
-import { database } from "../../server";
-
 let pokemon = 0;
 let pokeName = ""
 
@@ -21,19 +19,19 @@ function caller() {
     if (pokemon == 3) {
         pokeName = "Charmander"
     }
-    // MAX: database.addPokemonToPc() // Takes pokemon object, and user ID
     sendData("/openworld", pokeName, "pokemon", "POST")
-    function sendData(path, value, name, method = "post") {
-        const form = document.createElement("form");
-        form.method = method
-        form.action = path
-        document.body.appendChild(form)
-        const formField = document.createElement("input")
-        formField.type = "hidden"
-        formField.name = name
-        formField.value = value
-        form.appendChild(formField)
-        form.submit();
-    }
 
+}
+
+function sendData(path, value, name, method = "post") {
+    const form = document.createElement("form");
+    form.method = method
+    form.action = path
+    document.body.appendChild(form)
+    const formField = document.createElement("input")
+    formField.type = "hidden"
+    formField.name = name
+    formField.value = value
+    form.appendChild(formField)
+    form.submit();
 }

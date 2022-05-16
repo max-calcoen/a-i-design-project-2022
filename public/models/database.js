@@ -26,16 +26,16 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
      * @param {string} username username
      * @returns {array} a pc in the form [pcid, {json} pokemon1, {json} pokemon2, {json} pokemon3, {json} pokemon4]
      */
-    getPcByUsername(username) {
-        let sqlstr = "SELECT `pcid` FROM `users` WHERE `username`='" + username + "';"
+    getPcByUserId(id) {
+        let sqlstr = "SELECT `pcid` FROM `users` WHERE `id`='" + id + "';"
         let result = this.#db.exec(sqlstr)
         if (result.length == 0) {
             return false
         }
         result = this.#db.exec(sqlstr)[0].values[0][0]
         sqlstr = "SELECT * FROM `pc` WHERE `id`=" + result + ";"
-        result = this.#db.exec(sqlstr)[0].values
-        return result
+        result = this.#db.exec(sqlstr)
+        return result[0].values[0]
     }
 
     /**
@@ -62,45 +62,36 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
      * @param {int} userId userId, used to find correct pc
      * @param {Pokemon} pokemon pokemon to add to pc
      */
-    insertIntoUserPC(userId, pokemon) {
-        let sqlstr = "SELECT `pcid` FROM `users` WHERE `id`=" + userId + ";"
-        let pcid = this.#db.exec(sqlstr)[0].values[0][0]
-        sqlstr = ""
+    insertPokemonIntoUserPC(userId, pokemon) {
+        let pcId = this.getPcByUserId(userId)[0]
+        let sqlstr = "SELECT `pokemon1`, `pokemon2`, `pokemon3`, `pokemon4` FROM `pc` WHERE id=" + pcId + ";"
+        let result = this.#db.exec(sqlstr)
+        let insertIndex = 1
+        for (let i = result[0].values[0].length - 1; i >= 0; i--) {
+            if (result[0].values[0][i] == null) continue
+            if (i == result[0].values[0][i].length - 1) return false
+            insertIndex = i + 2
+            break
+        }
+        sqlstr = "UPDATE pc SET `pokemon" + insertIndex + "`=\'" + JSON.stringify(pokemon) + "\' WHERE `id`=" + pcId + ";"
+        this.#db.run(sqlstr)
+        this.writeToDisk()
+        return true
     }
 
     /**
-     * 
+     * Get a user's data from database
      * @param {int} userId user id
      * @returns {array} array containing a user's data, in the form [id, username, password, inventoryid, pcid]
      */
-    getUserById(userId) {
+    getUserByUserId(userId) {
         let sqlstr = "SELECT * FROM `users` WHERE `id`='" + userId + "'"
         let result = this.#db.exec(sqlstr)
         return result[0].values[0]
     }
 
-    //#region debugging tools
-    printUsers() {
-        let sqlstr = "SELECT * FROM `users`"
-        let result = this.#db.exec(sqlstr)
-        console.dir(result, { depth: null })
-    }
-
-    printPc() {
-        let sqlstr = "SELECT * FROM `pc`"
-        let result = this.#db.exec(sqlstr)
-        console.dir(result, { depth: null })
-    }
-
-    printInventory() {
-        let sqlstr = "SELECT * FROM `inventory`"
-        let result = this.#db.exec(sqlstr)
-        console.dir(result, { depth: null })
-    }
-    //#endregion
-
     /**
-     * Writes database in memory to disk
+     * Writes database from memory to disk
      */
     writeToDisk() {
         let data = this.#db.export()
@@ -108,6 +99,9 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
         this.#fs.writeFileSync("./db.sqlite", buffer)
     }
 
+    /**
+     * Clears user data
+     */
     resetUserTable() {
         let sqlstr = "DELETE FROM users;"
         this.#db.run(sqlstr)
@@ -122,4 +116,25 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
         }
         return result[0].values
     }
+    //#region debugging tools
+    printUsers() {
+        let sqlstr = "SELECT * FROM `users`"
+        let result = this.#db.exec(sqlstr)
+        console.dir(result, { depth: null })
+    }
+
+    printPcs() {
+        let sqlstr = "SELECT * FROM `pc`"
+        let result = this.#db.exec(sqlstr)
+        console.dir(result, { depth: null })
+    }
+
+    printInventory() {
+        let sqlstr = "SELECT * FROM `inventory`"
+        let result = this.#db.exec(sqlstr)
+        console.dir(result, { depth: null })
+    }
+    //#endregion
+
+
 }

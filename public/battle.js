@@ -5,8 +5,11 @@ import { imageMap } from "./itemImages.js"
 import { potions } from "./dex/items/potions.js"
 import { pokeballs } from "./dex/items/pokeballs.js"
 import { revives } from "./dex/items/revives.js"
-let user = new User('hi', 'whee')
-let userPokemon = user.pc[0]
+
+
+// FIXME: NEEDS TO CHANGE
+
+
 user.inventory.pokeballs.set("Pokeball", 20)
 user.inventory.pokeballs.set("Great Ball", 10)
 user.inventory.pokeballs.set("Ultra Ball", 5)
@@ -17,18 +20,18 @@ user.inventory.potions.set("Hyper Potion", 10)
 user.inventory.potions.set("Max Potion", 5)
 user.inventory.revives.set("Revive", 30)
 user.inventory.revives.set("Max Revive", 10)
-let enemyPokemon = pokedex.get('Charmander')
+let enemyPokemon = enemy
 let battle = new BattleLogic(userPokemon, enemyPokemon)
-let chosenPokemon = user.pc
+let chosenPokemon = userPokemon
 export let turnType
 window.onload = () => {
     showOptions()
     updateHealth()
 }
-
 /**
  * Removes event listeners on all buttons
  */
+
 function resetButtonListeners() {
     let buttons = Array.from(document.getElementsByTagName("button"))
     buttons.pop()
@@ -37,7 +40,6 @@ function resetButtonListeners() {
         button.parentNode.replaceChild(newButton, button)
     }
 }
-
 /**
  * Shows game options (Fight, Bag, Pokemon, Run)
  */
@@ -152,13 +154,13 @@ function handleChooseItem(itemClass, item) {
         buttons[i].innerText = " "
     }
     if (itemClass == 'Potion') {
-        buttons[0].innerText = "USE:" + user.inventory.potions.get(item)
+        buttons[0].innerText = "USE: " + user.inventory.potions.get(item) + ' left'
     }
     if (itemClass == 'Pokeball') {
-        buttons[0].innerText = "USE:" + user.inventory.pokeballs.get(item)
+        buttons[0].innerText = "USE: " + user.inventory.pokeballs.get(item) + ' left'
     }
     if (itemClass == 'Revive') {
-        buttons[0].innerText = "USE:" + user.inventory.pokeballs.get(item)
+        buttons[0].innerText = "USE: " + user.inventory.pokeballs.get(item) + ' left'
     }
 
     buttons[1].innerHTML = imageMap.get(item)
@@ -203,12 +205,6 @@ function handleChooseItem(itemClass, item) {
         }
     })
 }
-function createHealButtons(pokemon) {
-    let newButton = document.createElement('button');
-    li.innerText = pokemon.nick + ' hp: ' + pokemon.currentStats.health + '/' + pokemon.maxHP
-    return newButton;
-}
-
 function handleHealMenus(type, item) {
     resetButtonListeners() //
     let buttons = document.getElementById('battleOptionsGrid').children
@@ -355,9 +351,8 @@ function handleBackButtonClick() {
 }
 
 function gameOver(winner, text = winner + " Won!") {
-    showOptions()
-    resetButtonListeners()
-    document.getElementById("storyText").innerText = text
+    alert(text)
+    handleRunButtonClick()
 }
 
 function updateHealth() {

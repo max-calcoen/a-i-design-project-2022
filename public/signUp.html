@@ -1,22 +1,27 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel = "stylesheet" href= "base.css">
-    </head>
-    <body>
-        <form action="/createaccount" method="POST">
-            <div id= "createHeader">
-                Create Account
-            </div>
-            <div class = "input">
-                Username: <input type="text" name = "createAccountUsername" value = "" required class = "textInput">
-            </div>
-            <div class = "input">
-                Password: <input type="password" name = "createAccountPassword" value = "" required class = "textInput">
-            </div>
-            <div class = "input">
-                <input type = "submit" value = "Sign Up" id = "signButton">
-            </div>
-        </form>
-    </body>
+
+<head>
+    <link rel="stylesheet" href="base.css">
+</head>
+
+<body>
+    <form action="/createaccount" method="POST">
+        <div id="createHeader">
+            Create Account
+        </div>
+        <div class="input">
+            Username: <input type="text" name="createAccountUsername" value="" required class="textInput" minlength="4"
+                maxlength="10">
+        </div>
+        <div class="input">
+            Password: <input type="password" name="createAccountPassword" value="" required class="textInput"
+                minlength="5" maxlength="15">
+        </div>
+        <div class="input">
+            <input type="submit" value="Sign Up" id="signButton">
+        </div>
+    </form>
+</body>
+
 </html>

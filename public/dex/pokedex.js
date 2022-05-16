@@ -44,6 +44,7 @@ pokedex.getNewPokemon = function (name) {
     return pokedex.fromJSON(JSON.parse(JSON.stringify(pokedex.get(name))))
 }
 
+pokedex.set("Zapdos", new Pokemon("Zapdos", ["electric", "flying"], [moves.get("Zap Cannon"), moves.get("Thunder"), moves.get("Spark"), null], "zapdosfront.png", "zapdosback.png", new Stat(30, 45, 30, 35), new Stat(300, 400, 400, 250), 1))
 pokedex.set("Bulbasaur", new Pokemon("Bulbasaur", ["grass"], [moves.get("Scratch"), moves.get("Tackle"), moves.get("Vine Whip"), moves.get("Razor Leaf")], "bulbasaurfront.png", "bulbasaurback.png", new Stat(15, 20, 20, 15), new Stat(200, 250, 250, 200), 70))
 pokedex.set("Charmander", new Pokemon("Charmander", ["fire"], [moves.get("Scratch"), moves.get("Ember"), moves.get("Dragon Breath"), moves.get("Slash")], "charmanderfront.png", "charmanderback.png", new Stat(15, 20, 20, 15), new Stat(200, 250, 250, 200), 70))
 pokedex.set("Turtwig", new Pokemon("Turtwig", ["grass"], [moves.get("Scratch"), moves.get("Vine Whip"), moves.get("Razor Leaf"), moves.get("Leech Seed")], "turtwigfront.png", "turtwigback.png", new Stat(20, 25, 20, 20), new Stat(250, 300, 250, 200), 70))
@@ -56,4 +57,3 @@ pokedex.set("Pikachu", new Pokemon("Pikachu", ["electric"], [moves.get("Thunderb
 pokedex.set("Squirtle", new Pokemon("Squirtle", ["water"], [moves.get("Water Pulse"), moves.get("Water Gun"), moves.get("Hydro Pump"), null], "squirtlefront.png", "squirtleback.png", new Stat(25, 20, 15, 25), new Stat(200, 150, 150, 300), 70))
 pokedex.set("Venusaur", new Pokemon("Venusaur", ["grass", "poison"], [moves.get("Solar Beam"), moves.get("Seed Bomb"), moves.get("Leech Seed"), moves.get("Razor Leaf")], "venusaurfront.png", "venusaurback.png", new Stat(25, 25, 25, 30), new Stat(300, 300, 200, 300), 5))
 pokedex.set("Wartortle", new Pokemon("Wartortle", ["water"], [moves.get("Water Gun"), moves.get("Water Pulse"), moves.get("Hydro Pump"), null], "wartortlefront.png", "wartortleback.png", new Stat(25, 20, 20, 25), new Stat(225, 200, 150, 325), 25))
-pokedex.set("Zapdos", new Pokemon("Zapdos", ["electric", "flying"], [moves.get("Zap Cannon"), moves.get("Thunder"), moves.get("Spark"), null], "zapdosfront.png", "zapdosback.png", new Stat(30, 45, 30, 35), new Stat(300, 400, 400, 250), 1))

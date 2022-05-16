@@ -1,5 +1,7 @@
 import { pokedex } from "../dex/pokedex.js"
 
+
+
 let sprite
 let spriteArr = []
 let tilemapRocks = []
@@ -128,10 +130,11 @@ function makePokemon() {
         setBug = true;
     }
 }
+
 /**
  * @returns miliseconds before pokemon respawn
  */
-function msForSpawn(){
+function msForSpawn() {
     return 60000;
 }
 
@@ -140,6 +143,7 @@ function msForSpawn(){
  */
 function spawnPokemon() {
     setTimeout(() => {
+
         delPokemon()
         makePokemon()
         spawnPokemon()
@@ -264,6 +268,7 @@ function moveTilemap(evt) {
             PUT CODE HERE TO SEND TEST POST REQUEST WITH data TO "/test" ROUTE (SEE SERVER.JS)
             */
             sendData("/battle", pokeCollisionName, "enemyName", "POST")
+
         }
 
     }
