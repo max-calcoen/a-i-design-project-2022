@@ -3,31 +3,37 @@ export class Database {
     #idCount = 0
     #fs
     #bcrypt
-    constructor(fs, bcrypt) {
-
-        fs.access("./db.sqlite", fs.F_OK, (err) => {
+    #SQL
+    constructor(fs, bcrypt, SQL) {
+        this.#fs = fs
+        this.#bcrypt = bcrypt
+        this.#SQL = SQL
+        this.#fs.access("./db.sqlite", fs.F_OK, (err) => {
             if (err) {
-                db = new SQL.Database()
+                db = new this.#SQL.Database()
                 this.#db = db
-                this.#fs = fs
-                this.#bcrypt = bcrypt
                 let sqlstr = "CREATE TABLE IF NOT EXISTS users(`id` int, `username` varchar(15), `password` char(60), `inventoryid` int, `pcid` int);\
 CREATE TABLE IF NOT EXISTS inventory(`id` int, `pokeballCount` int, `greatballCount` int, `ultraballCount` int, `potionsCount` int, `superpotionsCount` int, `hyperpotionsCount` int, `maxpotionsCount` int);\
 CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nvarchar(4000), `pokemon3` nvarchar(4000), `pokemon4` nvarchar(4000));"
                 this.#db.run(sqlstr)
-                sqlstr = "SELECT MAX(id) FROM users"
-                let result = db.exec(sqlstr)
-                if (result[0].values[0][0] == null) {
-                    this.#idCount = 0
-                } else {
-                    this.#idCount = result[0].values[0][0] + 1
-                }
+                this.#idCount = 0
                 this.writeToDisk()
                 return
             }
-            data = fs.readFileSync("./db.sqlite")
-            db = new SQL.Database(data)
-            database = new Database(db, fs, bcrypt)
+            let data = this.#fs.readFileSync("./db.sqlite")
+            let db = new this.#SQL.Database(data)
+            this.#db = db
+            let sqlstr = "CREATE TABLE IF NOT EXISTS users(`id` int, `username` varchar(15), `password` char(60), `inventoryid` int, `pcid` int);\
+CREATE TABLE IF NOT EXISTS inventory(`id` int, `pokeballCount` int, `greatballCount` int, `ultraballCount` int, `potionsCount` int, `superpotionsCount` int, `hyperpotionsCount` int, `maxpotionsCount` int);\
+CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nvarchar(4000), `pokemon3` nvarchar(4000), `pokemon4` nvarchar(4000));"
+            this.#db.run(sqlstr)
+            sqlstr = "SELECT MAX(id) FROM users"
+            let result = this.#db.exec(sqlstr)
+            if (result[0].values[0][0] == null) {
+                this.#idCount = 0
+            } else {
+                this.#idCount = result[0].values[0][0] + 1
+            }
         })
     }
 
@@ -99,16 +105,17 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
         let result = this.#db.exec(sqlstr)
         return result
     }
-    
+
     /**
-     * Inserts the given Pokemon into the given user's PC
+     * Inserts the Pokemon into the PC on empty slot
      * @param {int} userId userId, used to find correct pc
      * @param {Pokemon} pokemon pokemon to add to pc
+     * @returns true on success, false if pc full
      */
-    insertPokemonIntoUserPC(userId, pokemon) {
+    insertNewPokemonIntoUserPC(userId, pokemon) {
         this.fetchFromDisk()
         let pcId = this.getPcByUserId(userId)[0]
-        let sqlstr = "SELECT `pokemon1`, `pokemon2`, `pokemon3`, `pokemon4` FROM `pc` WHERE id=" + pcId + ";"
+        let sqlstr = "SELECT `pokemon1`, `pokemon2`, `pokemon3`, `pokemon4` FROM `pc` WHERE `id`=" + pcId + ";"
         let result = this.#db.exec(sqlstr)
         let insertIndex = 1
         for (let i = result[0].values[0].length - 1; i >= 0; i--) {
@@ -117,22 +124,37 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
             insertIndex = i + 2
             break
         }
-        sqlstr = "UPDATE pc SET `pokemon" + insertIndex + "`=\'" + JSON.stringify(pokemon) + "\' WHERE `id`=" + pcId + ";"
+        sqlstr = "UPDATE `pc` SET `pokemon" + insertIndex + "`=\'" + JSON.stringify(pokemon) + "\' WHERE `id`=" + pcId + ";"
+        this.#db.run(sqlstr)
+        this.writeToDisk()
+        return true
+    }
+
+    /**
+     * Updates the Pokemon in the PC
+     * @param {int} userId user id
+     * @param {Pokemon} pokemon new updated pokemon
+     * @param {int} index index of pokemon to update
+     */
+    updatePokemonInUserPc(userId, pokemon, index) {
+        this.fetchFromDisk()
+        let pcId = this.getPcByUserId(userId)[0]
+        sqlstr = "UPDATE `pc` SET `pokemon" + index + "`=\'" + JSON.stringify(pokemon) + "\' WHERE `id`=" + pcId + ";"
         this.#db.run(sqlstr)
         this.writeToDisk()
         return true
     }
 
     fetchFromDisk() {
-        fs.access("./db.sqlite", fs.F_OK, (err) => {
+        this.#fs.access("./db.sqlite", this.#fs.F_OK, (err) => {
             if (err) {
-                db = new SQL.Database()
-                this = new Database(db, fs, bcrypt)
+                db = new this.#SQL.Database()
+                this.#db = db
                 return
             }
-            data = fs.readFileSync("./db.sqlite")
-            db = new SQL.Database(data)
-            this = new Database(db, fs, bcrypt)
+            data = this.#fs.readFileSync("./db.sqlite")
+            db = new this.#SQL.Database(data)
+            this.#db = db
         })
     }
 
@@ -176,6 +198,7 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
         }
         return result[0].values
     }
+
     //#region debugging tools
     printUsers() {
         this.fetchFromDisk()
@@ -192,11 +215,27 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
         console.dir(result, { depth: null })
     }
 
-    printInventory() {
-        this.fetchFromDisk()
+    printInventories() {
         let sqlstr = "SELECT * FROM `inventory`"
         let result = this.#db.exec(sqlstr)
         console.dir(result, { depth: null })
+    }
+
+    printAll() {
+        this.printUsers()
+        this.printPcs()
+        this.printInventories()
+    }
+
+    executeSelectSql(sqlstr) {
+        return this.#db.exec(sqlstr)
+    }
+
+
+    executeSql(sqlstr) {
+        this.fetchFromDisk()
+        this.#db.run(sqlstr)
+        this.writeToDisk()
     }
     //#endregion
 }

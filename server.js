@@ -25,12 +25,12 @@ let database
 fs.access("./db.sqlite", fs.F_OK, (err) => {
     if (err) {
         db = new SQL.Database()
-        database = new Database(db, fs, bcrypt)
+        database = new Database(fs, bcrypt)
         return
     }
     data = fs.readFileSync("./db.sqlite")
     db = new SQL.Database(data)
-    database = new Database(db, fs, bcrypt)
+    database = new Database(fs, bcrypt, SQL)
 })
 
 
