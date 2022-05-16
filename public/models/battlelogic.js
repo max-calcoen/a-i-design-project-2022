@@ -70,6 +70,8 @@ export class BattleLogic {
         let p1rand = (Math.floor(Math.random() * 15) + 85) / 100
         let p1stab = 1
         if (this.pokemon1.types[0] == pokemon1move.type) p1stab = 1.5
+
+        console.log(this.pokemon1.types, this.pokemon2.types)
         let p1type = BattleLogic.getEffectiveness(pokemon1move.type, this.pokemon2.types)
 
         let p1damage = Math.floor(((((2 * p1level / 5) + 2) * p1power * p1attack / p2def) / 50 + 2) * p1crit * p1rand * p1stab * p1type)
@@ -546,7 +548,6 @@ export class BattleLogic {
         types.get("fairy").set("dragon", 0.5)
         types.get("fairy").set("dark", 0.5)
         types.get("fairy").set("fairy", 1)
-
         if (defendTypes.length == 1) return types.get(attackType).get(defendTypes[0])
         return types.get(attackType).get(defendTypes[0]) * types.get(attackType).get(defendTypes[1])
     }

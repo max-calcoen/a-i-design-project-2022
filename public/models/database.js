@@ -18,11 +18,14 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
         } else {
             this.#idCount = result[0].values[0][0] + 1
         }
-        this.getPcByUsername("Max")
-        this.printUsers()
         this.writeToDisk()
     }
 
+    /**
+     * Gets a user's pc from database
+     * @param {string} username username
+     * @returns {array} a pc in the form [pcid, {json} pokemon1, {json} pokemon2, {json} pokemon3, {json} pokemon4]
+     */
     getPcByUsername(username) {
         let sqlstr = "SELECT `pcid` FROM `users` WHERE `username`='" + username + "';"
         let result = this.#db.exec(sqlstr)
@@ -32,10 +35,14 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
         result = this.#db.exec(sqlstr)[0].values[0][0]
         sqlstr = "SELECT * FROM `pc` WHERE `id`=" + result + ";"
         result = this.#db.exec(sqlstr)[0].values
-        result.shift()
-        console.log(result)
+        return result
     }
 
+    /**
+     * Creates a new User and adds it to the database
+     * @param {string} username username
+     * @param {string} password password (to be encrypted with bcrypt)
+     */
     createNewUser(username, password) {
         // tunable for encryption
         const SALT_ROUNDS = 5
@@ -50,18 +57,29 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
         })
     }
 
+    /**
+     * Inserts the given Pokemon into the given user's PC
+     * @param {int} userId userId, used to find correct pc
+     * @param {Pokemon} pokemon pokemon to add to pc
+     */
     insertIntoUserPC(userId, pokemon) {
         let sqlstr = "SELECT `pcid` FROM `users` WHERE `id`=" + userId + ";"
         let pcid = this.#db.exec(sqlstr)[0].values[0][0]
         sqlstr = ""
     }
 
+    /**
+     * 
+     * @param {int} userId user id
+     * @returns {array} array containing a user's data, in the form [id, username, password, inventoryid, pcid]
+     */
     getUserById(userId) {
         let sqlstr = "SELECT * FROM `users` WHERE `id`='" + userId + "'"
         let result = this.#db.exec(sqlstr)
         return result[0].values[0]
     }
 
+    //#region debugging tools
     printUsers() {
         let sqlstr = "SELECT * FROM `users`"
         let result = this.#db.exec(sqlstr)
@@ -79,7 +97,11 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
         let result = this.#db.exec(sqlstr)
         console.dir(result, { depth: null })
     }
+    //#endregion
 
+    /**
+     * Writes database in memory to disk
+     */
     writeToDisk() {
         let data = this.#db.export()
         let buffer = Buffer.from(data)

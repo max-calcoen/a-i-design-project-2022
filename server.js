@@ -99,8 +99,8 @@ app.post("/createaccount", (req, res) => {
         res.redirect("/?errorMessage=Password must be less than or equal to 15 characters!")
         return
     }
-    for (let user of database.users) {
-        if (user[1] == createAccountUsername) {
+    for (let i = 0; i < database.users.length; i++) {
+        if (database.users[i][1] == createAccountUsername) {
             res.redirect("/?errorMessage=There is already an account associated with this username")
             return
         }
