@@ -9,7 +9,7 @@ import { revives } from "./dex/items/revives.js"
 
 // FIXME: NEEDS TO CHANGE
 
-
+/*
 user.inventory.pokeballs.set("Pokeball", 20)
 user.inventory.pokeballs.set("Great Ball", 10)
 user.inventory.pokeballs.set("Ultra Ball", 5)
@@ -20,8 +20,9 @@ user.inventory.potions.set("Hyper Potion", 10)
 user.inventory.potions.set("Max Potion", 5)
 user.inventory.revives.set("Revive", 30)
 user.inventory.revives.set("Max Revive", 10)
-let userPokemon = database.getPcByUserId(userId)[1];
-let enemyPokemon = enemy;
+*/
+
+
 let battle = new BattleLogic(userPokemon, enemyPokemon)
 let chosenPokemon = userPokemon
 export let turnType
@@ -307,24 +308,22 @@ function handlePokemonButtonClick() {
 // TODO
 function handleRunButtonClick() {
     resetButtonListeners()
-    sendData("/openworld", "openworld", "POST")
+    sendData("/openworld",[userId], ["userId"], "POST")
 }
 
-function sendData(path, name, method = 'post') {
-
-    const form = document.createElement('form');
-    form.method = method;
-    form.action = path;
-    document.body.appendChild(form);
-
-    const formField = document.createElement('input');
-    formField.type = 'hidden';
-    formField.name = name;
-
-
-    form.appendChild(formField);
-
-    form.submit();
+function sendData(path, values, names, method = "POST") {
+    const form = document.createElement("form")
+    form.method = method
+    form.action = path
+    document.body.appendChild(form)
+    for (let i = 0; i < values.length; i++) {
+        let formField = document.createElement("input")
+        formField.type = "hidden"
+        formField.name = names[i]
+        formField.value = values[i]
+        form.appendChild(formField)
+    }
+    form.submit()
 }
 
 /**
