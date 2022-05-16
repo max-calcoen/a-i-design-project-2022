@@ -55,7 +55,6 @@ app.post("/openworld", (req, res) => {
 
 let loginPassword
 app.post("/login", (req, res) => {
-
     let username = req.body.username
     let password = req.body.password
     let userid

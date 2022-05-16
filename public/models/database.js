@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
     insertIntoUserPC(userId, pokemon) {
         let sqlstr = "SELECT `pcid` FROM `users` WHERE `id`=" + userId + ";"
         let pcid = this.#db.exec(sqlstr)[0].values[0][0]
+        sqlstr = ""
     }
 
     getUserById(userId) {
