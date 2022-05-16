@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
             this.writeToDisk()
             this.#idCount++
         })
+        return this.#idCount
     }
 
     /**

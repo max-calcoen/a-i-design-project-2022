@@ -20,7 +20,8 @@ user.inventory.potions.set("Hyper Potion", 10)
 user.inventory.potions.set("Max Potion", 5)
 user.inventory.revives.set("Revive", 30)
 user.inventory.revives.set("Max Revive", 10)
-let enemyPokemon = enemy
+let userPokemon = database.getPcByUserId(userId)[1];
+let enemyPokemon = enemy;
 let battle = new BattleLogic(userPokemon, enemyPokemon)
 let chosenPokemon = userPokemon
 export let turnType

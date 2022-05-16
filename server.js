@@ -31,7 +31,6 @@ fs.access("./db.sqlite", fs.F_OK, (err) => {
     data = fs.readFileSync("./db.sqlite")
     db = new SQL.Database(data)
     database = new Database(db, fs, bcrypt)
-    database.insertPokemonIntoUserPC(0, pokedex.getNewPokemon("Raichu"))
 })
 
 
@@ -51,17 +50,17 @@ app.get("/battle", (req, res) => {
 
 app.post("/openworld", (req, res) => {
     let userId = req.body.userId
-    console.log(userId)
+    let pokemon = req.body.pokemon
     if (req.body.pokemon != undefined || req.body.pokemon != null) {
-        pokedex.getNewPokemon(req.body.pokemon)
-        database.insertPokemonIntoUserPC(userId, pokedex.getNewPokemon(req.body.pokemon))
+        database.insertPokemonIntoUserPC(userId, pokedex.getNewPokemon(pokemon))
+        console.log(database.getPcByUserId(userId))
     }
-    res.render("openworld")
+    res.render("openworld", {
+        userId: userId
+    })
 })
 
 
-
-let loginPassword
 app.post("/login", (req, res) => {
     let username = req.body.username
     let password = req.body.password
@@ -110,18 +109,19 @@ app.post("/createaccount", (req, res) => {
             return
         }
     }
-    database.createNewUser(createAccountUsername, createAccountPassword)
-    res.render("starterpokemon")
+    let userId = database.createNewUser(createAccountUsername, createAccountPassword)
+    res.render("starterpokemon", {
+        userId: userId
+    })
     return
 })
 
 app.post("/battle", (req, res) => {
-    let enemyPokemon;
-    let userId = req.body.userId;
-
-    // let userPokemon = database.getPcByUserId(userId)[1];
-    let userPokemon = "Squirtle"
-
+    let enemyPokemon
+    let userId = req.body.userId
+    console.log(userId)
+    let userPokemon = JSON.parse(database.getPcByUserId(userId)[1]).name
+    console.log(userPokemon)
 
     if (req.body.enemyName != undefined) {
         enemyPokemon = req.body.enemyName
@@ -138,6 +138,7 @@ app.post("/battle", (req, res) => {
             users.get(user.username).pc[0] = pokedex.getNewPokemon(userPokemon)
             res.render("battle-interface", {
                 user: user,
+                userId: userId,
                 enemyPokemon: pokedex.getNewPokemon(enemyPokemon),
                 userPokemon: pokedex.getNewPokemon(userPokemon)
             })

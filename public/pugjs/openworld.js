@@ -1,7 +1,6 @@
 import { pokedex } from "../dex/pokedex.js"
 
 
-
 let sprite
 let spriteArr = []
 let tilemapRocks = []
@@ -143,7 +142,6 @@ function msForSpawn() {
  */
 function spawnPokemon() {
     setTimeout(() => {
-
         delPokemon()
         makePokemon()
         spawnPokemon()
@@ -214,21 +212,19 @@ function checkTilemapCollisions() {
 //Add event listener to keydown
 window.addEventListener('keydown', moveTilemap)
 
-function sendData(path, value, name, method = 'post') {
-
-    const form = document.createElement('form');
-    form.method = method;
-    form.action = path;
-    document.body.appendChild(form);
-
-    const formField = document.createElement('input');
-    formField.type = 'hidden';
-    formField.name = name;
-    formField.value = value;
-
-    form.appendChild(formField);
-
-    form.submit();
+function sendData(path, values, names, method = "POST") {
+    const form = document.createElement("form")
+    form.method = method
+    form.action = path
+    document.body.appendChild(form)
+    for (let i = 0; i < values.length; i++) {
+        let formField = document.createElement("input")
+        formField.type = "hidden"
+        formField.name = names[i]
+        formField.value = values[i]
+        form.appendChild(formField)
+    }
+    form.submit()
 }
 
 
@@ -267,7 +263,7 @@ function moveTilemap(evt) {
             /*
             PUT CODE HERE TO SEND TEST POST REQUEST WITH data TO "/test" ROUTE (SEE SERVER.JS)
             */
-            sendData("/battle", pokeCollisionName, "enemyName", "POST")
+            sendData("/battle", [pokeCollisionName, userId], ["enemyName", "userId"], "POST")
 
         }
 
@@ -298,7 +294,7 @@ function moveTilemap(evt) {
                 for (let i = 0; i < spriteArr.length; i++) {
                     spriteArr[i].x -= 16
                 }
-                sendData("/battle", pokeCollisionName, "enemyName", "POST")
+                sendData("/battle", [pokeCollisionName, userId], ["enemyName", "userId"], "POST")
             }
 
         }
@@ -329,7 +325,7 @@ function moveTilemap(evt) {
                 for (let i = 0; i < spriteArr.length; i++) {
                     spriteArr[i].y -= 16
                 }
-                sendData("/battle", pokeCollisionName, "enemyName", "POST")
+                sendData("/battle", [pokeCollisionName, userId], ["enemyName", "userId"], "POST")
             }
 
         }
@@ -360,7 +356,7 @@ function moveTilemap(evt) {
                 for (let i = 0; i < spriteArr.length; i++) {
                     spriteArr[i].y += 16
                 }
-                sendData("/battle", pokeCollisionName, "enemyName", "POST")
+                sendData("/battle", [pokeCollisionName, userId], ["enemyName", "userId"], "POST")
             }
         }
     }

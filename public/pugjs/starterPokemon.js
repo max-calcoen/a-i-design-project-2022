@@ -19,19 +19,21 @@ function caller() {
     if (pokemon == 3) {
         pokeName = "Charmander"
     }
-    sendData("/openworld", pokeName, "pokemon", "POST")
+    sendData("/openworld", [pokeName, userId], ["pokemon", "userId"], "POST")
 
 }
 
-function sendData(path, value, name, method = "post") {
-    const form = document.createElement("form");
+function sendData(path, values, names, method = "POST") {
+    const form = document.createElement("form")
     form.method = method
     form.action = path
     document.body.appendChild(form)
-    const formField = document.createElement("input")
-    formField.type = "hidden"
-    formField.name = name
-    formField.value = value
-    form.appendChild(formField)
-    form.submit();
+    for (let i = 0; i < values.length; i++) {
+        let formField = document.createElement("input")
+        formField.type = "hidden"
+        formField.name = names[i]
+        formField.value = values[i]
+        form.appendChild(formField)
+    }
+    form.submit()
 }
