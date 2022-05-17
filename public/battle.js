@@ -81,34 +81,23 @@ function showOptions() {
 
 function handleFightButtonClick() {
     resetButtonListeners()
-
     let battleOptionsGrid = Array.from(document.getElementById("battleOptionsGrid").children)
-    battleOptionsGrid.pop()
     for (let i = 0; i < userPokemon.moves.length; i++) {
         if (userPokemon.moves[i] != null) {
             battleOptionsGrid[i].innerHTML = `${userPokemon.moves[i].name} <br />(${userPokemon.moves[i].power}, ${userPokemon.moves[i].type})`
             battleOptionsGrid[i].onclick = () => {
-                turnType = userPokemon.moves[i]
                 let enemyMove = enemyPokemon.moves[Math.floor(Math.random() * 4)]
                 while (enemyMove == null) {
                     enemyMove = enemyPokemon.moves[Math.floor(Math.random() * 4)]
                 }
-                let turnResult = battle.turn(turnType, enemyMove)
+                let turnResult = battle.turn(userPokemon.moves[i], enemyMove)
                 updateHealth()
                 userPokemon = turnResult.pokemon1
                 enemyPokemon = turnResult.pokemon2
                 if (turnResult.winner != 0) {
                     return gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name + 'Won!')
-                    /*
-                   if(turnResult.winner == 1){
-                       console.log(userPokemon.level)
-                       userPokemon.levelUp();
-                       console.log(userPokemon.level)
-                   }
-                   */
                 } else {
-                    return gameOver('You Lost!')
-                    
+                    return showOptions()
                 }
             }
         } else {
@@ -229,7 +218,7 @@ function handleHealMenus(type, item) {
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
                     if (turnResult.winner != 0) {
-                        gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name)
+                        gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name + ' Won!')
                     }
                 })
             }
@@ -254,7 +243,7 @@ function handleHealMenus(type, item) {
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
                     if (turnResult.winner != 0) {
-                        gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name)
+                        gameOver(turnResult.winner == 1 ? 'You' : enemyPokemon.name + ' Won!')
                     }
                     return
                 })
@@ -297,12 +286,11 @@ function handlePokemonButtonClick() {
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
                     if (turnResult.winner != 0) {
-                        gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name + 'Won!')
+                        gameOver(turnResult.winner == 1 ? 'You ' : enemyPokemon.name + 'Won!')
                     }
                     else{
-                        'You Lost!'
+                        showOptions();
                     }
-                    showOptions()
                 }
             })
             showBackButton()
@@ -349,25 +337,25 @@ function getNewPokemon(newPokemon){
             resetButtonListeners()
             for(let i = 0; i< buttons.length;i++){
                 buttons[i].innerText = battleUser.pc[i]
-                alert('Click on the pokemon you want to replace with ' + enemyPokemon)
+                alert('Click on the pokemon you want to replace with ' + enemyPokemon.name)
                 buttons[i].addEventListener('click', event =>{
-                    alert('Goodbye ' + battleUser.pc[i] + ', my comrade, you are free!')
-                    alert('Hello '+ enemyPokemon + ', welcome to the team!')
-                    battleUser.pc[i] = enemyPokemon
+                    alert('Goodbye ' + battleUser.pc[i].name + ', my comrade, you are free!')
+                    alert('Hello '+ enemyPokemon.name + ', welcome to the team!')
+                    battleUser.pc[i] = pokedex.get(enemyPokemon.name)
                     handleRunButtonClick()
                     return
                 })
             }
         }
         else{
-            battleUser.pc.push(newPokemon)
+            battleUser.pc.push(pokedex.get(enemyPokemon.name))
         }
     })
     buttons[1].innerText = 'Release'
     buttons[1].addEventListener('click', event =>{
-        alert(newPokemon + ', Be Free!')
+        alert(enemyPokemon.name + ', Be Free!')
         showOptions()
-        gameOver()
+        gameOver('You freed the wild '+ enemyPokemon.name)
         return
     })
 }
