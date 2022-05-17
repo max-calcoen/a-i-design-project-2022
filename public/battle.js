@@ -7,7 +7,6 @@ userPokemon = pokedex.fromJSON(userPokemon)
 enemyPokemon = pokedex.fromJSON(enemyPokemon)
 // FIXME: NEEDS TO CHANGE
 let battle = new BattleLogic(userPokemon, enemyPokemon)
-let chosenPokemon = userPokemon
 let turnType
 //turntype will be passed into pokemon1 argument for battlelogic.turn(pokemon1, pokemon2)
 //its value is a string that determines the users turn if it isnt having their pokemon make a move
@@ -181,7 +180,16 @@ function handleChooseItem(itemClass, item) {
                     updateHealth()
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
-                    return
+                    if (turnResult.winner != 0) {
+                        if(userPokemon.currentStats.health == 0){
+                            alert('Your current pokemon has died')
+                             return handlePokemonButtonClick()
+                        }
+                        if(turnResult == 1){
+                            return gameOver('You Win!')
+                        }
+                         }
+                         return showOptions()
                 }
             } else {
                 return {
@@ -211,9 +219,16 @@ function handleHealMenus(type, item) {
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
                     if (turnResult.winner != 0) {
-                        gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name + " Won!")
-                    }
-                })
+                        if(userPokemon.currentStats.health == 0){
+                            alert('your current pokemon has died')
+                             return handlePokemonButtonClick()
+                        }
+                        if(turnResult == 1){
+                            return gameOver('You Win!')
+                        }
+                         }
+                         return showOptions()
+                     })
             }
             else {
                 buttons[i].addEventListener("click", event => {
@@ -236,15 +251,18 @@ function handleHealMenus(type, item) {
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
                     if (turnResult.winner != 0) {
-                        let livingCounter = 0
-                        for (let k = 0; k < user.pc.length; k++) {
-
+                       if(userPokemon.currentStats.health == 0){
+                           alert('your current pokemon has died')
+                            return handlePokemonButtonClick()
+                       }
+                       if(turnResult == 1){
+                           return gameOver('You Win!')
+                       }
                         }
-                        gameOver(turnResult.winner == 1 ? "You" : enemyPokemon.name + " Won!")
-                    }
-                    return
-                })
-            }
+                        return showOptions()
+                    })
+                    
+                }
             else {
                 buttons[i].aaddEventListener("click", event => {
                     alert("You cant revive a pokemon that is not dead my guy")
@@ -255,38 +273,48 @@ function handleHealMenus(type, item) {
     }
 }
 function handlePokemonButtonClick() {
+    let summativeHealth = 0
+    for(let i = 0; i< battleUser.pc.length;i++){
+        summativeHealth += battleUser.pc[i].currentStats.health
+    }
+    if(summativeHealth == 0){
+       return gameOver('All your pokemon are dead. Bit of a cope moment if I do say so myself')
+    }
     resetButtonListeners();
     let buttons = document.getElementById("battleOptionsGrid").children
-    for (let i = 0; i < chosenPokemon.length; i++) {
-        buttons[i].innerText = chosenPokemon[i].name
+    alert('Choose the pokemon you to use next')
+    for (let i = 0; i < battleUser.pc.length; i++) {
+        buttons[i].innerText = battleUser.pc[i].name
         buttons[i].addEventListener("click", event => {
             resetButtonListeners()
             buttons[3].innerText = " "
-            buttons[1].innerText = chosenPokemon[i].name
+            buttons[1].innerText = battleUser.pc[i].name
             buttons[2].innerText = "Send to Battle"
             buttons[2].addEventListener("click", event => {
-                let ppCounter = 0
-                if (userPokemon == chosenPokemon[i]) {
+                if (userPokemon == battleUser.pc[i]) {
                     alert("This pokemon is already on the battlefield bozo")
                     showBackButton()
                 }
-                else if (chosenPokemon[i].currentStats.health == 0) {
+                else if (battleUser.pc[i].currentStats.health == 0) {
                     alert("This pokemon is dead my guy")
                     showBackButton()
                 }
                 else {
-                    userPokemon = chosenPokemon[i]
-                    alert(chosenPokemon[i].name + ", I choose you!")
+                    userPokemon = battleUser.pc[i]
+                    alert(user.pc[i].name + ", I choose you!")
                     turnType = "Chose New"
                     console.log(enemyPokemon)
                     let turnResult = battle.turn(turnType, enemyPokemon)
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
                     if (turnResult.winner != 0) {
-                        gameOver(turnResult.winner == 1 ? "You " : enemyPokemon.name + "Won!")
+                        if(userPokemon.currentStats.health == 0){
+                            handlePokemonButtonClick()
+                        }
+                        return gameOver(turnResult.winner == 1 ? "You " : enemyPokemon.name + "Won!")
                     }
                     else {
-                        showOptions();
+                        return showOptions();
                     }
                 }
             })
@@ -322,7 +350,7 @@ function sendData(path, values, names, method = "POST") {
 function showBackButton() {
     document.getElementById("back").classList.remove("hidden")
 }
-function getNewPokemon(newPokemon) {
+function getNewPokemon() {
     let buttons = document.getElementById("battleOptionsGrid").children
     resetButtonListeners()
     for (let i = 0; i < buttons.length; i++) {
