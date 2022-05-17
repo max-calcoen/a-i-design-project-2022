@@ -11,10 +11,10 @@ export class Database {
         this.#SQL = SQL
         this.#fs.access("./db.sqlite", fs.F_OK, (err) => {
             if (err) {
-                db = new this.#SQL.Database()
+                let db = new this.#SQL.Database()
                 this.#db = db
                 let sqlstr = "CREATE TABLE IF NOT EXISTS users(`id` int, `username` varchar(15), `password` char(60), `inventoryid` int, `pcid` int);\
-CREATE TABLE IF NOT EXISTS inventory(`id` int, `pokeballCount` int, `greatballCount` int, `ultraballCount` int, `potionsCount` int, `superpotionsCount` int, `hyperpotionsCount` int, `maxpotionsCount` int);\
+CREATE TABLE IF NOT EXISTS inventory(`id` int, `pokeballCount` int, `greatballCount` int, `ultraballCount` int, `masterballCount` int, `potionCount` int, `superpotionCount` int, `hyperpotionCount` int, `maxpotionCount` int, `reviveCount` int, `maxreviveCount` int);\
 CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nvarchar(4000), `pokemon3` nvarchar(4000), `pokemon4` nvarchar(4000));"
                 this.#db.run(sqlstr)
                 this.#idCount = 0
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
             let db = new this.#SQL.Database(data)
             this.#db = db
             let sqlstr = "CREATE TABLE IF NOT EXISTS users(`id` int, `username` varchar(15), `password` char(60), `inventoryid` int, `pcid` int);\
-CREATE TABLE IF NOT EXISTS inventory(`id` int, `pokeballCount` int, `greatballCount` int, `ultraballCount` int, `potionsCount` int, `superpotionsCount` int, `hyperpotionsCount` int, `maxpotionsCount` int);\
+CREATE TABLE IF NOT EXISTS inventory(`id` int, `pokeballCount` int, `greatballCount` int, `ultraballCount` int, `masterballCount` int, `potionsCount` int, `superpotionsCount` int, `hyperpotionsCount` int, `maxpotionsCount` int, `reviveCount` int, `maxreviveCount` int);\
 CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nvarchar(4000), `pokemon3` nvarchar(4000), `pokemon4` nvarchar(4000));"
             this.#db.run(sqlstr)
             sqlstr = "SELECT MAX(id) FROM users"
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
         this.#bcrypt.hash(password, SALT_ROUNDS, (err, hash) => {
             password = hash
             let sqlstr = "INSERT INTO users(`id`, `username`, `password`, `inventoryid`, `pcid`) VALUES(" + this.#idCount + ", '" + username + "', '" + password + "', " + this.#idCount + ", " + this.#idCount + ");\
-            INSERT INTO inventory(`id`, `Pokeballs`, `Great Balls`, `Ultra Balls`, `Master Balls`,`Potions`, `Super Potions`, `Hyper Potions`, `Max Potions`) VALUES(" + this.#idCount + ", 0, 0, 0, 0, 0, 0, 0);\
+            INSERT INTO inventory(`id`, `pokeballCount`, `greatballCount`, `ultraballCount`, `masterballCount`, `potionCount`, `superpotionCount`, `hyperpotionCount`, `maxpotionCount`, `reviveCount`, `maxreviveCount`) VALUES(" + this.#idCount + ", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);\
             INSERT INTO pc(`id`, `pokemon1`, `pokemon2`, `pokemon3`, `pokemon4`) VALUES(" + this.#idCount + ", null, null, null, null);"
             this.#db.run(sqlstr)
             this.writeToDisk()
@@ -76,7 +76,6 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
         })
         return this.#idCount
     }
-
     /**
      * @param {int} userId user id
      * @param {string} name name of item
@@ -85,9 +84,9 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
      */
     updateInventoryByUserId(userId, name, quantity) {
         this.fetchFromDisk()
-        let inventoryId = this.getInventoryByUserId(userId)[0]
-        let nameIndex = new Map([["Pokeballs", 1], ["Great Balls", 2], ["Ultra Balls", 3], ["Master Balls", 1], ["Potions", 4], ["Super Potions", 5], ["Hyper Potions", 6], ["Max Potions", 7]])
-        if (!nameIndex.has(name)) throw new Error("wrong name- put in the form \"Pokeballs\" or similar")
+        let inventoryId = this.getIvserId(usepokeId)[0]
+        let nameIndex = new Map([["pokeballCount", 1], ["greatballCount", 2], ["ultraballCount", 3], ["masterballCount", 4] ["potionCount", 5], ["superpotionCount", 6], ["hyperpotionCount", 7], ["maxpotionCount", 8], ["reviveCount", 9], ["maxreviveCount", 10]])
+        if (!nameIndex.has(name)) throw new Error("wrong name- put in the form \"pokeballCount\" or similar")
         let storedQuantity = this.getInventoryByUserId(userId)[nameIndex.get(name)]
         if (storedQuantity + quantity < 0) return false
         let sqlstr = "UPDATE `inventory` SET " + name + "=" + (storedQuantity + quantity) + " WHERE `id`=" + inventoryId + ";"
@@ -98,15 +97,15 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
 
     /**
      * @param {int} userId user id
-     * @returns {array} array containing inventory data, in the form 
+     * @returns {array} array containing inventory data, in the form [id, pokeballCount, greatballCount, ultraballCount, masterballCount, potionCount, superpotionCount, hyperpotionCount, maxpotionCount, reviveCount, maxreviveCount]
      */
     getInventoryByUserId(userId) {
         this.fetchFromDisk()
-        let sqlstr = "result.shift()FROM `inventory` WHERE `id`=" + inventoryId + ";"
+        let sqlstr = "SELECT * FROM `inventory` WHERE `id`=" + inventoryId + ";"
         let result = this.#db.exec(sqlstr)
         return result
     }
-
+   
     /**
      * Inserts the Pokemon into the PC on empty slot
      * @param {int} userId userId, used to find correct pc
@@ -147,13 +146,14 @@ CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nv
     }
 
     fetchFromDisk() {
+        let db
         this.#fs.access("./db.sqlite", this.#fs.F_OK, (err) => {
             if (err) {
                 db = new this.#SQL.Database()
                 this.#db = db
                 return
             }
-            data = this.#fs.readFileSync("./db.sqlite")
+            let data = this.#fs.readFileSync("./db.sqlite")
             db = new this.#SQL.Database(data)
             this.#db = db
         })

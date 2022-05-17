@@ -4,7 +4,6 @@ import bodyParser from "body-parser"
 import bcrypt from "bcrypt"
 import initSqlJs from "sql.js"
 import fs from "fs"
-import { User } from "./public/models/user.js"
 import { pokedex } from "./public/dex/pokedex.js"
 import { createServer, Server } from "http"
 import { Database } from "./public/models/database.js"
@@ -13,78 +12,37 @@ import { Database } from "./public/models/database.js"
 const SERVER_PORT = 8080
 const PUBLIC_FILES_DIR = "public"
 
+const SQL = await initSqlJs()
 const app = express()
 const server = createServer(app)
 const io = new Server(server)
-
-const SQL = await initSqlJs()
-let db
 let data
 let database
 
 fs.access("./db.sqlite", fs.F_OK, (err) => {
     if (err) {
-        db = new SQL.Database()
-        database = new Database(fs, bcrypt)
+        database = new Database(fs, bcrypt, SQL)
         return
     }
-    data = fs.readFileSync("./db.sqlite")
-    db = new SQL.Database(data)
     database = new Database(fs, bcrypt, SQL)
 })
 
-
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({
+    extended: false
+}))
 app.use(express.static(PUBLIC_FILES_DIR))
 
 // set up pug rendering engine
 app.set("views", "views")
 app.set("view engine", "pug")
 
-export let users = new Map()
-users.set("", new User("", "e")) // THIS IS TEST USER
-
-
-/*
-updateInventoryByUserId(userId, name, quantity) {
-        this.fetchFromDisk()
-        let inventoryId = this.getInventoryByUserId(userId)[0]
-        let nameIndex = new Map([["pokeballCount", 1], ["greatballCount", 2], ["ultraballCount", 3], ["potionsCount", 4], ["superpoitionsCount", 5], ["hyperpotionCount", 6], ["maxpotionsCount", 7]])
-        if (!nameIndex.has(name)) throw new Error("wrong name- put in the form \"pokeballCount\" or similar")
-        let storedQuantity = this.getInventoryByUserId(userId)[nameIndex.get(name)]
-        if (storedQuantity + quantity < 0) return false
-        let sqlstr = "UPDATE `inventory` SET " + name + "=" + (storedQuantity + quantity) + " WHERE `id`=" + inventoryId + ";"
-        this.#db.run(sqlstr)
-        this.writeToDisk()
-        return true
-    }
-*/
-/*
-database.updateInventoryByUserId(userId, "Pokeball", 20)
-
-user.inventory.pokeballs.set("Pokeball", 20)
-user.inventory.pokeballs.set("Great Ball", 10)
-user.inventory.pokeballs.set("Ultra Ball", 5)
-user.inventory.pokeballs.set("Master Ball", 1)
-user.inventory.potions.set("Potion", 20)
-user.inventory.potions.set("Super Potion", 15)
-user.inventory.potions.set("Hyper Potion", 10)
-user.inventory.potions.set("Max Potion", 5)
-user.inventory.revives.set("Revive", 30)
-user.inventory.revives.set("Max Revive", 10)
-
-*/
-
-
-app.get("/battle", (req, res) => {
-    res.send("Error: send post request from index")
-})
 
 app.post("/openworld", (req, res) => {
     let userId = req.body.userId
+    console.log(userId)
     let pokemon = req.body.pokemon
     if (req.body.pokemon != undefined || req.body.pokemon != null) {
-        database.insertPokemonIntoUserPC(userId, pokedex.getNewPokemon(pokemon))
+        database.insertNewPokemonIntoUserPC(userId, pokedex.getNewPokemon(pokemon))
         console.log(database.getPcByUserId(userId))
     }
     res.render("openworld", {
@@ -96,19 +54,18 @@ app.post("/openworld", (req, res) => {
 app.post("/login", (req, res) => {
     let username = req.body.username
     let password = req.body.password
-    let userId
-    console.log("DATABASE USERS: " + database.users)
+    let userId = -1
     for (let user of database.users) {
-        console.log(user)
+        console.log(user[1])
+        console.log(username)
         if (user[1] == username) {
             userId = user[0]
         }
     }
-    if (!userId) {
-        res.redirect(307, "/login?errorMessage=There are no registered users with this username") // Not working correctly
+    if (!(userId + 1)) {
+        res.redirect("/?errorMessage=There are no registered users with this username") // Not working correctly
         return
     }
-    console.log(userId)
     let hash = database.getUserByUserId(userId)[2]
     bcrypt.compare(password, hash, (err, result) => {
         if (result) {
@@ -157,33 +114,39 @@ app.post("/createaccount", (req, res) => {
 app.post("/battle", (req, res) => {
     let enemyPokemon
     let userId = req.body.userId
-    console.log(userId)
     let userPokemon = JSON.parse(database.getPcByUserId(userId)[1]).name
-    console.log(userPokemon)
 
     if (req.body.enemyName != undefined) {
         enemyPokemon = req.body.enemyName
     } else {
         enemyPokemon = "Charmander"
     }
+
     if (!pokedex.has(userPokemon)) {
-        res.send("Pokemon Not Found!")
+        res.redirect("/?errorMessage=Pokemon not found!")
         return
     }
-
-    for (let user of users.values()) {
-        if (true || user.username == username && user.password == password) {
-            users.get(user.username).pc[0] = pokedex.getNewPokemon(userPokemon)
-            res.render("battle-interface", {
-                user: user,
-                userId: userId,
-                enemyPokemon: pokedex.getNewPokemon(enemyPokemon),
-                userPokemon: pokedex.getNewPokemon(userPokemon)
-            })
-            return
-        }
+    if (!database.users) {
+        res.redirect("/?errorMessage=Please create an account or log in!")
+        return
     }
-    res.send("Wrong username or password! D:")
+    res.render("battle-interface", {
+        userId: userId,
+        enemyPokemon: pokedex.getNewPokemon(enemyPokemon),
+        userPokemon: pokedex.getNewPokemon(userPokemon)
+    })
+    // for (let user of users.values()) {
+    //     if (true || user.username == username && user.password == password) {
+    //         users.get(user.username).pc[0] = pokedex.getNewPokemon(userPokemon)
+    //         res.render("battle-interface", {
+    //             user: user,
+    //             userId: userId,
+    //             enemyPokemon: pokedex.getNewPokemon(enemyPokemon),
+    //             userPokemon: pokedex.getNewPokemon(userPokemon)
+    //         })
+    //         return
+    //     }
+    // }
 })
 
 app.post("/", (req, res) => {
