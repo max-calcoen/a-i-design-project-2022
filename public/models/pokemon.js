@@ -63,6 +63,7 @@ export class Pokemon {
             this.tempExp = 0
         }
     }
+
     /**
      * @param {int} amt amount of damage to take
      * @returns true on faint, false otherwise

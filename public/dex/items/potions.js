@@ -1,8 +1,8 @@
 import { Potion } from "./../../models/item/heal.js"
 
 export let potions = new Map()
-potions.set("Potion", new Potion("Potion", 20))
-potions.set("Super Potion", new Potion("Super Potion", 50))
-potions.set("Hyper Potion", new Potion("Hyper Potion", 100))
-potions.set("Max Potion", new Potion("Max Potion", 300))
-//no pokemon has an HP value that exceeds 300
+potions.set("Potion", new Potion("Potion", 5))
+potions.set("SuperPotion", new Potion("SuperPotion", 10))
+potions.set("HyperPotion", new Potion("HyperPotion", 20))
+potions.set("MaxPotion", new Potion("MaxPotion", 30))
+//no pokemon has an HP value that exceeds 30

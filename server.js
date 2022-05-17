@@ -5,7 +5,7 @@ import bcrypt from "bcrypt"
 import initSqlJs from "sql.js"
 import fs from "fs"
 import { pokedex } from "./public/dex/pokedex.js"
-import { createServer, Server } from "http"
+import { createServer } from "http"
 import { Database } from "./public/models/database.js"
 
 // tunables for server setup
@@ -15,17 +15,7 @@ const PUBLIC_FILES_DIR = "public"
 const SQL = await initSqlJs()
 const app = express()
 const server = createServer(app)
-const io = new Server(server)
-let data
-let database
-
-fs.access("./db.sqlite", fs.F_OK, (err) => {
-    if (err) {
-        database = new Database(fs, bcrypt, SQL)
-        return
-    }
-    database = new Database(fs, bcrypt, SQL)
-})
+let database = new Database(fs, bcrypt, SQL)
 
 app.use(bodyParser.urlencoded({
     extended: false
@@ -36,14 +26,15 @@ app.use(express.static(PUBLIC_FILES_DIR))
 app.set("views", "views")
 app.set("view engine", "pug")
 
+server.listen(SERVER_PORT, function () {
+    console.log(`Server listening on port ${SERVER_PORT}`)
+})
 
 app.post("/openworld", (req, res) => {
     let userId = req.body.userId
-    console.log(userId)
     let pokemon = req.body.pokemon
     if (req.body.pokemon != undefined || req.body.pokemon != null) {
         database.insertNewPokemonIntoUserPC(userId, pokedex.getNewPokemon(pokemon))
-        console.log(database.getPcByUserId(userId))
     }
     res.render("openworld", {
         userId: userId
@@ -56,8 +47,6 @@ app.post("/login", (req, res) => {
     let password = req.body.password
     let userId = -1
     for (let user of database.users) {
-        console.log(user[1])
-        console.log(username)
         if (user[1] == username) {
             userId = user[0]
         }
@@ -135,18 +124,6 @@ app.post("/battle", (req, res) => {
         enemyPokemon: pokedex.getNewPokemon(enemyPokemon),
         userPokemon: pokedex.getNewPokemon(userPokemon)
     })
-    // for (let user of users.values()) {
-    //     if (true || user.username == username && user.password == password) {
-    //         users.get(user.username).pc[0] = pokedex.getNewPokemon(userPokemon)
-    //         res.render("battle-interface", {
-    //             user: user,
-    //             userId: userId,
-    //             enemyPokemon: pokedex.getNewPokemon(enemyPokemon),
-    //             userPokemon: pokedex.getNewPokemon(userPokemon)
-    //         })
-    //         return
-    //     }
-    // }
 })
 
 app.post("/", (req, res) => {
@@ -156,15 +133,84 @@ app.post("/", (req, res) => {
         errorMessage: errorMessage ? "Error: " + errorMessage : ""
     })
 })
-server.listen(SERVER_PORT, function () {
-    console.log(`Server listening on port ${SERVER_PORT}`)
+
+app.post("/getPcByUserId", (req, res) => {
+    let userId = req.body.userId
+    let pc = database.getPcByUserId(userId)
+    res.send(pc)
 })
 
-io.on("connection", (socket) => {
-    socket.on("connect", (arg) => {
-        console.log("user connected :)")
-    })
-    socket.on("disconnect", (arg) => {
-        console.log("user disconnected :(")
-    })
+app.post("/updateInventoryByUserId", (req, res) => {
+    let userId = req.body.userId
+    let name = req.body.name
+    let quantity = req.body.quantity
+    if (database.updateInventoryByUserId(userId, name, quantity)) res.send(true)
+    else res.send(false)
+
+})
+
+app.post("/getInvetoryByUserId", (req, res) => {
+    let userId = req.body.userId
+    let inv = database.getInventoryByUserId(userId)
+    res.send(inv)
+})
+
+app.post("/insertNewPokemonIntoUserPc", (req, res) => {
+    let userId = req.body.userId
+    let pokemon = req.body.pokemon
+    if (database.insertNewPokemonIntoUserPC(userId, pokemon)) res.send(true)
+    else res.send(false)
+})
+
+app.post("/updatePokemonInUserPc", (req, res) => {
+    let userId = req.body.userId
+    let pokemon = req.body.pokemon
+    let index = req.body.index
+    database.updatePokemonInUserPc(userId, pokemon, index)
+})
+
+app.post("/getUserByUserId", (req, res) => {
+    let userId = req.body.userId
+    res.send(database.getUserByUserId(userId))
+})
+
+app.post("/writeToDisk", (req, res) => {
+    database.writeToDisk()
+    res.send(true)
+})
+
+app.post("/getUsers", (req, res) => {
+    res.send(database.users)
+})
+
+app.post("/printUsers", (req, res) => {
+    database.printUsers()
+    res.send(true)
+})
+
+app.post("/printPcs", (req, res) => {
+    database.printPcs()
+    res.send(true)
+})
+
+app.post("/printInventories", (req, res) => {
+    database.printInventories()
+    res.send(true)
+})
+
+app.post("/printAll", (req, res) => {
+    database.printAll()
+    res.send(true)
+})
+
+app.post("/executeSelectSql", (req, res) => {
+    let sqlstr = req.body.sqlstr
+    database.executeSelectSql(sqlstr)
+    res.send(true)
+})
+
+app.post("/executeSql", (req, res) => {
+    let sqlstr = req.body.sqlstr
+    database.executeSql(sqlstr)
+    res.send(true)
 })
