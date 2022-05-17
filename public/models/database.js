@@ -46,12 +46,9 @@ export class Database {
      */
     getPcByUserId(userId) {
         this.fetchFromDisk()
-        let sqlstr = "SELECT `pcid` FROM `users` WHERE `id`='" + userId + "';"
-        let result = this.#db.exec(sqlstr)
-        if (result.length == 0) {
-            return false
-        }
-        result = this.#db.exec(sqlstr)[0].values[0][0]
+        let sqlstr = "SELECT `pcid` FROM `users` WHERE `id`=" + userId + ";"
+        console.log(sqlstr)
+        let result = this.#db.exec(sqlstr)[0].values[0][0]
         sqlstr = "SELECT * FROM `pc` WHERE `id`=" + result + ";"
         result = this.#db.exec(sqlstr)
         return result[0].values[0]

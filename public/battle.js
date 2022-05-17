@@ -16,9 +16,8 @@ let turnType
 window.onload = () => {
     showOptions()
     updateHealth()
-    let pc = await getPcByUserId(0)
-    console.log(pc)
 }
+
 let battleUser = {
     pc: [],
     inventory: new Map()
@@ -181,15 +180,15 @@ function handleChooseItem(itemClass, item) {
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
                     if (turnResult.winner != 0) {
-                        if(userPokemon.currentStats.health == 0){
+                        if (userPokemon.currentStats.health == 0) {
                             alert('Your current pokemon has died')
-                             return handlePokemonButtonClick()
+                            return handlePokemonButtonClick()
                         }
-                        if(turnResult == 1){
+                        if (turnResult == 1) {
                             return gameOver('You Win!')
                         }
-                         }
-                         return showOptions()
+                    }
+                    return showOptions()
                 }
             } else {
                 return {
@@ -219,16 +218,16 @@ function handleHealMenus(type, item) {
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
                     if (turnResult.winner != 0) {
-                        if(userPokemon.currentStats.health == 0){
+                        if (userPokemon.currentStats.health == 0) {
                             alert('your current pokemon has died')
-                             return handlePokemonButtonClick()
+                            return handlePokemonButtonClick()
                         }
-                        if(turnResult == 1){
+                        if (turnResult == 1) {
                             return gameOver('You Win!')
                         }
-                         }
-                         return showOptions()
-                     })
+                    }
+                    return showOptions()
+                })
             }
             else {
                 buttons[i].addEventListener("click", event => {
@@ -251,18 +250,18 @@ function handleHealMenus(type, item) {
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
                     if (turnResult.winner != 0) {
-                       if(userPokemon.currentStats.health == 0){
-                           alert('your current pokemon has died')
+                        if (userPokemon.currentStats.health == 0) {
+                            alert('your current pokemon has died')
                             return handlePokemonButtonClick()
-                       }
-                       if(turnResult == 1){
-                           return gameOver('You Win!')
-                       }
                         }
-                        return showOptions()
-                    })
-                    
-                }
+                        if (turnResult == 1) {
+                            return gameOver('You Win!')
+                        }
+                    }
+                    return showOptions()
+                })
+
+            }
             else {
                 buttons[i].aaddEventListener("click", event => {
                     alert("You cant revive a pokemon that is not dead my guy")
@@ -274,11 +273,11 @@ function handleHealMenus(type, item) {
 }
 function handlePokemonButtonClick() {
     let summativeHealth = 0
-    for(let i = 0; i< battleUser.pc.length;i++){
+    for (let i = 0; i < battleUser.pc.length; i++) {
         summativeHealth += battleUser.pc[i].currentStats.health
     }
-    if(summativeHealth == 0){
-       return gameOver('All your pokemon are dead. Bit of a cope moment if I do say so myself')
+    if (summativeHealth == 0) {
+        return gameOver('All your pokemon are dead. Bit of a cope moment if I do say so myself')
     }
     resetButtonListeners();
     let buttons = document.getElementById("battleOptionsGrid").children
@@ -308,7 +307,7 @@ function handlePokemonButtonClick() {
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
                     if (turnResult.winner != 0) {
-                        if(userPokemon.currentStats.health == 0){
+                        if (userPokemon.currentStats.health == 0) {
                             handlePokemonButtonClick()
                         }
                         return gameOver(turnResult.winner == 1 ? "You " : enemyPokemon.name + "Won!")
@@ -436,11 +435,201 @@ export function updateDatabaseUser() {
 async function getPcByUserId(userId) {
     let response = await fetch("/getPcByUserId", {
         method: "POST",
-        body: {
+        body: JSON.stringify({
             userId: userId
-        },
+        }),
         headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
+            "Content-Type": "application/json"
+        }
+    }).then((res) => {
+        return res.json()
+    })
+    return response
+}
+
+async function updateInventoryByUserId(userId, name, quantity) {
+    let response = await fetch("/updateInventoryByUserId", {
+        method: "POST",
+        body: JSON.stringify({
+            userId: userId,
+            name: name,
+            quantity: quantity
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then((res) => {
+        return res.json()
+    })
+    return response
+}
+
+
+async function getInventoryByUserId(userId) {
+    let response = await fetch("/getInventoryByUserId", {
+        method: "POST",
+        body: JSON.stringify({
+            userId: userId
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then((res) => {
+        return res.json()
+    })
+    return response
+}
+
+
+async function insertNewPokemonIntoUserPc(userId, pokemon) {
+    let response = await fetch("/insertNewPokemonIntoUserPc", {
+        method: "POST",
+        body: JSON.stringify({
+            userId: userId,
+            pokemon: pokemon
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then((res) => {
+        return res.json()
+    })
+    return response
+}
+
+
+
+async function updatePokemonInUserPc(userId, pokemon, index) {
+    let response = await fetch("/updatePokemonInUserPc", {
+        method: "POST",
+        body: JSON.stringify({
+            userId: userId,
+            pokemon: pokemon,
+            index: index
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then((res) => {
+        return res.json()
+    })
+    return response
+}
+
+
+async function getUserByUserId(userId) {
+    let response = await fetch("/getUserByUserId", {
+        method: "POST",
+        body: JSON.stringify({
+            userId: userId
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then((res) => {
+        return res.json()
+    })
+    return response
+}
+
+
+async function writeToDisk() {
+    let response = await fetch("/writeToDisk", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then((res) => {
+        return res.json()
+    })
+    return response
+}
+
+async function getUsers() {
+    let response = await fetch("/getUsers", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then((res) => {
+        return res.json()
+    })
+    return response
+}
+
+async function printUsers() {
+    let response = await fetch("/printUsers", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then((res) => {
+        return res.json()
+    })
+    return response
+}
+
+async function printPcs(sqlstr) {
+    let response = await fetch("/printPcs", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then((res) => {
+        return res.json()
+    })
+    return response
+}
+
+async function printInventories() {
+    let response = await fetch("/printInventories", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then((res) => {
+        return res.json()
+    })
+    return response
+}
+
+async function printAll() {
+    let response = await fetch("/printAll", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then((res) => {
+        return res.json()
+    })
+    return response
+}
+
+
+async function executeSelectSql(sqlstr) {
+    let response = await fetch("/executeSelectSql", {
+        method: "POST",
+        body: JSON.stringify({
+            sqlstr: sqlstr
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then((res) => {
+        return res.json()
+    })
+    return response
+}
+
+
+async function executeSql(sqlstr) {
+    let response = await fetch("/executeSql", {
+        method: "POST",
+        body: JSON.stringify({
+            sqlstr: sqlstr
+        }),
+        headers: {
+            "Content-Type": "application/json"
         }
     }).then((res) => {
         return res.json()

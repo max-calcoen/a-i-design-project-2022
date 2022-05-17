@@ -11,7 +11,7 @@
 
 body {
     margin: 0px;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 div#content {
@@ -159,52 +159,57 @@ button#back {
 }
 
 #indexHeader {
-    display: flex;
-    font-size: 100px;
-    justify-content: center;
+    text-align: center;
+    font-size: 60pt;
+    margin: 15px 0px;
+    font-style: italic;
 }
 
-.indexButton{
+.indexButton {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 48px;
-    font-family: 'Franklin Gothic Medium', Arial, sans-serif;
-    font-style: none;
+    font-size: 40pt;
     text-decoration: none;
     color: black;
     margin: 1%;
     padding: 5%;
 }
 
-a:link{
-    color: black;
-    text-decoration: none;
-}
-a:visited{
-    color: black;
-    text-decoration: none;
-}
-a:hover{
-    color: black;
-    text-decoration: none;
-}
-a:active{
+a:link {
     color: black;
     text-decoration: none;
 }
 
-.indexButton:hover{
-    background-color: antiquewhite ;
+a:visited {
+    color: black;
+    text-decoration: none;
 }
 
-#createHeader{
+a:hover {
+    text-decoration: none;
+}
+
+a:active {
+    color: black;
+    text-decoration: none;
+}
+
+.indexButton:first-of-type:hover {
+    background-color: rgba(0, 128, 0, 0.3);
+}
+
+.indexButton:last-child:hover {
+    background-color: rgba(255, 217, 0, 0.3);
+}
+
+#createHeader {
     display: flex;
     font-size: 100px;
     justify-content: center;
 }
 
-.input{
+.input {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -212,14 +217,21 @@ a:active{
     font-size: 48px;
 }
 
-#signButton{
+#signButton {
     font-size: 48px;
     height: auto;
     width: auto;
     padding: 3%;
 }
 
-.textInput{
+.textInput {
     height: auto;
     font-size: 36px;
+}
+
+#error {
+    color: red;
+    display: flex;
+    justify-content: center;
+    font-style: italic;
 }

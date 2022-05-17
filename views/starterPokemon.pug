@@ -28,11 +28,11 @@ body
     .header Choose a Starter Pokemon 
     #surveyContainer
         button#button1(onclick="confirmk(1)")
-            img(src="../public/assets/sprites/bulbasaurfront.png" width="250px" height=" 250px")
+            img(src="/assets/sprites/bulbasaurfront.png" width="250px" height="250px" alt="Bulbasaur")
         button#button2(onclick="confirmk(2)")
-            img(src="../public/assets/sprites/squirtlefront.png" width="250px" height=" 250px")
+            img(src="/assets/sprites/squirtlefront.png" width="250px" height="250px" alt="Squirtle")
         button#button3(onclick="confirmk(3)")
-            img(src="../public/assets/sprites/charmanderfront.png" width="250px" height=" 250px")
+            img(src="/assets/sprites/charmanderfront.png" width="250px" height="250px" alt="Charmander")
         button#button4.hidden(onclick="caller()") Confirm
     script(type="text/javascript").
         let userId = #{userId}

@@ -20,6 +20,7 @@ let database = new Database(fs, bcrypt, SQL)
 app.use(bodyParser.urlencoded({
     extended: false
 }))
+app.use(bodyParser.json())
 app.use(express.static(PUBLIC_FILES_DIR))
 
 // set up pug rendering engine
@@ -29,6 +30,14 @@ app.set("view engine", "pug")
 server.listen(SERVER_PORT, function () {
     console.log(`Server listening on port ${SERVER_PORT}`)
 })
+
+app.get("/", (req, res) => {
+    let errorMessage = req.query.errorMessage
+    res.render("index", {
+        errorMessage: errorMessage
+    })
+})
+
 
 app.post("/openworld", (req, res) => {
     let userId = req.body.userId
@@ -52,7 +61,7 @@ app.post("/login", (req, res) => {
         }
     }
     if (!(userId + 1)) {
-        res.redirect("/?errorMessage=There are no registered users with this username") // Not working correctly
+        res.redirect("/?errorMessage=There are no registered users with this username")
         return
     }
     let hash = database.getUserByUserId(userId)[2]
@@ -103,15 +112,14 @@ app.post("/createaccount", (req, res) => {
 app.post("/battle", (req, res) => {
     let enemyPokemon
     let userId = req.body.userId
-    let userPokemon = JSON.parse(database.getPcByUserId(userId)[1]).name
+    let userPokemon = database.getPcByUserId(userId)[1]
 
     if (req.body.enemyName != undefined) {
         enemyPokemon = req.body.enemyName
     } else {
         enemyPokemon = "Charmander"
     }
-
-    if (!pokedex.has(userPokemon)) {
+    if (!pokedex.has(userPokemon.name)) {
         res.redirect("/?errorMessage=Pokemon not found!")
         return
     }
@@ -122,7 +130,7 @@ app.post("/battle", (req, res) => {
     res.render("battle-interface", {
         userId: userId,
         enemyPokemon: pokedex.getNewPokemon(enemyPokemon),
-        userPokemon: pokedex.getNewPokemon(userPokemon)
+        userPokemon: userPokemon
     })
 })
 
@@ -135,7 +143,9 @@ app.post("/", (req, res) => {
 })
 
 app.post("/getPcByUserId", (req, res) => {
+    console.log(req.body)
     let userId = req.body.userId
+    console.log("post  " + userId)
     let pc = database.getPcByUserId(userId)
     res.send(pc)
 })
@@ -213,4 +223,8 @@ app.post("/executeSql", (req, res) => {
     let sqlstr = req.body.sqlstr
     database.executeSql(sqlstr)
     res.send(true)
+})
+
+app.get("/*", (req, res) => {
+    res.redirect("/?errorMessage=Please create an account or log in!")
 })
