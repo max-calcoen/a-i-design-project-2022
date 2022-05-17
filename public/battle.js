@@ -42,6 +42,8 @@ const items = [
  */
 
 function resetButtonListeners() {
+    updateBattleUser()
+    updateDatabaseUser()
     let buttons = Array.from(document.getElementsByTagName("button"))
     buttons.pop()
     for (let button of buttons) {
@@ -53,6 +55,8 @@ function resetButtonListeners() {
  * Shows game options (Fight, Bag, Pokemon, Run)
  */
 function showOptions() {
+    updateBattleUser()
+    updateDatabaseUser()
     let buttons = document.getElementById("battleOptionsGrid")
     let button = buttons.firstElementChild
     let buttonsLabels = ["Fight", "Bag", "Pokemon", "Run"]
@@ -92,7 +96,7 @@ function handleFightButtonClick() {
                 userPokemon = turnResult.pokemon1
                 enemyPokemon = turnResult.pokemon2
                 if (turnResult.winner != 0) {
-                    gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name)
+                    return gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name + 'Won!')
                     /*
                    if(turnResult.winner == 1){
                        console.log(userPokemon.level)
@@ -101,8 +105,8 @@ function handleFightButtonClick() {
                    }
                    */
                 } else {
-                    resetButtonListeners()
-                    showOptions()
+                    return gameOver('You Lost!')
+                    
                 }
             }
         } else {
@@ -113,7 +117,7 @@ function handleFightButtonClick() {
 }
 
 function handleBagButtonClick() {
-    resetButtonListeners
+    resetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
     let labels = [{
         name: "Heal",
@@ -170,7 +174,7 @@ function handleChooseItem(itemClass, item) {
     buttons[1].innerHTML = imageMap.get(item)
     buttons[0].addEventListener("click", event => {
         if (itemClass == "Potion" || itemClass == "Revive") {
-            if (user.inventory.potions.get(item) > 0) {
+            if (user.inventory.get(item) > 0) {
                 handleHealMenus(itemClass, item)
             } else {
                 return {
@@ -180,9 +184,9 @@ function handleChooseItem(itemClass, item) {
             }
         }
         if (itemClass == 'Pokeball') {
-            if (user.inventory.pokeballs.get(item) > 0) {
+            if (user.inventory.get(item) > 0) {
                 if (pokedex.get(userPokemon.name).catch(pokeballs.get(item))) {
-                    user.inventory.pokeballs.set(item, user.inventory.pokeballs.get(item) - 1)
+                    user.inventory.set(item, user.inventory.get(item) - 1)
                     turnType = 'Successful Catch'
                     user.pc.push(enemyPokemon)
                     let turnResult = battle.turn(turnType, enemyMove)
@@ -192,7 +196,7 @@ function handleChooseItem(itemClass, item) {
                     return getNewPokemon(enemyPokemon)
                 } else {
                     turnType = 'Attempted Catch'
-                    user.inventory.pokeballs.set(item, user.inventory.pokeballs.get(item) - 1)
+                    user.inventory.set(item, user.inventory.get(item) - 1)
                     alert('Oh no! ' + enemyPokemon + ' broke free!')
                     let turnResult = battle.turn(turnType, enemyMove)
                     updateHealth()
@@ -206,7 +210,6 @@ function handleChooseItem(itemClass, item) {
                     message: 'Bruh you dont have anymore ' + type + 's'
                 }
             }
-
         }
     })
 }
@@ -222,7 +225,7 @@ function handleHealMenus(type, item) {
                     showOptions();
                     turnType = 'Healed/Revived'
                     user.pc[i].heal(potions.get(item).amountToHeal)
-                    user.inventory.potions.set(item, user.inventory.potions.get(item) - 1)
+                    user.inventory.set(item, user.inventory.get(item) - 1)
                     let turnResult = battle.turn(turnType, enemyMove)
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
@@ -247,7 +250,7 @@ function handleHealMenus(type, item) {
                     showOptions();
                     turnType = 'Healed/Revived'
                     user.pc[i].heal(potions.get(item).percentHeal * user.pc[i].currentStats.maxHealth)
-                    user.inventory.revives.set(item, user.inventory.revives.get(item) - 1)
+                    user.inventory.set(item, user.inventory.revives.get(item) - 1)
                     let turnResult = battle.turn(turnType, enemyMove)
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
@@ -275,7 +278,6 @@ function handlePokemonButtonClick() {
         buttons[i].addEventListener('click', event => {
             resetButtonListeners()
             buttons[3].innerText = ' '
-            buttons[0].innerText = chosenPokemon[i].nick
             buttons[1].innerText = chosenPokemon[i].name
             buttons[2].innerText = 'Send to Battle'
             buttons[2].addEventListener('click', event => {
@@ -297,7 +299,10 @@ function handlePokemonButtonClick() {
                     userPokemon = turnResult.pokemon1
                     enemyPokemon = turnResult.pokemon2
                     if (turnResult.winner != 0) {
-                        gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name)
+                        gameOver(turnResult.winner == 1 ? userPokemon.name : enemyPokemon.name + 'Won!')
+                    }
+                    else{
+                        'You Lost!'
                     }
                     showOptions()
                 }
@@ -328,28 +333,7 @@ function sendData(path, values, names, method = "POST") {
     }
     form.submit()
 }
-function updateBattleUser(){
-    for(let i = 0; i< items.length;i++){
-        user.inventory.set(items[i], database.getInventoryByUserId(userId).get(items[i]))
-    } 
-    user.pc.splice(0, user.pc.length)
-    for(let i = 1; i < database.getPcByUserId(userId).length; i++){
-        user.pc.push(pokedex.fromJSON(database.getPcByUserId(userId[i])))
-    }
-}
 
-function updateDatabaseUser(){
-    for(let i = 1; i < database.getPcByUserId(userId).length; i++){
-       database.getPcByUserId
-    }
-    
-    for(let i = 0; i< items.length;i++){
-        database.updateInventoryByUserId(userId, items[i], user.pokeballs.get(items[i]))
-    }
-    for(let g = 0; g<user.pc.length; g++){
-       //TODO: link to database
-    }
-}
 /**
  * Shows back button
  */
@@ -365,13 +349,16 @@ function getNewPokemon(newPokemon){
     buttons[0].innerText = 'Keep'
     buttons[0].addEventListener('click', event => {
         if(user.pc.length == 4){
-            //need to link to pc
             resetButtonListeners()
             for(let i = 0; i< buttons.length;i++){
                 buttons[i].innerText = user.pc[i]
-                alert('Click on the pokemon you want to release')
+                alert('Click on the pokemon you want to replace with ' + enemyPokemon)
                 buttons[i].addEventListener('click', event =>{
-                    
+                    alert('Goodbye ' + user.pc[i] + ', my comrade, you are free!')
+                    alert('Hello '+ enemyPokemon + ', welcome to the team!')
+                    user.pc[i] = enemyPokemon
+                    handleRunButtonClick()
+                    return
                 })
             }
         }
@@ -383,6 +370,7 @@ function getNewPokemon(newPokemon){
     buttons[1].addEventListener('click', event =>{
         alert(newPokemon + ', Be Free!')
         showOptions()
+        gameOver()
         return
     })
 }
@@ -403,8 +391,8 @@ function handleBackButtonClick() {
     hideBackButton()
 }
 
-function gameOver(winner, text = winner + " Won!") {
-    alert(text)
+function gameOver(message) {
+    alert(message)
     handleRunButtonClick()
 }
 
@@ -413,4 +401,22 @@ function updateHealth() {
     document.getElementById("currentNumPlayerHealth").innerText = userPokemon.currentStats.health
     document.documentElement.style.setProperty("--player-health", (100 * userPokemon.currentStats.health / userPokemon.currentStats.maxHealth) + "%")
     document.documentElement.style.setProperty("--enemy-health", (100 * enemyPokemon.currentStats.health / enemyPokemon.currentStats.maxHealth) + "%")
+}
+export function updateBattleUser(){
+    for(let i = 0; i< items.length;i++){
+        user.inventory.set(items[i], database.getInventoryByUserId(userId).get(items[i]))
+    } 
+    user.pc.splice(0, user.pc.length)
+    for(let i = 1; i < database.getPcByUserId(userId).length; i++){
+        user.pc.push(pokedex.fromJSON(database.getPcByUserId(userId[i])))
+    }
+}
+export function updateDatabaseUser(){
+    for(let i = 1; i < database.getPcByUserId(userId).length; i++){
+       database.updatePokemonInUserPc(userId, user.pc[i-1], i)
+    }
+    for(let i = 0; i< items.length;i++){
+        database.updateInventoryByUserId(userId, items[i], user.inventory.get(items[i]))
+        //need to know what datatype the fucntiont akes for @param: newPokemon
+    }
 }

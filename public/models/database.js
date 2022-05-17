@@ -5,6 +5,7 @@ export class Database {
     #bcrypt
     #SQL
     constructor(fs, bcrypt, SQL) {
+        this.#db
         this.#fs = fs
         this.#bcrypt = bcrypt
         this.#SQL = SQL

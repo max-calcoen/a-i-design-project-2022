@@ -1,4 +1,6 @@
 import { inflictEffects } from "./move.js"
+import {updateBattleUser} from "../battle.js"
+import {updateDatabaseUser} from "../battle.js"
 export class BattleLogic {
     constructor(pokemon1, pokemon2) {
         this.pokemon1 = pokemon1
@@ -107,6 +109,7 @@ export class BattleLogic {
                         alert("It was not very effective!")
                     }
                     if (damageResult) {
+                        updateDatabaseUser()
                         return {
                             pokemon1: this.pokemon1,
                             pokemon2: this.pokemon2,
@@ -132,6 +135,7 @@ export class BattleLogic {
                         alert("It was not very effective!")
                     }
                     if (damageResult) {
+                         updateDatabaseUser()
                         return {
                             pokemon1: this.pokemon1,// live share ending
                             pokemon2: this.pokemon2,
@@ -159,6 +163,7 @@ export class BattleLogic {
                         alert("It was not very effective!")
                     }
                     if (damageResult) {
+                         updateDatabaseUser()
                         return {
                             pokemon1: this.pokemon1,
                             pokemon2: this.pokemon2,
@@ -183,6 +188,7 @@ export class BattleLogic {
                         alert("It was not very effective!")
                     }
                     if (damageResult) {
+                        updateDatabaseUser()
                         return {
                             pokemon1: this.pokemon1,// live share ending
                             pokemon2: this.pokemon2,
@@ -194,6 +200,7 @@ export class BattleLogic {
                 }
             }
         }
+        updateDatabaseUser()
         return {
             pokemon1: this.pokemon1,
             pokemon2: this.pokemon2,
