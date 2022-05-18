@@ -1,11 +1,16 @@
 import { pokedex } from "../dex/pokedex.js"
-
+import { pokeballs } from "../dex/items/pokeballs.js"
+import { potions } from "../dex/items/potions.js"
 
 let sprite
 let spriteArr = []
 let tilemapRocks = []
 let stage
 let tilemap
+// Variable so setTimeout wont bug
+let setBug = false
+// tunable spawn cooldown time in ms
+const SPAWN_COOLDOWN = 60000
 let frame = 0
 
 
@@ -14,8 +19,8 @@ const renderer = PIXI.autoDetectRenderer({
     antialias: true,
     autoDensity: true,
     resolution: window.devicePixelRatio || 1,
-    width: 1440,
-    height: 672,
+    width: 1200,
+    height: 600,
 })
 window.addEventListener('keydown', moveTilemap)
 
@@ -84,13 +89,13 @@ function makeTilemap() {
     }
 
     // make Sprite tile
-    sprite = PIXI.Sprite.from('../assets/tilemap/player.png')
+    sprite = PIXI.Sprite.from("../assets/tilemap/player.png")
     stage.addChild(sprite)
     sprite.x = tileW / 2 * size
     sprite.y = tileH / 2 * size
     sprite.width = 32
     sprite.height = 32
-    makePokemon();
+    makePokemon()
 }
 
 // Define array for the pokemon images and information
@@ -101,8 +106,15 @@ for (let pokemon of pokedex.values()) {
     pokemonImgArr.push(["/assets/sprites/" + pokemon.frontImg, pokemon.name, pokemon.rarity])
 }
 
-// Variable so setTimeout wont bug
-let setBug = false
+let itemImgArr = []
+
+for (let item of potions.values()) {
+    itemImgArr.push(["/assets/sprites/" + item.img, item.name, item.rarity])
+}
+
+for (let item of pokeballs.values()) {
+    itemImgArr.push(["/assets/sprites/" + item.img, item.name, item.rarity])
+}
 
 /**
  * Puts pokemon randomly on the tilemap
@@ -124,19 +136,20 @@ function makePokemon() {
                     makeSprite(i * size, j * size, pokemonImgArr[index][0], pokemonImgArr[index][1])
                 }
             }
+            let spawnItemRand = Math.random() * 100
+            if (spawnItemRand > 99.6) {
+                let index = Math.floor(Math.random() * itemImgArr.length)
+                let rarityRand = Math.random() * 100
+                if (rarityRand < itemImgArr[index][2]) {
+                    makeSprite(i * size, j * size, itemImgArr[index][0], itemImgArr[index][1])
+                }
+            }
         }
     }
     if (setBug == false) {
         spawnPokemon()
         setBug = true;
     }
-}
-
-/**
- * @returns miliseconds before pokemon respawn
- */
-function msForSpawn() {
-    return 60000;
 }
 
 /**
@@ -147,22 +160,24 @@ function spawnPokemon() {
         delPokemon()
         makePokemon()
         spawnPokemon()
-    }, msForSpawn())
+    }, SPAWN_COOLDOWN)
 }
 
 
 /**
  * Makes a sprite given an X, Y, Image, and a name
- * @param {*} x x corrdinate of sprite
- * @param {*} y y coordinate of sprite
- * @param {*} image image in the format of: '/assets/sprites/raichufront.png'
- * @param {*} name name of pokemon
+ * @param {int} x x corrdinate of sprite
+ * @param {int} y y coordinate of sprite
+ * @param {string} image image in the format of: '/assets/sprites/raichufront.png'
+ * @param {string} name name of pokemon
  */
 function makeSprite(x, y, image, name) {
     let newSprite = PIXI.Sprite.from(image)
     stage.addChild(newSprite)
     newSprite.x = x
     newSprite.y = y
+    newSprite.width = 48
+    newSprite.height = 48
     newSprite.name = name
     spriteArr.push(newSprite)
 }
@@ -174,10 +189,10 @@ function delPokemon() {
     for (let i = 0; i < spriteArr.length; i++) {
         stage.removeChild(spriteArr[i])
     }
-    spriteArr = [];
+    spriteArr = []
 }
 
-
+let itemCollisionObj
 let pokeCollisionName = ""
 /**
  * Checks for sprite collisions
@@ -189,6 +204,7 @@ function checkSpriteCollisions() {
             spriteArr[i].x + spriteArr[i].width > sprite.x &&
             spriteArr[i].y < sprite.y + sprite.height &&
             spriteArr[i].height + spriteArr[i].y > sprite.y) {
+            itemCollisionObj = spriteArr[i]
             pokeCollisionName = spriteArr[i].name
             return true
         }
@@ -262,13 +278,14 @@ function moveTilemap(evt) {
                 spriteArr[i].x += 16
             }
 
-            /*
-            PUT CODE HERE TO SEND TEST POST REQUEST WITH data TO "/test" ROUTE (SEE SERVER.JS)
-            */
-            sendData("/battle", [pokeCollisionName, userId], ["enemyName", "userId"], "POST")
-
+            if (pokedex.has(pokeCollisionName)) {
+                sendData("/battle", [pokeCollisionName, userId], ["enemyName", "userId"], "POST")
+            } else {
+                stage.removeChild(itemImgArr.indexOf(itemCollisionObj))
+                spriteArr.splice(itemImgArr.indexOf(itemCollisionObj), 1)
+                addToInventoryByUserId(userId, pokeCollisionName.toLowerCase().replace(" ", "") + "Count", 1)
+            }
         }
-
     }
     if (evt.which === 65) {
         if (sprite.x > tilemap.x) {
@@ -296,7 +313,13 @@ function moveTilemap(evt) {
                 for (let i = 0; i < spriteArr.length; i++) {
                     spriteArr[i].x -= 16
                 }
-                sendData("/battle", [pokeCollisionName, userId], ["enemyName", "userId"], "POST")
+                if (pokedex.has(pokeCollisionName)) {
+                    sendData("/battle", [pokeCollisionName, userId], ["enemyName", "userId"], "POST")
+                } else {
+                    stage.removeChild(itemImgArr.indexOf(itemCollisionObj))
+                    spriteArr.splice(itemImgArr.indexOf(itemCollisionObj), 1)
+                    addToInventoryByUserId(userId, pokeCollisionName.toLowerCase().replace(" ", "") + "Count", 1)
+                }
             }
 
         }
@@ -327,7 +350,13 @@ function moveTilemap(evt) {
                 for (let i = 0; i < spriteArr.length; i++) {
                     spriteArr[i].y -= 16
                 }
-                sendData("/battle", [pokeCollisionName, userId], ["enemyName", "userId"], "POST")
+                if (pokedex.has(pokeCollisionName)) {
+                    sendData("/battle", [pokeCollisionName, userId], ["enemyName", "userId"], "POST")
+                } else {
+                    stage.removeChild(itemImgArr.indexOf(itemCollisionObj))
+                    spriteArr.splice(itemImgArr.indexOf(itemCollisionObj), 1)
+                    addToInventoryByUserId(userId, pokeCollisionName.toLowerCase().replace(" ", "") + "Count", 1)
+                }
             }
 
         }
@@ -358,8 +387,31 @@ function moveTilemap(evt) {
                 for (let i = 0; i < spriteArr.length; i++) {
                     spriteArr[i].y += 16
                 }
-                sendData("/battle", [pokeCollisionName, userId], ["enemyName", "userId"], "POST")
+                if (pokedex.has(pokeCollisionName)) {
+                    sendData("/battle", [pokeCollisionName, userId], ["enemyName", "userId"], "POST")
+                } else {
+                    stage.removeChild(itemImgArr.indexOf(itemCollisionObj))
+                    spriteArr.splice(itemImgArr.indexOf(itemCollisionObj), 1)
+                    addToInventoryByUserId(userId, pokeCollisionName.toLowerCase().replace(" ", "") + "Count", 1)
+                }
             }
         }
     }
+}
+
+async function addToInventoryByUserId(userId, name, quantity) {
+    let response = await fetch("/addToInventoryByUserId", {
+        method: "POST",
+        body: JSON.stringify({
+            userId: userId,
+            name: name,
+            quantity: quantity
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then((res) => {
+        return res.json()
+    })
+    return response
 }

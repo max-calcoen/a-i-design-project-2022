@@ -7,7 +7,7 @@ head
   title Index
 body
   p#indexHeader Pokémon Green and Gold
-  a(href='/login.html').indexButton Log In
-  a(href='/createaccount.html').indexButton Create Account
+  a(href='/login.html').indexButton#login Log In
+  a(href='/createaccount.html').indexButton#createAccount Create Account
   if errorMessage
     p#error Error: #{errorMessage}

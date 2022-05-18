@@ -79,19 +79,19 @@ app.post("/createaccount", (req, res) => {
 
     let createAccountUsername = req.body.createAccountUsername
     let createAccountPassword = req.body.createAccountPassword
-    if (createAccountUsername.length <= 4) {
+    if (!(createAccountUsername.length >= 4)) {
         res.redirect("/?errorMessage=Username must be greater than or equal to 4 characters")
         return
     }
-    if (createAccountUsername.length >= 10) {
+    if (!(createAccountUsername.length <= 10)) {
         res.redirect("/?errorMessage=Username must be less than or equal to 10 characters")
         return
     }
-    if (createAccountPassword.length <= 5) {
+    if (!(createAccountPassword.length >= 5)) {
         res.redirect("/?errorMessage=Password must be greater than or equal to 5 characters")
         return
     }
-    if (createAccountPassword.length >= 15) {
+    if (!(createAccountPassword.length <= 15)) {
         res.redirect("/?errorMessage=Password must be less than or equal to 15 characters")
         return
     }
@@ -139,9 +139,17 @@ app.post("/updateInventoryByUserId", (req, res) => {
     let userId = req.body.userId
     let name = req.body.name
     let quantity = req.body.quantity
-    if (database.updateInventoryByUserId(userId, name, quantity)) res.send(true)
-    else res.send(false)
+    database.updateInventoryByUserId(userId, name, quantity)
+})
 
+app.post("/addToInventoryByUserId", (req, res) => {
+    let userId = req.body.userId
+    let name = req.body.name
+    let quantity = req.body.quantity
+    console.log(userId)
+    console.log(name)
+    console.log(quantity)
+    res.send(database.addToInventoryByUserId(userId, name, quantity))
 })
 
 app.post("/getInventoryByUserId", (req, res) => {

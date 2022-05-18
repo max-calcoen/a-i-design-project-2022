@@ -50,34 +50,6 @@ export class BattleLogic {
      */
     // TODO: implement bag, pokemon, run, and status effects (including turn)
     turn(pokemon1move, pokemon2move) {
-        if (pokemon1move == "Attempted Catch") {
-            this.pokemon1.statusEffects.push({
-                name: "Attempted Catch",
-                canMove: false,
-                dpround: 0,
-                duration: 1
-            })
-        }
-        if (pokemon1move == "Successful Catch") {
-            return
-        }
-        if (pokemon1move == "Chose New") {
-            this.pokemon1.statusEffects.push({
-                name: "Chose New",
-                canMove: false,
-                dpround: 0,
-                duration: 1
-            })
-        }
-        if (pokemon1move == "Healed/Revived") {
-            this.pokemon1.statusEffects.push({
-                name: "Healed",
-                canMove: false,
-                dpround: 0,
-                duration: 1
-            })
-        }
-        console.dir(this.pokemon1, { depth: null })
         let p1damage = 0
         let p1type = 1
         if (typeof pokemon1move != "string") {

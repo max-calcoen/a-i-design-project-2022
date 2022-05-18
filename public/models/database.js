@@ -30,12 +30,14 @@ export class Database {
             }
         })
     }
-
+    // users: id, username, password, pcid
+    // inventory: id, pokeballCount, greatballCount, ultraballCount, masterballCount, potionCount, superpotionCount, hyperpotionCount, maxpotionCount, reviveCount, maxreviveCount
+    // pc: id, pokemon1, pokemon2, pokemon3, pokemon4
     #init() {
         let sqlstr = "\
             CREATE TABLE IF NOT EXISTS users(`id` int, `username` varchar(15), `password` char(60), `inventoryid` int, `pcid` int);\
             CREATE TABLE IF NOT EXISTS inventory(`id` int, `pokeballCount` int, `greatballCount` int, `ultraballCount` int, `masterballCount` int, `potionCount` int, `superpotionCount` int, `hyperpotionCount` int, `maxpotionCount` int, `reviveCount` int, `maxreviveCount` int);\
-            CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nvarchar(4000), `pokemon3` nvarchar(4000), `pokemon4` nvarchar(4000));"
+            CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(1000), `pokemon2` nvarchar(1000), `pokemon3` nvarchar(1000), `pokemon4` nvarchar(1000));"
         this.#db.run(sqlstr)
     }
 
@@ -67,7 +69,7 @@ export class Database {
             password = hash
             let sqlstr = "\
                 INSERT INTO `users`(`id`, `username`, `password`, `inventoryid`, `pcid`) VALUES(" + this.#idCount + ", '" + username + "', '" + password + "', " + this.#idCount + ", " + this.#idCount + ");\
-                INSERT INTO `inventory`(`id`, `pokeballCount`, `greatballCount`, `ultraballCount`, `masterballCount`, `potionCount`, `superpotionCount`, `hyperpotionCount`, `maxpotionCount`, `reviveCount`, `maxreviveCount`) VALUES(" + this.#idCount + ", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);\
+                INSERT INTO `inventory`(`id`, `pokeballCount`, `greatballCount`, `ultraballCount`, `masterballCount`, `potionCount`, `superpotionCount`, `hyperpotionCount`, `maxpotionCount`, `reviveCount`, `maxreviveCount`) VALUES(" + this.#idCount + ", 5, 5, 5, 5, 5, 5, 5, 5, 5, 5);\
                 INSERT INTO `pc`(`id`, `pokemon1`, `pokemon2`, `pokemon3`, `pokemon4`) VALUES(" + this.#idCount + ", null, null, null, null);"
             this.#db.run(sqlstr)
             this.writeToDisk()
@@ -78,14 +80,30 @@ export class Database {
 
     /**
      * @param {int} userId user id
-     * @param {string} name name of item
-     * @param {int} quantity quantity of item to add
-     * @returns true on success, false on error
+     * @param {array} newInventory new inventory to replace old one in database
      */
     updateInventoryByUserId(userId, newInventory) {
         this.fetchFromDisk()
         let inventoryId = this.getInventoryByUserId(userId)[0]
         let sqlstr = "UPDATE `inventory` SET `pokeballCount`=" + newInventory[1] + ", `greatballCount`=" + newInventory[2] + ", `ultraballCount`=" + newInventory[3] + ", `masterballCount`=" + newInventory[4] + ", `potionCount`=" + newInventory[5] + ", `superpotionCount`=" + newInventory[6] + ", `hyperpotionCount`=" + newInventory[7] + ", `maxpotionCount`=" + newInventory[8] + ", `reviveCount`=" + newInventory[9] + ", `maxreviveCount`=" + newInventory[10] + " WHERE `id`=" + inventoryId + ";"
+        this.#db.run(sqlstr)
+        this.writeToDisk()
+    }
+
+    /**
+     * @param {int} userId user id
+     * @param {string} name name of item
+     * @param {int} quantity quantity of item to add
+     * @returns true on success, false on error
+     */
+    addToInventoryByUserId(userId, name, quantity) {
+        this.fetchFromDisk()
+        let inventoryId = this.getInventoryByUserId(userId)[0]
+        let nameIndex = new Map([["pokeballCount", 1], ["greatballCount", 2], ["ultraballCount", 3], ["masterballCount", 4], ["potionCount", 5], ["superpotionCount", 6], ["hyperpotionCount", 7], ["maxpotionCount", 8], ["reviveCount", 9], ["maxreviveCount", 10]])
+        if (!nameIndex.has(name)) throw new Error("wrong name- put in the form \"pokeballCount\" or similar")
+        let storedQuantity = this.getInventoryByUserId(userId)[nameIndex.get(name)]
+        if (storedQuantity + quantity < 0) return false
+        let sqlstr = "UPDATE `inventory` SET `" + name + "`=" + (storedQuantity + quantity) + " WHERE `id`=" + inventoryId + ";"
         this.#db.run(sqlstr)
         this.writeToDisk()
         return true

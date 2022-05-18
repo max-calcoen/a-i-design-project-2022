@@ -75,9 +75,10 @@ export class Pokemon {
      * @param {int} amt amount of health points to heal / add to current hp
      */
     heal(amt) {
+        let temp = this.currentStats.health
         this.currentStats.health += amt
         if (this.currentStats.health > this.currentStats.maxHealth) this.currentStats.health = this.currentStats.maxHealth
-        return true
+        return Math.min(amt, this.currentStats.health - temp)
     }
 
     /**
@@ -86,12 +87,12 @@ export class Pokemon {
      */
     catch(pokeball) {
         if (pokeball.probabilityModifier == 100) {
-            return true;
+            return true
         }
-        pokeball.probabilityModifier = (pokeball.probabilityModifier * this.#catchRate) / 30
-        let math = Math.random() * 100;
-        if (math < pokeball.probabilityModifier) {
-            return true;
+        let check = (pokeball.probabilityModifier * this.#catchRate) / 30
+        let rand = Math.random() * 100
+        if (rand < check) {
+            return true
         }
         return false
     }
