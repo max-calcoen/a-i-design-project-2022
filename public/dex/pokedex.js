@@ -12,6 +12,7 @@ import { Stat } from "../models/stat.js"
  * @param {Stat} maxStats maximum possible / level 100 stats of the pokemon (new Stat(200, 250, 250))
  * @param {int} rarity rarity for pokemon to spawn, lower = more rare
  */
+
 export let pokedex = new Map()
 
 /**
@@ -54,3 +55,10 @@ pokedex.set("Pikachu", new Pokemon("Pikachu", ["electric"], [moves.get("Thunderb
 pokedex.set("Squirtle", new Pokemon("Squirtle", ["water"], [moves.get("Water Pulse"), moves.get("Water Gun"), moves.get("Hydro Pump"), null], "squirtlefront.png", "squirtleback.png", new Stat(25, 20, 15, 25), new Stat(200, 150, 150, 300), 70))
 pokedex.set("Venusaur", new Pokemon("Venusaur", ["grass", "poison"], [moves.get("Solar Beam"), moves.get("Seed Bomb"), moves.get("Leech Seed"), moves.get("Razor Leaf")], "venusaurfront.png", "venusaurback.png", new Stat(25, 25, 25, 30), new Stat(300, 300, 200, 300), 5))
 pokedex.set("Wartortle", new Pokemon("Wartortle", ["water"], [moves.get("Water Gun"), moves.get("Water Pulse"), moves.get("Hydro Pump"), null], "wartortlefront.png", "wartortleback.png", new Stat(25, 20, 20, 25), new Stat(225, 200, 150, 325), 25))
+pokedex.set("Nidoran", new Pokemon("Nidoran", ["poison"], [moves.get("Scratch"), moves.get("Tackle"), moves.get("Poison Fang"), null], "nidoranfront.png", "nidoranback.png", new Stat(15, 15, 20, 15), new Stat(210, 250, 250, 175), 70))
+pokedex.set("Nidorino", new Pokemon("Nidorino", ["poison", "ground"], [moves.get("Tackle"), moves.get("Poison Fang"), moves.get("Poison Jab"), null], "nidorinofront.png", "nidorinoback.png", new Stat(25, 25, 30, 25), new Stat(280, 300, 300, 230), 40))
+pokedex.set("Nidoking", new Pokemon("Nidoking", ["poison", "ground"], [moves.get("Poison Fang"), moves.get("Poison Jab"), moves.get("Earthquake"), moves.get("Fissure")], "nidokingfront.png", "nidokingback.png", new Stat(35, 45, 45, 35), new Stat(310, 310, 300, 250), 25))
+pokedex.set("Vulpix", new Pokemon("Vulpix", ["fire"],[moves.get("Tackle"), moves.get("Scratch"), moves.get("Ember"), null], "vulpixfront.png", "vulpixback.png", new Stat(15, 15, 20, 10), new Stat(200, 240, 230, 175), 40))
+pokedex.set("Ninetales", new Pokemon("Ninetales", ["fire"], [moves.get("Ember"), moves.get("Flare Blitz"), moves.get("Tackle"), moves.get("Flamethrower")], "ninetailsfront.png", "ninetailsback.png", new Stat(30, 30, 35, 25), new Stat(290, 310, 330, 250), 20))
+pokedex.set("Jigglypuff", new Pokemon("Jigglypuff", ["normal", "fairy"], [moves.get("Tackle"), moves.get("Egg Bomb"), moves.get("Dazzling Gleam"), null], "jigglypufffront.png", "jigglypuffback.png", new Stat(25, 20, 25, 30), new Stat(210, 250, 250, 210), 60))
+pokedex.set("Wigglytuff", new Pokemon("WigglyTuff", ["fairy"], [moves.get("Dazzling Gleam"), moves.get("Moonblast"), moves.get("Tackle"), moves.get("Body Slam")], "wigglytufffront.png", "wigglytuffback.png", new Stat(35, 30, 30, 40), new Stat(280, 310, 310, 250), 15))

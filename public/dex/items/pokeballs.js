@@ -1,5 +1,8 @@
 import { Pokeball } from "./../../models/item/pokeball.js"
 
+/**
+ * Pokeball object map
+ */
 export let pokeballs = new Map()
 pokeballs.set("Pokeball", new Pokeball("Pokeball", 0, "pokeball.png", 60))
 pokeballs.set("Great Ball", new Pokeball("Great Ball", 40, "greatball.png"), 40)

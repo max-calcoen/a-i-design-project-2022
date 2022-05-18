@@ -128,7 +128,9 @@ app.post("/openworld", (req, res) => {
         userId: userId
     })
 })
-//#region database
+
+
+//#region database fetch stuff
 app.post("/getPcByUserId", (req, res) => {
     let userId = req.body.userId
     let pc = database.getPcByUserId(userId)

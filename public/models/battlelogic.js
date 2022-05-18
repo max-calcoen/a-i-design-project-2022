@@ -4,7 +4,9 @@ export class BattleLogic {
         this.pokemon1 = pokemon1
         this.pokemon2 = pokemon2
     }
-
+    /**
+     * Status effects that a pokemon can have (logic)
+     */
     #dealWithEffects() {
         let cantMoveCounter
         for (let i = 0; i < this.pokemon1.statusEffects.length; i++) {
@@ -43,7 +45,7 @@ export class BattleLogic {
     }
 
     /**
-     * Game takes a turn
+     * Game takes a turn and does all the calculations for battle
      * @param {Move} pokemon1move move pokemon 1 makes
      * @param {Move} pokemon2move move pokemon 2 makes
      * @returns {Object} object in form pokemon1: pokemon1, pokemon2: pokemon2, winner: 1 if p1 knocks out p2, 2 if p2 knocks out p1, false if neither

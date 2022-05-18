@@ -22,7 +22,13 @@ function caller() {
     sendData("/openworld", [pokeName, userId], ["pokemon", "userId"], "POST")
 
 }
-
+/**
+ * makes a form and submits it dynamically 
+ * @param {string} path path to send get or post request to
+ * @param {string} values Value of form
+ * @param {string} names Name of forms
+ * @param {string} method POST or GET
+ */
 function sendData(path, values, names, method = "POST") {
     const form = document.createElement("form")
     form.method = method

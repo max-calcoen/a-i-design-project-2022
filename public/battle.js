@@ -37,7 +37,9 @@ let battle = new BattleLogic(mannequin.pc[currentPokemonChosen], enemyPokemon)
 showOptions()
 updateGraphics()
 
-
+/**
+ * Handles bag button click
+ */
 function handleBagButtonClick() {
     resetButtonListeners()
     showBackButton()
@@ -49,7 +51,9 @@ function handleBagButtonClick() {
     buttons[0].addEventListener("click", handlePotionsButtonClick)
     buttons[1].addEventListener("click", handlePokeballsButtonClick)
 }
-
+/**
+ * Handles poition button click
+ */
 function handlePotionsButtonClick() {
     resetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
@@ -62,7 +66,10 @@ function handlePotionsButtonClick() {
     buttons[3].innerText = "Max Potion (" + mannequin.inventory[8] + ")"
     buttons[3].addEventListener("click", handleMaxPotionButtonClick)
 }
-
+/**
+ * Handles click on individual potion items
+ * @returns nothing (gets out of function)
+ */
 function handlePotionButtonClick() {
     if (mannequin.inventory[5] == 0) {
         alert("You have no Potions!")
@@ -81,6 +88,10 @@ function handlePotionButtonClick() {
     showOptions()
 }
 
+/**
+ * Handles click on individual potion items
+ * @returns nothing (gets out of function)
+ */
 function handleSuperPotionButtonClick() {
     if (mannequin.inventory[6] == 0) {
         alert("You have no Super Potions!")
@@ -99,6 +110,10 @@ function handleSuperPotionButtonClick() {
     showOptions()
 }
 
+/**
+ * Handles click on individual potion items
+ * @returns nothing (gets out of function)
+ */
 function handleHyperPotionButtonClick() {
     if (mannequin.inventory[7] == 0) {
         alert("You have no Hyper Potions!")
@@ -116,7 +131,10 @@ function handleHyperPotionButtonClick() {
     resetButtonListeners()
     showOptions()
 }
-
+/**
+ * Handles click on individual potion items
+ * @returns nothing (gets out of function)
+ */
 function handleMaxPotionButtonClick() {
     if (mannequin.inventory[8] == 0) {
         alert("You have no Max Potions!")
@@ -135,6 +153,9 @@ function handleMaxPotionButtonClick() {
     showOptions()
 }
 
+/**
+ * makes pokeball buttons and adds onclick events
+ */
 function handlePokeballsButtonClick() {
     resetButtonListeners()
     let buttons = document.getElementById("battleOptionsGrid").children
@@ -148,6 +169,10 @@ function handlePokeballsButtonClick() {
     buttons[3].addEventListener("click", handleMasterballButtonClick)
 }
 
+/**
+ * Handles click on individual pokeball buttons
+ * @returns nothing (finishes function)
+ */
 function handlePokeballButtonClick() {
     if (mannequin.inventory[1] == 0) {
         alert("You have no Pokeballs!")
@@ -175,6 +200,10 @@ function handlePokeballButtonClick() {
     resetButtonListeners()
     showOptions()
 }
+/**
+ * Handles click on individual pokeball buttons
+ * @returns nothing (finishes function)
+ */
 function handleGreatballButtonClick() {
     if (mannequin.inventory[2] == 0) {
         alert("You have no Great Balls!")
@@ -202,6 +231,10 @@ function handleGreatballButtonClick() {
     resetButtonListeners()
     showOptions()
 }
+/**
+ * Handles click on individual pokeball buttons
+ * @returns nothing (finishes function)
+ */
 function handleUltraballButtonClick() {
     if (mannequin.inventory[3] == 0) {
         alert("You have no Pokeballs!")
@@ -229,6 +262,10 @@ function handleUltraballButtonClick() {
     resetButtonListeners()
     showOptions()
 }
+/**
+ * Handles click on individual pokeball buttons
+ * @returns nothing (finishes function)
+ */
 function handleMasterballButtonClick() {
     if (mannequin.inventory[4] == 0) {
         alert("You have no Pokeballs!")
@@ -247,6 +284,9 @@ function handleMasterballButtonClick() {
     showOptions()
 }
 
+/**
+ * logic for what happens if Pc is full
+ */
 function handlePcFull() {
     resetButtonListeners()
 
@@ -262,13 +302,19 @@ function handlePcFull() {
     buttons[0].addEventListener("click", handlePick(4))
 }
 
+/**
+ * Logic for which pokemon to release if all pc slots are full
+ * @param {int} index 
+ */
 function handlePick(index) {
     let temp = mannequin[index]
     mannequin[index] = enemyPokemon
     gameOver(`${temp.name} was released! Welcome, ${enemyPokemon.name}`)
 }
 
-
+/**
+ * resets button listeners so we can have same button do diff things
+ */
 function resetButtonListeners() {
     let buttons = Array.from(document.getElementsByTagName("button"))
     buttons.pop()
@@ -278,6 +324,9 @@ function resetButtonListeners() {
     }
 }
 
+/**
+ * Shows initial options
+ */
 function showOptions() {
     let buttons = document.getElementById("battleOptionsGrid")
     let button = buttons.firstElementChild
@@ -299,6 +348,9 @@ function showOptions() {
     hideBackButton()
 }
 
+/**
+ * handles fight click
+ */
 function handleFightButtonClick() {
     resetButtonListeners()
     showBackButton()
@@ -335,7 +387,11 @@ function handleFightButtonClick() {
     }
 }
 
-
+/**
+ * handles pokemon button and the Pc
+ * @param {boolean} p2canmove 
+ * @returns if the other pokemon can move
+ */
 function handlePokemonButtonClick(p2canmove = true) {
     if (!p2canmove) enemyPokemon.canMove = false
     showBackButton()
@@ -397,10 +453,20 @@ function handlePokemonButtonClick(p2canmove = true) {
     }
 }
 
+/**
+ * Run button
+ */
 function handleRunButtonClick() {
     gameOver("You ran away!")
 }
 
+/**
+ * makes a form and submits it dynamically 
+ * @param {string} path path to send get or post request to
+ * @param {string} values Value of form
+ * @param {string} names Name of forms
+ * @param {string} method POST or GET
+ */
 function sendData(path, values, names, method = "POST") {
     const form = document.createElement("form")
     form.method = method
@@ -416,14 +482,23 @@ function sendData(path, values, names, method = "POST") {
     form.submit()
 }
 
+/**
+ * Shows back button
+ */
 function showBackButton() {
     document.getElementById("back").classList.remove("hidden")
 }
 
+/**
+ * hides back button
+ */
 function hideBackButton() {
     document.getElementById("back").classList.add("hidden")
 }
 
+/**
+ * Handles back button 
+ */
 function handleBackButtonClick() {
     resetButtonListeners()
     showOptions()
@@ -434,6 +509,10 @@ function handleBackButtonClick() {
     hideBackButton()
 }
 
+/**
+ * Handles gameover logic
+ * @param {string} message message for what happens when game is over
+ */
 function gameOver(message) {
     if (message) alert(message)
     for (let i = 1; i < mannequin.pc.length; i++) {
@@ -445,6 +524,9 @@ function gameOver(message) {
     sendData("/openworld", [userId], ["userId"], "POST")
 }
 
+/**
+ * Updates graphics
+ */
 function updateGraphics() {
     document.getElementById("playerHealth").children[0].innerHTML = `${mannequin.pc[currentPokemonChosen].name} <span id="currentNumPlayerHealth"></span> / <span id="maxNumPlayerHealth"></span>`
     document.getElementById("storyText").innerText = `What will ${mannequin.pc[currentPokemonChosen].name} do?`

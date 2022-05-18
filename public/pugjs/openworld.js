@@ -19,8 +19,8 @@ const renderer = PIXI.autoDetectRenderer({
     antialias: true,
     autoDensity: true,
     resolution: window.devicePixelRatio || 1,
-    width: 1200,
-    height: 600,
+    width: 1400,
+    height: 680,
 })
 window.addEventListener('keydown', moveTilemap)
 
@@ -93,8 +93,6 @@ function makeTilemap() {
     stage.addChild(sprite)
     sprite.x = tileW / 2 * size
     sprite.y = tileH / 2 * size
-    sprite.width = 32
-    sprite.height = 32
     makePokemon()
 }
 
@@ -230,6 +228,13 @@ function checkTilemapCollisions() {
 //Add event listener to keydown
 window.addEventListener('keydown', moveTilemap)
 
+/**
+ * makes a form and submits it dynamically 
+ * @param {string} path path to send get or post request to
+ * @param {string} values Value of form
+ * @param {string} names Name of forms
+ * @param {string} method POST or GET
+ */
 function sendData(path, values, names, method = "POST") {
     const form = document.createElement("form")
     form.method = method
@@ -399,6 +404,13 @@ function moveTilemap(evt) {
     }
 }
 
+/**
+ * Adds a item object to the users inventory
+ * @param {*} userId userId of current player
+ * @param {*} name name of the item object
+ * @param {*} quantity how many to add
+ * @returns 
+ */
 async function addToInventoryByUserId(userId, name, quantity) {
     let response = await fetch("/addToInventoryByUserId", {
         method: "POST",

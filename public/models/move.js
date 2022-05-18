@@ -17,6 +17,7 @@ export class Move {
         this.accuracy = accuracy
     }
 }
+// Effects Map
 export const inflictEffects = new Map([
     ["Fire", {
         name: "burn",

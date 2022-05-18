@@ -1,5 +1,7 @@
 import { Potion } from "../../models/item/heal.js"
-
+/**
+ * Potion object map
+ */
 export let potions = new Map()
 potions.set("Potion", new Potion("Potion", 5))
 potions.set("Super Potion", new Potion("Super Potion", 10, "potion.png", 50))
