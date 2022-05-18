@@ -34,7 +34,7 @@ export class Database {
     #init() {
         let sqlstr = "\
             CREATE TABLE IF NOT EXISTS users(`id` int, `username` varchar(15), `password` char(60), `inventoryid` int, `pcid` int);\
-            CREATE TABLE IF NOT EXISTS inventory(`id` int, `pokeballCount` int, `greatballCount` int, `ultraballCount` int, `masterballCount` int, `potionsCount` int, `superpotionsCount` int, `hyperpotionsCount` int, `maxpotionsCount` int, `reviveCount` int, `maxreviveCount` int);\
+            CREATE TABLE IF NOT EXISTS inventory(`id` int, `pokeballCount` int, `greatballCount` int, `ultraballCount` int, `masterballCount` int, `potionCount` int, `superpotionCount` int, `hyperpotionCount` int, `maxpotionCount` int, `reviveCount` int, `maxreviveCount` int);\
             CREATE TABLE IF NOT EXISTS pc(`id` int, `pokemon1` nvarchar(4000), `pokemon2` nvarchar(4000), `pokemon3` nvarchar(4000), `pokemon4` nvarchar(4000));"
         this.#db.run(sqlstr)
     }
@@ -47,7 +47,6 @@ export class Database {
     getPcByUserId(userId) {
         this.fetchFromDisk()
         let sqlstr = "SELECT `pcid` FROM `users` WHERE `id`=" + userId + ";"
-        console.log(sqlstr)
         let result = this.#db.exec(sqlstr)[0].values[0][0]
         sqlstr = "SELECT * FROM `pc` WHERE `id`=" + result + ";"
         result = this.#db.exec(sqlstr)
@@ -83,14 +82,10 @@ export class Database {
      * @param {int} quantity quantity of item to add
      * @returns true on success, false on error
      */
-    updateInventoryByUserId(userId, name, quantity) {
+    updateInventoryByUserId(userId, newInventory) {
         this.fetchFromDisk()
         let inventoryId = this.getInventoryByUserId(userId)[0]
-        let nameIndex = new Map([["pokeballCount", 1], ["greatballCount", 2], ["ultraballCount", 3], ["masterballCount", 4]["potionCount", 5], ["superpotionCount", 6], ["hyperpotionCount", 7], ["maxpotionCount", 8], ["reviveCount", 9], ["maxreviveCount", 10]])
-        if (!nameIndex.has(name)) throw new Error("wrong name- put in the form \"pokeballCount\" or similar")
-        let storedQuantity = this.getInventoryByUserId(userId)[nameIndex.get(name)]
-        if (storedQuantity + quantity < 0) return false
-        let sqlstr = "UPDATE `inventory` SET `" + name + "`=" + (storedQuantity + quantity) + " WHERE `id`=" + inventoryId + ";"
+        let sqlstr = "UPDATE `inventory` SET `pokeballCount`=" + newInventory[1] + ", `greatballCount`=" + newInventory[2] + ", `ultraballCount`=" + newInventory[3] + ", `masterballCount`=" + newInventory[4] + ", `potionCount`=" + newInventory[5] + ", `superpotionCount`=" + newInventory[6] + ", `hyperpotionCount`=" + newInventory[7] + ", `maxpotionCount`=" + newInventory[8] + ", `reviveCount`=" + newInventory[9] + ", `maxreviveCount`=" + newInventory[10] + " WHERE `id`=" + inventoryId + ";"
         this.#db.run(sqlstr)
         this.writeToDisk()
         return true
@@ -104,7 +99,7 @@ export class Database {
         this.fetchFromDisk()
         let sqlstr = "SELECT * FROM `inventory` WHERE `id`=" + userId + ";"
         let result = this.#db.exec(sqlstr)
-        return result
+        return result[0].values[0]
     }
 
     /**
@@ -140,7 +135,17 @@ export class Database {
     updatePokemonInUserPc(userId, pokemon, index) {
         this.fetchFromDisk()
         let pcId = this.getPcByUserId(userId)[0]
-        sqlstr = "UPDATE `pc` SET `pokemon" + index + "`=\'" + JSON.stringify(pokemon) + "\' WHERE `id`=" + pcId + ";"
+        let sqlstr = "UPDATE `pc` SET `pokemon" + index + "`='" + JSON.stringify(pokemon) + "' WHERE `id`=" + pcId + ";"
+        this.#db.run(sqlstr)
+        this.writeToDisk()
+        return true
+    }
+
+    updatePcByUserId(userId, newPc) {
+        this.fetchFromDisk()
+        let pcId = this.getPcByUserId(userId)[0]
+        let sqlstr = "UPDATE `pc` SET `pokemon1`='" + newPc[1] + "', `pokemon2`='" + newPc[2] + "', `pokemon3`='" + newPc[3] + "', `pokemon4`='" + newPc[4] + "' WHERE `id`=" + pcId + ";"
+        sqlstr = sqlstr.replace(/'null'/g, "null")
         this.#db.run(sqlstr)
         this.writeToDisk()
         return true
@@ -167,7 +172,7 @@ export class Database {
      */
     getUserByUserId(userId) {
         this.fetchFromDisk()
-        let sqlstr = "SELECT * FROM `users` WHERE `id`='" + userId + "'"
+        let sqlstr = "SELECT * FROM `users` WHERE `id`=" + userId + ";"
         let result = this.#db.exec(sqlstr)
         return result[0].values[0]
     }
@@ -231,7 +236,6 @@ export class Database {
     executeSelectSql(sqlstr) {
         return this.#db.exec(sqlstr)
     }
-
 
     executeSql(sqlstr) {
         this.fetchFromDisk()

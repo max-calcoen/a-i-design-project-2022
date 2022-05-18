@@ -84,10 +84,12 @@ function makeTilemap() {
     }
 
     // make Sprite tile
-    sprite = PIXI.Sprite.from('chest.png')
+    sprite = PIXI.Sprite.from('../assets/tilemap/player.png')
     stage.addChild(sprite)
     sprite.x = tileW / 2 * size
     sprite.y = tileH / 2 * size
+    sprite.width = 32
+    sprite.height = 32
     makePokemon();
 }
 

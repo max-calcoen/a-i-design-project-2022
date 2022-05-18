@@ -6,9 +6,8 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         link(rel="stylesheet", href="/base.css")
         script(type="text/javascript").
-            let userPokemon = !{JSON.stringify(userPokemon)}
-            let enemyPokemon = !{JSON.stringify(enemyPokemon)}
             let userId = #{userId}
+            let enemyPokemon = !{JSON.stringify(enemyPokemon)}
         script(type="module" src="../battle.js")
         title Battle
     body
@@ -26,8 +25,8 @@ html(lang="en")
                         span#maxNumPlayerHealth #{userPokemon.currentStats.maxHealth}
                     div#playerHealthBarContainer.healthBarContainer
                         div#playerHealthBar.healthBar 
-                img#p1(src = "../assets/sprites/" + userPokemon.backImg alt="user pokemon")
-                img#p2(src="../assets/sprites/" + enemyPokemon.frontImg alt="enemy pokemon")
+                img#p1(src = "/assets/sprites/" + userPokemon.backImg alt="user pokemon")
+                img#p2(src="/assets/sprites/" + enemyPokemon.frontImg alt="enemy pokemon")
             div#battleOptions
                 p#storyText What will #{userPokemon.name} do?
                 div#battleOptionsGrid

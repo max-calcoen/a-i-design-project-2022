@@ -59,14 +59,10 @@ div.healthBar {
 
 div#playerHealthBar {
     width: var(--player-health);
-    animation-name: slidePlayerHealth;
-    animation-duration: 1s;
 }
 
 div#enemyHealthBar {
     width: var(--enemy-health);
-    animation-name: slideEnemyHealth;
-    animation-duration: 1s;
 }
 
 div#playerHealth {
@@ -137,26 +133,6 @@ button#back {
     height: auto !important;
 }
 
-
-@keyframes slidePlayerHealth {
-    from {
-        width: var(--old-player-health);
-    }
-
-    to {
-        width: var(--player-health);
-    }
-}
-
-@keyframes slideEnemyHealth {
-    from {
-        width: var(--old-player-health);
-    }
-
-    to {
-        width: var(--player-health);
-    }
-}
 
 #indexHeader {
     text-align: center;

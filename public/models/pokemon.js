@@ -1,7 +1,6 @@
 export class Pokemon {
     frontImg
     backImg
-    #baseStats
     #maxStats
     #catchRate
     /**
@@ -10,7 +9,7 @@ export class Pokemon {
      * @param {array} moves array of moves ([moves.get("flamethrower"), moves.get("scratch"), moves.get("growl"))])
      * @param {string} frontImg image url of front of pokemon ("charmanderfront.png")
      * @param {string} backImg image url of back of pokemon ("charmandeback.png")
-     * @param {Stat} baseStats starting / level 1 stats of the pokemon (new Stat(15, 20, 100))
+     * @param {Stat} baseStats starting  stats of the pokemon (new Stat(15, 20, 100))
      * @param {Stat} maxStats maximum possible / level 100 stats of the pokemon (new Stat(200, 250, 250))
      * @param {int} rarity chance to appear on the tilemap
      * @param {int} catchRate catch rate modifier
@@ -21,9 +20,8 @@ export class Pokemon {
         this.moves = moves
         this.frontImg = frontImg
         this.backImg = backImg
-        this.#baseStats = baseStats
+        this.currentStats = baseStats
         this.#maxStats = maxStats
-        this.currentStats = this.#baseStats
         this.totalExp = 0
         this.tempExp = 0
         this.nick = ""
@@ -78,7 +76,7 @@ export class Pokemon {
      */
     heal(amt) {
         this.currentStats.health += amt
-        if (this.currentStats.health > this.#maxStats.health) this.currentStats.health = this.currentStats.maxHealth
+        if (this.currentStats.health > this.currentStats.maxHealth) this.currentStats.health = this.currentStats.maxHealth
         return true
     }
 

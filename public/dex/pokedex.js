@@ -14,16 +14,13 @@ import { Stat } from "../models/stat.js"
  */
 export let pokedex = new Map()
 
-
-// TODO: test if 100% robust
 /**
  * Construct Pokemon object from JSON
  * @param {object} parsedPokemonJSON parsed JSON object containing all Pokemon attributes (no methods)
  * @returns {Pokemon} Pokemon object containing attributes from the JSON and methods from Pokemon class
  */
-pokedex.fromJSON = function (parsedPokemonJSON) {
-    let newPokemon = new Pokemon(parsedPokemonJSON.name, parsedPokemonJSON.types, parsedPokemonJSON.moves, parsedPokemonJSON.frontImg, parsedPokemonJSON.backImg, parsedPokemonJSON.baseStats, parsedPokemonJSON.maxStats, parsedPokemonJSON.rarity)
-    newPokemon.currentStats = parsedPokemonJSON.currentStats
+pokedex.fromJSON = (parsedPokemonJSON) => {
+    let newPokemon = new Pokemon(parsedPokemonJSON.name, parsedPokemonJSON.types, parsedPokemonJSON.moves, parsedPokemonJSON.frontImg, parsedPokemonJSON.backImg, parsedPokemonJSON.currentStats, parsedPokemonJSON.maxStats, parsedPokemonJSON.rarity)
     newPokemon.moves = parsedPokemonJSON.moves
     newPokemon.totalExp = parsedPokemonJSON.totalExp
     newPokemon.tempExp = parsedPokemonJSON.tempExp
