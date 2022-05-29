@@ -31,22 +31,6 @@ export class Pokemon {
         this.#catchRate = catchRate
         this.rarity = rarity
     }
-    /**
-     * Replace a pokemon's move with another
-     * @param {Move} newMove move to learn
-     * @param {Move} moveToReplace move to unlearn
-     * @returns true on success, false on failure
-     */
-    // TODO- make better (using different array methods)
-    learnMove(newMove, moveToReplace) {
-        for (let i = 0; i < this.moves.length; i++) {
-            if (this.moves[i].equals(moveToReplace)) {
-                this.moves[i] = newMove
-                return true
-            }
-        }
-        return false
-    }
 
     /**
      * Adds an array containing the id of the status_effect along with its effect values to the pokemon statuseffects array

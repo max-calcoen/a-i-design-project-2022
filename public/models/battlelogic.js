@@ -50,7 +50,6 @@ export class BattleLogic {
      * @param {Move} pokemon2move move pokemon 2 makes
      * @returns {Object} object in form pokemon1: pokemon1, pokemon2: pokemon2, winner: 1 if p1 knocks out p2, 2 if p2 knocks out p1, false if neither
      */
-    // TODO: implement bag, pokemon, run, and status effects (including turn)
     turn(pokemon1move, pokemon2move) {
         let p1damage = 0
         let p1type = 1
@@ -207,7 +206,6 @@ export class BattleLogic {
      * @param {string} defendTypes types of defending pokemon
      * @returns type effectiveness damage modifier
      */
-    // TODO: condense
     static getEffectiveness(attackType, defendTypes) {
         let types = new Map()
         types.set("normal", new Map())

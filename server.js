@@ -1,7 +1,7 @@
 // import neccesary modules
 import express from "express"
 import bodyParser from "body-parser"
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 import initSqlJs from "sql.js"
 import fs from "fs"
 import { pokedex } from "./public/dex/pokedex.js"
@@ -26,7 +26,7 @@ app.use(express.static(PUBLIC_FILES_DIR))
 // set up pug rendering engine
 app.set("views", "views")
 app.set("view engine", "pug")
-//#region working
+
 server.listen(SERVER_PORT, function () {
     console.log(`Server listening on port ${SERVER_PORT}`)
 })
@@ -36,14 +36,6 @@ app.get("/", (req, res) => {
     res.render("index", {
         errorMessage: errorMessage
     })
-    // database.insertNewPokemonIntoUserPC(0, pokedex.getNewPokemon("Squirtle"))
-    // database.printPcs()
-})
-
-app.get("/printAll", (req, res) => {
-    database.printPcs()
-    // database.printAll()
-    res.send("check terminal")
 })
 
 app.post("/login", (req, res) => {
@@ -107,7 +99,7 @@ app.post("/createaccount", (req, res) => {
     })
     return
 })
-//#endregion
+
 app.post("/battle", (req, res) => {
     let enemyPokemon = req.body.enemyName
     let userId = req.body.userId
@@ -129,8 +121,7 @@ app.post("/openworld", (req, res) => {
     })
 })
 
-
-//#region database fetch stuff
+//#region database fetch
 app.post("/getPcByUserId", (req, res) => {
     let userId = req.body.userId
     let pc = database.getPcByUserId(userId)
@@ -148,9 +139,6 @@ app.post("/addToInventoryByUserId", (req, res) => {
     let userId = req.body.userId
     let name = req.body.name
     let quantity = req.body.quantity
-    console.log(userId)
-    console.log(name)
-    console.log(quantity)
     res.send(database.addToInventoryByUserId(userId, name, quantity))
 })
 
@@ -189,10 +177,7 @@ app.post("/getUsers", (req, res) => {
     res.send(database.users)
 })
 //#endregion
+// 404
 app.get("*", (req, res) => {
-    res.redirect("/?errorMessage=Page not found. You may have been logged out. Please create an account or log in.")
+    res.redirect("/?errorMessage=404: Page not found. You may have been logged out. Please create an account or log in.")
 })
-
-function dir(s) {
-    console.dir(s, { depth: null })
-}
