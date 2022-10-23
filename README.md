@@ -12,3 +12,4 @@ Head-Royce School, Oakland, CA
 Pokémon Green and Gold is a 2d game based on the original Pokémon game, Pokémon Red and Blue. This game has multiple features, most prominently the database- you can play offline while saving your progress across multiple sessions. Everything that you do will be saved so you can come back to it another time. Pokémon Green and Gold also has an open-world tile-map that you can move around in and find wild Pokémon to catch or fight with.
 
 install guide coming soon
+# A-I-Design-Project-2021
